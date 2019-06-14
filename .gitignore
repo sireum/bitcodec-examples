@@ -1,0 +1,5 @@
+/.idea
+/bitcodec-examples.iml
+/src/script.sc
+*.jar
+*.native
