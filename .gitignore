@@ -3,3 +3,5 @@
 /src/script.sc
 *.jar
 *.native
+out
+c
