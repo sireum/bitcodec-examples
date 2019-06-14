@@ -61,14 +61,14 @@ def gen(): Unit = {
 
     println(s"Generating bitcodec from $spec ...")
     val big = gens(0)
-    val pb = sireum.call(ISZ("tools", "bcgen", "--mode", "script", "--name", big.name,
+    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
       "--output-dir", big.up.string, spec.string)).console
     println(st"${(pb.cmds, " ")}".render)
     pb.runCheck()
 
     if (gens.size == 2) {
       val little = gens(1)
-      val pl = sireum.call(ISZ("tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
+      val pl = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
         "--output-dir", little.up.string, spec.string)).console
       println(st"${(pl.cmds, " ")}".render)
       pl.runCheck()
@@ -82,7 +82,7 @@ def run(): Unit = {
     for (gen <- specGens._2) {
       val genPath = s"$gen.sc"
       println(s"Running $genPath ...")
-      val p = sireum.call(ISZ("slang", "run", "--no-server", genPath)).console
+      val p = Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).console
       println(st"${(p.cmds, " ")}".render)
       p.runCheck()
       println()
@@ -104,7 +104,7 @@ def runNative(): Unit = {
       out.mkdirAll()
 
       println(s"Compiling $genPath to C ...")
-      val pt = sireum.call(ISZ("slang", "transpilers", "c", "--string-size", "2048",
+      val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
         "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
       println(st"${(pt.cmds, " ")}".render)
       pt.runCheck()
@@ -143,5 +143,3 @@ if (Os.cliArgs.size == 1) {
 } else {
   usage()
 }
-
-
