@@ -78,8 +78,6 @@ def gen(): Unit = {
 }
 
 def run(): Unit = {
-  gen()
-
   for (specGens <- specGensMap.entries) {
     for (gen <- specGens._2) {
       val genPath = s"$gen.sc"
@@ -93,8 +91,6 @@ def run(): Unit = {
 }
 
 def runNative(): Unit = {
-//  gen()
-
   for (specGens <- specGensMap.entries) {
     for (gen <- specGens._2) {
       val genPath = s"$gen.sc"
@@ -126,7 +122,7 @@ def runNative(): Unit = {
       println()
 
       println(s"Running $x ...")
-      x.call(ISZ()).console.runCheck()
+      Os.proc(ISZ(x.string)).console.runCheck()
       println()
       println()
     }
