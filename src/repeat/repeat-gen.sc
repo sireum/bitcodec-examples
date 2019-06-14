@@ -6,7 +6,7 @@ import org.sireum.ops.Bits.{Context, Reader, Writer}
 import org.sireum.bitcodec.Runtime
 
 // BEGIN USER CODE: Imports
-// ... empty  
+// ... empty
 // END USER CODE: Imports
 
 object BitCodec {
@@ -18,7 +18,7 @@ object BitCodec {
   val ERROR_Foo: Z = 4
 
   // BEGIN USER CODE: Members
-  // ... empty  
+  // ... empty
   // END USER CODE: Members
 
   object SixBytes {
@@ -38,7 +38,7 @@ object BitCodec {
       }
 
       // BEGIN USER CODE: SixBytes.wellFormed
-      // ... empty  
+      // ... empty
       // END USER CODE: SixBytes.wellFormed
 
       return 0
@@ -82,7 +82,7 @@ object BitCodec {
       }
 
       // BEGIN USER CODE: Foo.wellFormed
-      // ... empty  
+      // ... empty
       // END USER CODE: Foo.wellFormed
 
       return 0
@@ -133,36 +133,36 @@ object BitCodec {
 }
 
 // BEGIN USER CODE: Test
-import BitCodec._  
-val fooExample = Foo(u8"3", MSZ(  
-  SixBytes(MSZ.create(6, u8"1")),  
-  SixBytes(MSZ.create(6, u8"2")),  
-  SixBytes(MSZ.create(6, u8"3"))  
-))  
-println(s"fooExample = $fooExample")  
+import BitCodec._
+val fooExample = Foo(u8"3", MSZ(
+  SixBytes(MSZ.create(6, u8"1")),
+  SixBytes(MSZ.create(6, u8"2")),
+  SixBytes(MSZ.create(6, u8"3"))
+))
+println(s"fooExample = $fooExample")
 
-assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")  
+assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
 
-val fooExampleOutput = MSZ.create(1000, F)  
-val fooExampleOutputContext = Context.create  
-fooExample.encode(fooExampleOutput, fooExampleOutputContext)  
-val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)  
-println(s"encode(fooExample) = $fooExampleEncoded")  
-println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")  
-println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")  
-println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")  
+val fooExampleOutput = MSZ.create(1000, F)
+val fooExampleOutputContext = Context.create
+fooExample.encode(fooExampleOutput, fooExampleOutputContext)
+val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)
+println(s"encode(fooExample) = $fooExampleEncoded")
+println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")
+println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")
+println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")
 
-assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")  
+assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")
 
-val fooExampleInputContext = Context.create  
-val fooExampleDecoded = Foo.empty  
-fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)  
-println(s"decode(encode(fooExample)) = $fooExampleDecoded")  
-println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")  
-println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")  
-println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")  
+val fooExampleInputContext = Context.create
+val fooExampleDecoded = Foo.empty
+fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+println(s"decode(encode(fooExample)) = $fooExampleDecoded")
+println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
+println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
+println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")
 
-assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")  
-assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")  
-assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")  
+assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")
+assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")
+assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
 // END USER CODE: Test

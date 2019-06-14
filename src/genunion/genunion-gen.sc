@@ -6,7 +6,7 @@ import org.sireum.ops.Bits.{Context, Reader, Writer}
 import org.sireum.bitcodec.Runtime
 
 // BEGIN USER CODE: Imports
-// ... empty  
+// ... empty
 // END USER CODE: Imports
 
 object BitCodec {
@@ -20,7 +20,7 @@ object BitCodec {
   val ERROR_Foo: Z = 5
 
   // BEGIN USER CODE: Members
-  // ... empty  
+  // ... empty
   // END USER CODE: Members
 
   @record trait Bar extends Runtime.Composite
@@ -30,14 +30,14 @@ object BitCodec {
     object ChoiceContext {
       def empty: ChoiceContext = {
         // BEGIN USER CODE: Bar.ChoiceContext.empty
-        return ChoiceContext(F)  
+        return ChoiceContext(F)
         // END USER CODE: Bar.ChoiceContext.empty
       }
     }
 
     @record class ChoiceContext(
        // BEGIN USER CODE: Bar.ChoiceContext
-       var flag: B  
+       var flag: B
        // END USER CODE: Bar.ChoiceContext
     )
 
@@ -56,7 +56,7 @@ object BitCodec {
 
 
         // BEGIN USER CODE: Baz.wellFormed
-        // ... empty  
+        // ... empty
         // END USER CODE: Baz.wellFormed
 
         return 0
@@ -97,7 +97,7 @@ object BitCodec {
 
 
         // BEGIN USER CODE: Bazz.wellFormed
-        // ... empty  
+        // ... empty
         // END USER CODE: Bazz.wellFormed
 
         return 0
@@ -130,7 +130,7 @@ object BitCodec {
 
     def choose(input: MSZ[B], context: Context, choiceContext: Bar.ChoiceContext): Choice.Type = {
       // BEGIN USER CODE: Bar.choose
-      return if (choiceContext.flag) Choice.Bazz else Choice.Baz  
+      return if (choiceContext.flag) Choice.Bazz else Choice.Baz
       // END USER CODE: Bar.choose
     }
   }
@@ -154,11 +154,11 @@ object BitCodec {
       }
 
       // BEGIN USER CODE: Foo.wellFormed
-      (flag, bar) match {  
-        case (F, _: Bar.Baz) =>  
-        case (T, _: Bar.Bazz) =>  
-        case _ => return ERROR_Bar  
-      }  
+      (flag, bar) match {
+        case (F, _: Bar.Baz) =>
+        case (T, _: Bar.Bazz) =>
+        case _ => return ERROR_Bar
+      }
       // END USER CODE: Foo.wellFormed
 
       return 0
@@ -168,7 +168,7 @@ object BitCodec {
       flag = Reader.MS.bleB(input, context)
       val barChoiceContext = Bar.ChoiceContext.empty
       // BEGIN USER CODE: Bar.ChoiceContext.init
-      barChoiceContext.flag = flag  
+      barChoiceContext.flag = flag
       // END USER CODE: Bar.ChoiceContext.init
       Bar.choose(input, context, barChoiceContext) match {
         case Bar.Choice.Baz => bar = Bar.Baz.empty
@@ -197,64 +197,64 @@ object BitCodec {
 }
 
 // BEGIN USER CODE: Test
-import BitCodec._  
-;{  
-  val fooExample = Foo(T, Bar.Bazz(u4"7"))  
-  println(s"fooExample = $fooExample")  
+import BitCodec._
+;{
+  val fooExample = Foo(T, Bar.Bazz(u4"7"))
+  println(s"fooExample = $fooExample")
 
-  assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")  
+  assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
 
-  val fooExampleOutput = MSZ.create(1000, F)  
-  val fooExampleOutputContext = Context.create  
-  fooExample.encode(fooExampleOutput, fooExampleOutputContext)  
-  val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)  
-  println(s"encode(fooExample) = $fooExampleEncoded")  
-  println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")  
-  println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")  
-  println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")  
+  val fooExampleOutput = MSZ.create(1000, F)
+  val fooExampleOutputContext = Context.create
+  fooExample.encode(fooExampleOutput, fooExampleOutputContext)
+  val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)
+  println(s"encode(fooExample) = $fooExampleEncoded")
+  println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")
+  println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")
+  println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")
 
-  assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")  
+  assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")
 
-  val fooExampleInputContext = Context.create  
-  val fooExampleDecoded = Foo.empty  
-  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)  
-  println(s"decode(encode(fooExample)) = $fooExampleDecoded")  
-  println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")  
-  println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")  
-  println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")  
+  val fooExampleInputContext = Context.create
+  val fooExampleDecoded = Foo.empty
+  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+  println(s"decode(encode(fooExample)) = $fooExampleDecoded")
+  println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
+  println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
+  println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")
 
-  assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")  
-  assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")  
-  assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")  
-}  
-println()  
-;{  
-  val fooExample = Foo(F, Bar.Baz(F, T))  
-  println(s"fooExample = $fooExample")  
+  assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")
+  assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")
+  assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
+}
+println()
+;{
+  val fooExample = Foo(F, Bar.Baz(F, T))
+  println(s"fooExample = $fooExample")
 
-  assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")  
+  assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
 
-  val fooExampleOutput = MSZ.create(1000, F)  
-  val fooExampleOutputContext = Context.create  
-  fooExample.encode(fooExampleOutput, fooExampleOutputContext)  
-  val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)  
-  println(s"encode(fooExample) = $fooExampleEncoded")  
-  println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")  
-  println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")  
-  println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")  
+  val fooExampleOutput = MSZ.create(1000, F)
+  val fooExampleOutputContext = Context.create
+  fooExample.encode(fooExampleOutput, fooExampleOutputContext)
+  val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)
+  println(s"encode(fooExample) = $fooExampleEncoded")
+  println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")
+  println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")
+  println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")
 
-  assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")  
+  assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")
 
-  val fooExampleInputContext = Context.create  
-  val fooExampleDecoded = Foo.empty  
-  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)  
-  println(s"decode(encode(fooExample)) = $fooExampleDecoded")  
-  println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")  
-  println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")  
-  println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")  
+  val fooExampleInputContext = Context.create
+  val fooExampleDecoded = Foo.empty
+  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+  println(s"decode(encode(fooExample)) = $fooExampleDecoded")
+  println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
+  println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
+  println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")
 
-  assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")  
-  assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")  
-  assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")  
-}  
+  assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")
+  assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")
+  assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
+}
 // END USER CODE: Test
