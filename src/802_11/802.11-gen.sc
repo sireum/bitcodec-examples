@@ -385,8 +385,9 @@ object BitCodec {
         case z"0" => return Choice.Receiver
         case z"1" => return Choice.ReceiverTransmitter
         case z"2" => return Choice.Data
-        case _ => return Choice.Error
+        case _ =>
       }
+      return Choice.Error
     }
   }
 

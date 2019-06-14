@@ -121,8 +121,9 @@ object BitCodec {
       r match {
         case z"0" => return Choice.Baz
         case z"1" => return Choice.Bazz
-        case _ => return Choice.Error
+        case _ =>
       }
+      return Choice.Error
     }
   }
 
