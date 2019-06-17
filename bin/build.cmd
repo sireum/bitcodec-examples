@@ -11,11 +11,19 @@ else                                                          #
   exec "${SIREUM_HOME}/bin/sireum" slang run -s -n "$0" "$@"  #
 fi                                                            #
 :BOF
+setlocal
+set NEWER=False
+if exist %~dpnx0.com for /f %%i in ('powershell -noprofile -executionpolicy bypass -command "(Get-Item %~dpnx0.com).LastWriteTime -gt (Get-Item %~dpnx0).LastWriteTime"') do @set NEWER=%%i
+if "%NEWER%" == "True" goto native
+del "%~dpnx0.com" > nul 2>&1
 if not defined SIREUM_HOME (
   echo Please set SIREUM_HOME env var
   exit /B -1
 )
-%SIREUM_HOME%\bin\sireum.bat slang run -s "%0" %*
+%SIREUM_HOME%\bin\sireum.bat slang run -s -n "%0" %*
+exit /B %errorlevel%
+:native
+%~dpnx0.com %*
 exit /B %errorlevel%
 ::!#
 // #Sireum
