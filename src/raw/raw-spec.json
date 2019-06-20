@@ -1,0 +1,382 @@
+{
+  "type" : "BitCodecGenSpec",
+  "spec" : {
+    "type" : "Spec.Concat",
+    "name" : "Foo",
+    "elements" : [
+      {
+        "type" : "Spec.Bits",
+        "name" : "size",
+        "size" : 8
+      },
+      {
+        "type" : "Spec.Raw",
+        "name" : "elements",
+        "dependsOn" : ["size"],
+        "size" : ""
+      }
+    ]
+  },
+  "enums" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funs" : {
+    "type" : "Map",
+    "entries" : [
+      [
+        "elements",
+        {
+          "type" : "org.sireum.lang.ast.Exp.Fun",
+          "context" : [],
+          "params" : [
+            {
+              "type" : "org.sireum.lang.ast.Exp.Fun.Param",
+              "id" : {
+                "type" : "org.sireum.lang.ast.Id",
+                "value" : "p",
+                "attr" : {
+                  "type" : "org.sireum.lang.ast.Attr",
+                  "posOpt" : {
+                    "type" : "None"
+                  }
+                }
+              },
+              "tipeOpt" : {
+                "type" : "None"
+              },
+              "typedOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Typed.Name",
+                  "ids" : ["org", "sireum", "U8"],
+                  "args" : [
+                  ]
+                }
+              }
+            }
+          ],
+          "contract" : {
+            "type" : "org.sireum.lang.ast.Contract",
+            "cases" : [
+            ],
+            "subs" : [
+            ]
+          },
+          "exp" : {
+            "type" : "org.sireum.lang.ast.Stmt.Expr",
+            "exp" : {
+              "type" : "org.sireum.lang.ast.Exp.Invoke",
+              "receiverOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Exp.Select",
+                  "receiverOpt" : {
+                    "type" : "Some",
+                    "value" : {
+                      "type" : "org.sireum.lang.ast.Exp.Ident",
+                      "id" : {
+                        "type" : "org.sireum.lang.ast.Id",
+                        "value" : "conversions",
+                        "attr" : {
+                          "type" : "org.sireum.lang.ast.Attr",
+                          "posOpt" : {
+                            "type" : "None"
+                          }
+                        }
+                      },
+                      "attr" : {
+                        "type" : "org.sireum.lang.ast.ResolvedAttr",
+                        "posOpt" : {
+                          "type" : "None"
+                        },
+                        "resOpt" : {
+                          "type" : "Some",
+                          "value" : {
+                            "type" : "org.sireum.lang.ast.ResolvedInfo.Package",
+                            "name" : ["org", "sireum", "conversions"]
+                          }
+                        },
+                        "typedOpt" : {
+                          "type" : "Some",
+                          "value" : {
+                            "type" : "org.sireum.lang.ast.Typed.Package",
+                            "name" : ["org", "sireum", "conversions"]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "id" : {
+                    "type" : "org.sireum.lang.ast.Id",
+                    "value" : "U8",
+                    "attr" : {
+                      "type" : "org.sireum.lang.ast.Attr",
+                      "posOpt" : {
+                        "type" : "None"
+                      }
+                    }
+                  },
+                  "targs" : [
+                  ],
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.ResolvedAttr",
+                    "posOpt" : {
+                      "type" : "None"
+                    },
+                    "resOpt" : {
+                      "type" : "Some",
+                      "value" : {
+                        "type" : "org.sireum.lang.ast.ResolvedInfo.Object",
+                        "name" : ["org", "sireum", "conversions", "U8"]
+                      }
+                    },
+                    "typedOpt" : {
+                      "type" : "Some",
+                      "value" : {
+                        "type" : "org.sireum.lang.ast.Typed.Object",
+                        "owner" : ["org", "sireum", "conversions"],
+                        "id" : "U8"
+                      }
+                    }
+                  }
+                }
+              },
+              "ident" : {
+                "type" : "org.sireum.lang.ast.Exp.Ident",
+                "id" : {
+                  "type" : "org.sireum.lang.ast.Id",
+                  "value" : "toZ",
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.Attr",
+                    "posOpt" : {
+                      "type" : "None"
+                    }
+                  }
+                },
+                "attr" : {
+                  "type" : "org.sireum.lang.ast.ResolvedAttr",
+                  "posOpt" : {
+                    "type" : "None"
+                  },
+                  "resOpt" : {
+                    "type" : "Some",
+                    "value" : {
+                      "type" : "org.sireum.lang.ast.ResolvedInfo.Method",
+                      "isInObject" : true,
+                      "mode" : {
+                        "type" : "org.sireum.lang.ast.MethodMode",
+                        "value" : "Ext"
+                      },
+                      "typeParams" : [],
+                      "owner" : ["org", "sireum", "conversions", "U8"],
+                      "id" : "toZ",
+                      "paramNames" : ["n"],
+                      "tpeOpt" : {
+                        "type" : "Some",
+                        "value" : {
+                          "type" : "org.sireum.lang.ast.Typed.Fun",
+                          "isPure" : true,
+                          "isByName" : false,
+                          "args" : [
+                            {
+                              "type" : "org.sireum.lang.ast.Typed.Name",
+                              "ids" : ["org", "sireum", "U8"],
+                              "args" : [
+                              ]
+                            }
+                          ],
+                          "ret" : {
+                            "type" : "org.sireum.lang.ast.Typed.Name",
+                            "ids" : ["org", "sireum", "Z"],
+                            "args" : [
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "typedOpt" : {
+                    "type" : "Some",
+                    "value" : {
+                      "type" : "org.sireum.lang.ast.Typed.Method",
+                      "isInObject" : true,
+                      "mode" : {
+                        "type" : "org.sireum.lang.ast.MethodMode",
+                        "value" : "Ext"
+                      },
+                      "typeParams" : [],
+                      "owner" : ["org", "sireum", "conversions", "U8"],
+                      "name" : "toZ",
+                      "paramNames" : ["n"],
+                      "tpe" : {
+                        "type" : "org.sireum.lang.ast.Typed.Fun",
+                        "isPure" : true,
+                        "isByName" : false,
+                        "args" : [
+                          {
+                            "type" : "org.sireum.lang.ast.Typed.Name",
+                            "ids" : ["org", "sireum", "U8"],
+                            "args" : [
+                            ]
+                          }
+                        ],
+                        "ret" : {
+                          "type" : "org.sireum.lang.ast.Typed.Name",
+                          "ids" : ["org", "sireum", "Z"],
+                          "args" : [
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "targs" : [
+              ],
+              "args" : [
+                {
+                  "type" : "org.sireum.lang.ast.Exp.Ident",
+                  "id" : {
+                    "type" : "org.sireum.lang.ast.Id",
+                    "value" : "p",
+                    "attr" : {
+                      "type" : "org.sireum.lang.ast.Attr",
+                      "posOpt" : {
+                        "type" : "None"
+                      }
+                    }
+                  },
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.ResolvedAttr",
+                    "posOpt" : {
+                      "type" : "None"
+                    },
+                    "resOpt" : {
+                      "type" : "Some",
+                      "value" : {
+                        "type" : "org.sireum.lang.ast.ResolvedInfo.LocalVar",
+                        "context" : [],
+                        "scope" : {
+                          "type" : "org.sireum.lang.ast.ResolvedInfo.LocalVar.Scope",
+                          "value" : "Current"
+                        },
+                        "isVal" : true,
+                        "id" : "p"
+                      }
+                    },
+                    "typedOpt" : {
+                      "type" : "Some",
+                      "value" : {
+                        "type" : "org.sireum.lang.ast.Typed.Name",
+                        "ids" : ["org", "sireum", "U8"],
+                        "args" : [
+                        ]
+                      }
+                    }
+                  }
+                }
+              ],
+              "attr" : {
+                "type" : "org.sireum.lang.ast.ResolvedAttr",
+                "posOpt" : {
+                  "type" : "None"
+                },
+                "resOpt" : {
+                  "type" : "Some",
+                  "value" : {
+                    "type" : "org.sireum.lang.ast.ResolvedInfo.Method",
+                    "isInObject" : true,
+                    "mode" : {
+                      "type" : "org.sireum.lang.ast.MethodMode",
+                      "value" : "Ext"
+                    },
+                    "typeParams" : [],
+                    "owner" : ["org", "sireum", "conversions", "U8"],
+                    "id" : "toZ",
+                    "paramNames" : ["n"],
+                    "tpeOpt" : {
+                      "type" : "Some",
+                      "value" : {
+                        "type" : "org.sireum.lang.ast.Typed.Fun",
+                        "isPure" : true,
+                        "isByName" : false,
+                        "args" : [
+                          {
+                            "type" : "org.sireum.lang.ast.Typed.Name",
+                            "ids" : ["org", "sireum", "U8"],
+                            "args" : [
+                            ]
+                          }
+                        ],
+                        "ret" : {
+                          "type" : "org.sireum.lang.ast.Typed.Name",
+                          "ids" : ["org", "sireum", "Z"],
+                          "args" : [
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "typedOpt" : {
+                  "type" : "Some",
+                  "value" : {
+                    "type" : "org.sireum.lang.ast.Typed.Name",
+                    "ids" : ["org", "sireum", "Z"],
+                    "args" : [
+                    ]
+                  }
+                }
+              }
+            },
+            "attr" : {
+              "type" : "org.sireum.lang.ast.TypedAttr",
+              "posOpt" : {
+                "type" : "None"
+              },
+              "typedOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Typed.Name",
+                  "ids" : ["org", "sireum", "Z"],
+                  "args" : [
+                  ]
+                }
+              }
+            }
+          },
+          "attr" : {
+            "type" : "org.sireum.lang.ast.TypedAttr",
+            "posOpt" : {
+              "type" : "None"
+            },
+            "typedOpt" : {
+              "type" : "Some",
+              "value" : {
+                "type" : "org.sireum.lang.ast.Typed.Fun",
+                "isPure" : true,
+                "isByName" : false,
+                "args" : [
+                  {
+                    "type" : "org.sireum.lang.ast.Typed.Name",
+                    "ids" : ["org", "sireum", "U8"],
+                    "args" : [
+                    ]
+                  }
+                ],
+                "ret" : {
+                  "type" : "org.sireum.lang.ast.Typed.Name",
+                  "ids" : ["org", "sireum", "Z"],
+                  "args" : [
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    ]
+  }
+}

@@ -63,6 +63,22 @@ val specGensMap: HashSMap[Os.Path, ISZ[Os.Path]] = {
   r
 }
 
+def json(): Unit = {
+  for (specGens <- specGensMap.entries) {
+    val (spec, gens) = specGens
+
+    val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
+    println(s"Generating bcgen's JSON from $spec ...")
+    val big = gens(0)
+    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).console
+    println(st"${(pb.cmds, " ")}".render)
+    pb.runCheck()
+
+    println()
+  }
+}
+
 def gen(): Unit = {
   for (specGens <- specGensMap.entries) {
     val (spec, gens) = specGens
@@ -138,11 +154,12 @@ def runNative(): Unit = {
 }
 
 def usage(): Unit = {
-  println("Usage: ( gen | run | run-native )")
+  println("Usage: ( json | gen | run | run-native )")
 }
 
 if (Os.cliArgs.size == 1) {
   Os.cliArgs(0) match {
+    case string"json" => json()
     case string"gen" => gen()
     case string"run" => run()
     case string"run-native" => runNative()

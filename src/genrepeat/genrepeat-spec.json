@@ -1,0 +1,33 @@
+{
+  "type" : "BitCodecGenSpec",
+  "spec" : {
+    "type" : "Spec.Concat",
+    "name" : "Foo",
+    "elements" : [
+      {
+        "type" : "Spec.Bits",
+        "name" : "size",
+        "size" : 8
+      },
+      {
+        "type" : "Spec.GenRepeat",
+        "name" : "elements",
+        "element" : {
+          "type" : "Spec.Bytes",
+          "name" : "sixBytes",
+          "size" : 6
+        }
+      }
+    ]
+  },
+  "enums" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  }
+}

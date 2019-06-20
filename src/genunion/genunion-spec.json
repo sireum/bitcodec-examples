@@ -1,0 +1,48 @@
+{
+  "type" : "BitCodecGenSpec",
+  "spec" : {
+    "type" : "Spec.Concat",
+    "name" : "Foo",
+    "elements" : [
+      {
+        "type" : "Spec.Boolean",
+        "name" : "flag"
+      },
+      {
+        "type" : "Spec.GenUnion",
+        "name" : "Bar",
+        "subs" : [
+          {
+            "type" : "Spec.Concat",
+            "name" : "Baz",
+            "elements" : [
+              {
+                "type" : "Spec.Boolean",
+                "name" : "b1"
+              },
+              {
+                "type" : "Spec.Boolean",
+                "name" : "b2"
+              }
+            ]
+          },
+          {
+            "type" : "Spec.Bits",
+            "name" : "bazz",
+            "size" : 4
+          }
+        ]
+      }
+    ]
+  },
+  "enums" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  }
+}
