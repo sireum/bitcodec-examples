@@ -57,6 +57,23 @@ they can be regenerated as follows:
   ```bash
   bin\build.cmd gen
   ```
+  
+## Regenerating JSON
+
+The repository already holds the generated specs in JSON, however,
+they can be regenerated as follows:
+
+* macOS/Linux:
+
+  ```bash
+  bin/build.cmd json
+  ```
+
+* Windows:
+
+  ```bash
+  bin\build.cmd json
+  ```
 
 
   
