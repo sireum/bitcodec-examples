@@ -220,13 +220,6 @@
               }
             }
           ],
-          "contract" : {
-            "type" : "org.sireum.lang.ast.Contract",
-            "cases" : [
-            ],
-            "subs" : [
-            ]
-          },
           "exp" : {
             "type" : "org.sireum.lang.ast.Stmt.Match",
             "exp" : {
@@ -946,13 +939,6 @@
               }
             }
           ],
-          "contract" : {
-            "type" : "org.sireum.lang.ast.Contract",
-            "cases" : [
-            ],
-            "subs" : [
-            ]
-          },
           "exp" : {
             "type" : "org.sireum.lang.ast.Stmt.Match",
             "exp" : {

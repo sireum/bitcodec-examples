@@ -57,13 +57,6 @@
               }
             }
           ],
-          "contract" : {
-            "type" : "org.sireum.lang.ast.Contract",
-            "cases" : [
-            ],
-            "subs" : [
-            ]
-          },
           "exp" : {
             "type" : "org.sireum.lang.ast.Stmt.Expr",
             "exp" : {
