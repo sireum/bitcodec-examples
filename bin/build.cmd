@@ -154,16 +154,18 @@ def runNative(): Unit = {
 }
 
 def usage(): Unit = {
-  println("Usage: ( json | gen | run | run-native )")
+  println("Usage: ( json | gen | run | run-native )+")
 }
 
-if (Os.cliArgs.size == 1) {
-  Os.cliArgs(0) match {
-    case string"json" => json()
-    case string"gen" => gen()
-    case string"run" => run()
-    case string"run-native" => runNative()
-    case _ => usage()
+if (Os.cliArgs.size > 0) {
+  for (arg <- Os.cliArgs) {
+    arg match {
+      case string"json" => json()
+      case string"gen" => gen()
+      case string"run" => run()
+      case string"run-native" => runNative()
+      case _ => usage()
+    }
   }
 } else {
   usage()
