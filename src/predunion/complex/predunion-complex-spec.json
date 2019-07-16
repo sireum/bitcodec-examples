@@ -1,0 +1,152 @@
+{
+  "type" : "BitCodecGenSpec",
+  "spec" : {
+    "type" : "Spec.Concat",
+    "name" : "Foo",
+    "elements" : [
+      {
+        "type" : "Spec.PredUnion",
+        "name" : "Bar",
+        "subs" : [
+          {
+            "type" : "Spec.PredSpec",
+            "preds" : [
+              {
+                "type" : "Spec.Pred.Skip",
+                "size" : 1
+              },
+              {
+                "type" : "Spec.Pred.Bytes",
+                "value" : [1, 0]
+              },
+              {
+                "type" : "Spec.Pred.Longs",
+                "value" : [7]
+              }
+            ],
+            "spec" : {
+              "type" : "Spec.Concat",
+              "name" : "Baz",
+              "elements" : [
+                {
+                  "type" : "Spec.Boolean",
+                  "name" : "flag"
+                },
+                {
+                  "type" : "Spec.Bytes",
+                  "name" : "bs",
+                  "size" : 2
+                },
+                {
+                  "type" : "Spec.Longs",
+                  "name" : "l",
+                  "size" : 1
+                }
+              ]
+            }
+          },
+          {
+            "type" : "Spec.PredSpec",
+            "preds" : [
+              {
+                "type" : "Spec.Pred.Skip",
+                "size" : 1
+              },
+              {
+                "type" : "Spec.Pred.Shorts",
+                "value" : [2]
+              },
+              {
+                "type" : "Spec.Pred.Ints",
+                "value" : [3, 5]
+              }
+            ],
+            "spec" : {
+              "type" : "Spec.Concat",
+              "name" : "Bazz",
+              "elements" : [
+                {
+                  "type" : "Spec.Boolean",
+                  "name" : "flag"
+                },
+                {
+                  "type" : "Spec.Shorts",
+                  "name" : "s",
+                  "size" : 1
+                },
+                {
+                  "type" : "Spec.Ints",
+                  "name" : "is",
+                  "size" : 2
+                }
+              ]
+            }
+          },
+          {
+            "type" : "Spec.PredSpec",
+            "preds" : [
+              {
+                "type" : "Spec.Pred.Not",
+                "pred" : {
+                  "type" : "Spec.Pred.Boolean",
+                  "value" : true
+                }
+              },
+              {
+                "type" : "Spec.Pred.Or",
+                "preds" : [
+                  {
+                    "type" : "Spec.Pred.Bits",
+                    "size" : 8,
+                    "value" : 3
+                  },
+                  {
+                    "type" : "Spec.Pred.Bits",
+                    "size" : 8,
+                    "value" : 5
+                  }
+                ]
+              },
+              {
+                "type" : "Spec.Pred.Between",
+                "size" : 8,
+                "lo" : 10,
+                "hi" : 15
+              }
+            ],
+            "spec" : {
+              "type" : "Spec.Concat",
+              "name" : "Bazzz",
+              "elements" : [
+                {
+                  "type" : "Spec.Boolean",
+                  "name" : "flag"
+                },
+                {
+                  "type" : "Spec.Bits",
+                  "name" : "b1",
+                  "size" : 8
+                },
+                {
+                  "type" : "Spec.Bits",
+                  "name" : "b2",
+                  "size" : 8
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "enums" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  }
+}
