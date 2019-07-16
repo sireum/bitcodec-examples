@@ -198,8 +198,8 @@ object BitCodec {
 
 // BEGIN USER CODE: Test
 import BitCodec._
-;{
-  val fooExample = Foo(T, Bar.Bazz(u4"7"))
+
+def test(fooExample: Foo): Unit = {
   println(s"fooExample = $fooExample")
 
   assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
@@ -226,35 +226,9 @@ import BitCodec._
   assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")
   assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")
   assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
+  println()
 }
-println()
-;{
-  val fooExample = Foo(F, Bar.Baz(F, T))
-  println(s"fooExample = $fooExample")
 
-  assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
-
-  val fooExampleOutput = MSZ.create(1000, F)
-  val fooExampleOutputContext = Context.create
-  fooExample.encode(fooExampleOutput, fooExampleOutputContext)
-  val fooExampleEncoded = Writer.resultMS(fooExampleOutput, fooExampleOutputContext)
-  println(s"encode(fooExample) = $fooExampleEncoded")
-  println(s"encode(fooExample).offset = ${fooExampleOutputContext.offset}")
-  println(s"encode(fooExample).errorCode = ${fooExampleOutputContext.errorCode}")
-  println(s"encode(fooExample).errorOffset = ${fooExampleOutputContext.errorOffset}")
-
-  assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOffset == 0, "Encoding error!")
-
-  val fooExampleInputContext = Context.create
-  val fooExampleDecoded = Foo.empty
-  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
-  println(s"decode(encode(fooExample)) = $fooExampleDecoded")
-  println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
-  println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
-  println(s"decode(encode(fooExample)).errorOffset = ${fooExampleInputContext.errorOffset}")
-
-  assert(fooExampleInputContext.errorCode == 0 && fooExampleInputContext.errorOffset == 0, "Decoding error!")
-  assert(fooExampleOutputContext.offset == fooExampleInputContext.offset, "The decoder does not consume the same number of bits produced by the encoder!")
-  assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
-}
+test(Foo(F, Bar.Baz(F, T)))
+test(Foo(T, Bar.Bazz(u4"7")))
 // END USER CODE: Test

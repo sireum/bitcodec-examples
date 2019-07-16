@@ -421,7 +421,6 @@ object BitCodec {
         case _ => return ERROR_HeaderAddress
       }
 
-
       val wfHeaderAddress = headerAddress.wellFormed
       if (wfHeaderAddress != 0) {
         return wfHeaderAddress
