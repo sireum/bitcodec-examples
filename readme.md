@@ -74,6 +74,23 @@ they can be regenerated as follows:
   ```bash
   bin\build.cmd json
   ```
+  
+## Regenerating GraphViz's .dot
+
+The repository already holds the generated .dot file for each example spec, 
+however, they can be regenerated as follows:
+
+* macOS/Linux:
+
+  ```bash
+  bin/build.cmd dot
+  ```
+
+* Windows:
+
+  ```bash
+  bin\build.cmd dot
+  ```
 
 
   

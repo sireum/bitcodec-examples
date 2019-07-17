@@ -1,0 +1,26 @@
+digraph G {
+  rankdir = LR;
+  node [shape=plaintext];
+  edge [arrowhead=vee];
+
+  n0 [shape=point];
+  n1 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>flag:1</TD><TD>s:16</TD><TD>is:64</TD></TR>
+    </TABLE>
+  >];
+  n2 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>flag:1</TD><TD>b1:8</TD><TD>b2:8</TD></TR>
+    </TABLE>
+  >];
+  n3 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>flag:1</TD><TD>bs:16</TD><TD>l:64</TD></TR>
+    </TABLE>
+  >];
+
+  n0 -> n1 [label="_1.u16[0002].u32[00000003.00000005]"];
+  n0 -> n2 [label="!(T).(u8\"3\" | u8\"5\").u8(10..15)"];
+  n0 -> n3 [label="_1.u8[01.00].u64[0000000000000007]"];
+}

@@ -68,9 +68,25 @@ def json(): Unit = {
     val (spec, gens) = specGens
 
     val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
-    println(s"Generating bcgen's JSON from $spec ...")
+    println(s"Generating bcgen's JSON spec from $spec ...")
     val big = gens(0)
     val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).console
+    println(st"${(pb.cmds, " ")}".render)
+    pb.runCheck()
+
+    println()
+  }
+}
+
+def dot(): Unit = {
+  for (specGens <- specGensMap.entries) {
+    val (spec, gens) = specGens
+
+    val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
+    println(s"Generating GraphViz .dot from $spec ...")
+    val big = gens(0)
+    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "dot", "--name", name,
       "--output-dir", spec.up.string, spec.string)).console
     println(st"${(pb.cmds, " ")}".render)
     pb.runCheck()
@@ -154,14 +170,15 @@ def runNative(): Unit = {
 }
 
 def usage(): Unit = {
-  println("Usage: ( json | gen | run | run-native )+")
+  println("Usage: ( gen | json | dot | run | run-native )+")
 }
 
 if (Os.cliArgs.size > 0) {
   for (arg <- Os.cliArgs) {
     arg match {
-      case string"json" => json()
       case string"gen" => gen()
+      case string"json" => json()
+      case string"dot" => dot()
       case string"run" => run()
       case string"run-native" => runNative()
       case _ => usage()

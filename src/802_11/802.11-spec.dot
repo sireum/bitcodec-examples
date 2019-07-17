@@ -1,0 +1,58 @@
+digraph G {
+  rankdir = LR;
+  node [shape=plaintext];
+  edge [arrowhead=vee];
+
+  n0 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>protocol:2</TD><TD>tpe:2</TD><TD>subType:4</TD><TD>toDS:1</TD><TD>fromDS:1</TD><TD>moreFrag:1</TD><TD>retry:1</TD><TD>powerMgmt:1</TD><TD>moreData:1</TD><TD>wep:1</TD><TD>order:1</TD></TR>
+    </TABLE>
+  >];
+  n1 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>duration:16</TD></TR>
+    </TABLE>
+  >];
+  n2 [shape=point];
+  n3 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>address1:48</TD><TD>address2:48</TD><TD>address3:48</TD></TR>
+    </TABLE>
+  >];
+  n4 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>fragNumber:4</TD><TD>seqNumber:12</TD></TR>
+    </TABLE>
+  >];
+  n5 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>address4:48</TD></TR>
+    </TABLE>
+  >];
+  n6 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>receiver:48</TD></TR>
+    </TABLE>
+  >];
+  n7 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>receiver:48</TD><TD>transmitter:48</TD></TR>
+    </TABLE>
+  >];
+  n8 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>body:&lt;...(macHeader.frameControl.tpe, macHeader.frameControl.subType)&gt;</TD><TD>fcs:32</TD></TR>
+    </TABLE>
+  >];
+
+  n0 -> n1;
+  n1 -> n2 [arrowhead=none, label="frameControl.tpe, frameControl.subType"];
+  n2 -> n3;
+  n3 -> n4;
+  n4 -> n5;
+  n2 -> n6;
+  n2 -> n7;
+  n7 -> n8;
+  n5 -> n8;
+  n6 -> n8;
+}

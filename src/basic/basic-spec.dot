@@ -1,0 +1,12 @@
+digraph G {
+  rankdir = LR;
+  node [shape=plaintext];
+  edge [arrowhead=vee];
+
+  n0 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>f1:1</TD><TD>f2:7</TD><TD>f3:100</TD><TD>f4:32</TD><TD>f5:80</TD><TD>f6:192</TD><TD>f7:448</TD><TD>(pads):11</TD></TR>
+    </TABLE>
+  >];
+
+}

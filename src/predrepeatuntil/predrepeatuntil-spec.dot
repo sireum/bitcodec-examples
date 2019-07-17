@@ -1,0 +1,19 @@
+digraph G {
+  rankdir = LR;
+  node [shape=plaintext];
+  edge [arrowhead=vee];
+
+  n0 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>end:8</TD></TR>
+    </TABLE>
+  >];
+  n1 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>value:8</TD></TR>
+    </TABLE>
+  >];
+
+  n1 -> n1 [label="!(u8\"0\")"];
+  n0 -> n1;
+}
