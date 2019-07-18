@@ -84,7 +84,7 @@ def dot(): Unit = {
     val (spec, gens) = specGens
 
     val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
-    println(s"Generating GraphViz .dot from $spec ...")
+    println(s"Generating Graphviz .dot from $spec ...")
     val big = gens(0)
     val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "dot", "--name", name,
       "--output-dir", spec.up.string, spec.string)).console
