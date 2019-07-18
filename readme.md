@@ -92,5 +92,21 @@ however, they can be regenerated as follows:
   bin\build.cmd dot
   ```
 
+## Running All Tasks
+
+To run all the tasks above in one go:
+
+* macOS/Linux:
+
+  ```bash
+  bin/build.cmd all
+  ```
+
+* Windows:
+
+  ```bash
+  bin\build.cmd all
+  ```
+
 
   

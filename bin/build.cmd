@@ -117,71 +117,112 @@ def gen(): Unit = {
   }
 }
 
-def run(): Unit = {
-  for (specGens <- specGensMap.entries) {
-    for (gen <- specGens._2) {
-      val genPath = s"$gen.sc"
-      println(s"Running $genPath ...")
-      val p = Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).console
-      println(st"${(p.cmds, " ")}".render)
-      p.runCheck()
-      println()
-    }
-  }
+def run(gen: Os.Path): Unit = {
+  val genPath = s"$gen.sc"
+  println(s"Running $genPath ...")
+  val p = Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).console
+  println(st"${(p.cmds, " ")}".render)
+  p.runCheck()
+  println()
 }
 
-def runNative(): Unit = {
+def runNative(gen: Os.Path): Unit = {
+  val genPath = s"$gen.sc"
+
+  val c = gen.up / "c"
+  val out = gen.up / "out"
+  val x = out / (if (Os.isWin) s"${gen.name}.exe" else gen.name)
+
+  c.removeAll()
+  out.removeAll()
+  out.mkdirAll()
+
+  println(s"Compiling $genPath to C ...")
+  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
+    "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
+  println(st"${(pt.cmds, " ")}".render)
+  pt.runCheck()
+  println()
+
+  println(s"Compiling executable $x ...")
+  val px = Os.proc(ISZ("cmake", "-DCMAKE_BUILD_TYPE=Release", s"..${Os.fileSep}c")).at(out).console
+  println(st"${(px.cmds, " ")}".render)
+  px.runCheck()
+  println()
+
+  val pm = Os.proc(ISZ("make")).at(out).console
+  println(st"${(pm.cmds, " ")}".render)
+  pm.runCheck()
+  println()
+
+  println(s"Running $x ...")
+  Os.proc(ISZ(x.string)).console.runCheck()
+  println()
+  println()
+}
+
+def all(): Unit = {
   for (specGens <- specGensMap.entries) {
-    for (gen <- specGens._2) {
-      val genPath = s"$gen.sc"
+    val (spec, gens) = specGens
 
-      val c = gen.up / "c"
-      val out = gen.up / "out"
-      val x = out / (if (Os.isWin) s"${gen.name}.exe" else gen.name)
+    println(s"Generating bitcodec from $spec ...")
+    val big = gens(0)
+    var pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
+      "--output-dir", big.up.string, spec.string)).console
+    println(st"${(pb.cmds, " ")}".render)
+    pb.runCheck()
 
-      c.removeAll()
-      out.removeAll()
-      out.mkdirAll()
+    if (gens.size == 2) {
+      val little = gens(1)
+      val pl = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
+        "--output-dir", little.up.string, spec.string)).console
+      println(st"${(pl.cmds, " ")}".render)
+      pl.runCheck()
+    }
+    println()
 
-      println(s"Compiling $genPath to C ...")
-      val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
-        "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
-      println(st"${(pt.cmds, " ")}".render)
-      pt.runCheck()
-      println()
+    println(s"Generating JSON, and Graphviz .dot from $spec ...")
+    val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
+    pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json,dot", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).console
+    println(st"${(pb.cmds, " ")}".render)
+    pb.runCheck()
+    println()
 
-      println(s"Compiling executable $x ...")
-      val px = Os.proc(ISZ("cmake", "-DCMAKE_BUILD_TYPE=Release", s"..${Os.fileSep}c")).at(out).console
-      println(st"${(px.cmds, " ")}".render)
-      px.runCheck()
-      println()
-
-      val pm = Os.proc(ISZ("make")).at(out).console
-      println(st"${(pm.cmds, " ")}".render)
-      pm.runCheck()
-      println()
-
-      println(s"Running $x ...")
-      Os.proc(ISZ(x.string)).console.runCheck()
-      println()
-      println()
+    for (gen <- gens) {
+      run(gen)
+      runNative(gen)
     }
   }
 }
 
 def usage(): Unit = {
-  println("Usage: ( gen | json | dot | run | run-native )+")
+  println("Usage: ( gen | json | dot | run | run-native | all )+")
 }
 
 if (Os.cliArgs.size > 0) {
-  for (arg <- Os.cliArgs) {
-    arg match {
-      case string"gen" => gen()
-      case string"json" => json()
-      case string"dot" => dot()
-      case string"run" => run()
-      case string"run-native" => runNative()
-      case _ => usage()
+  if (ops.ISZOps(Os.cliArgs).exists((arg: String) => arg == "all")) {
+    all()
+  } else {
+    for (arg <- Os.cliArgs) {
+      arg match {
+        case string"gen" => gen()
+        case string"json" => json()
+        case string"dot" => dot()
+        case string"run" =>
+          for (specGens <- specGensMap.entries) {
+            for (gen <- specGens._2) {
+              run(gen)
+            }
+          }
+        case string"run-native" =>
+          for (specGens <- specGensMap.entries) {
+            for (gen <- specGens._2) {
+              runNative(gen)
+            }
+          }
+        case _ => usage()
+      }
     }
   }
 } else {
