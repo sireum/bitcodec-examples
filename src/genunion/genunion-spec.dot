@@ -5,22 +5,25 @@ digraph G {
 
   n0 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>flag:1</TD></TR>
+      <TR><TD>flag:B</TD></TR>
     </TABLE>
   >];
   n1 [shape=point];
   n2 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>bazz:4</TD></TR>
+      <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
   n3 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>b1:1</TD><TD>b2:1</TD></TR>
+      <TR><TD>bazz:4</TD></TR>
     </TABLE>
   >];
+  n4 [shape=point];
 
   n0 -> n1 [arrowhead=none];
   n1 -> n2;
   n1 -> n3;
+  n2 -> n4 [arrowhead=none];
+  n3 -> n4 [arrowhead=none];
 }

@@ -3,17 +3,21 @@ digraph G {
   node [shape=plaintext];
   edge [arrowhead=vee];
 
-  n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>end:1</TD></TR>
-    </TABLE>
-  >];
+  n0 [shape=point];
   n1 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>cont:1</TD><TD>value:7</TD></TR>
+      <TR><TD>cont:B</TD><TD>value:7</TD></TR>
+    </TABLE>
+  >];
+  n2 [shape=point];
+  n3 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>end:B</TD></TR>
     </TABLE>
   >];
 
-  n1 -> n1 [label="T"];
+  n2 -> n0 [label="T"];
   n0 -> n1;
+  n1 -> n2 [arrowhead=none];
+  n2 -> n3;
 }

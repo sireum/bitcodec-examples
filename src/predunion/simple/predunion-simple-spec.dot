@@ -6,15 +6,18 @@ digraph G {
   n0 [shape=point];
   n1 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>flag:1</TD><TD>b1:1</TD><TD>b2:1</TD></TR>
+      <TR><TD>flag:B</TD><TD>bazz:4</TD></TR>
     </TABLE>
   >];
   n2 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>flag:1</TD><TD>bazz:4</TD></TR>
+      <TR><TD>flag:B</TD><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
+  n3 [shape=point];
 
-  n0 -> n1 [label="T"];
-  n0 -> n2 [label="F"];
+  n0 -> n1 [label="F"];
+  n0 -> n2 [label="T"];
+  n2 -> n3 [arrowhead=none];
+  n1 -> n3 [arrowhead=none];
 }

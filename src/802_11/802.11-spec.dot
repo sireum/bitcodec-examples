@@ -10,33 +10,29 @@ digraph G {
   >];
   n1 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>duration:16</TD></TR>
+      <TR><TD>duration:16 (2*8)</TD></TR>
     </TABLE>
   >];
   n2 [shape=point];
   n3 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>address1:48</TD><TD>address2:48</TD><TD>address3:48</TD></TR>
+      <TR><TD>address1:48 (6*8)</TD><TD>address2:48 (6*8)</TD><TD>address3:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n4 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>fragNumber:4</TD><TD>seqNumber:12</TD></TR>
+      <TR><TD>receiver:48 (6*8)</TD><TD>transmitter:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n5 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>address4:48</TD></TR>
+      <TR><TD>receiver:48 (6*8)</TD></TR>
     </TABLE>
   >];
-  n6 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>receiver:48</TD></TR>
-    </TABLE>
-  >];
+  n6 [shape=point];
   n7 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>receiver:48</TD><TD>transmitter:48</TD></TR>
+      <TR><TD>fragNumber:4</TD><TD>seqNumber:12</TD></TR>
     </TABLE>
   >];
   n8 [label=<
@@ -44,15 +40,21 @@ digraph G {
       <TR><TD>body:&lt;...(macHeader.frameControl.tpe, macHeader.frameControl.subType)&gt;</TD><TD>fcs:32</TD></TR>
     </TABLE>
   >];
+  n9 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD>address4:48 (6*8)</TD></TR>
+    </TABLE>
+  >];
 
   n0 -> n1;
   n1 -> n2 [arrowhead=none, label="frameControl.tpe, frameControl.subType"];
   n2 -> n3;
-  n3 -> n4;
-  n4 -> n5;
-  n2 -> n6;
-  n2 -> n7;
-  n7 -> n8;
-  n5 -> n8;
+  n2 -> n4;
+  n2 -> n5;
+  n9 -> n6 [arrowhead=none];
+  n5 -> n6 [arrowhead=none];
+  n4 -> n6 [arrowhead=none];
+  n3 -> n7;
   n6 -> n8;
+  n7 -> n9;
 }
