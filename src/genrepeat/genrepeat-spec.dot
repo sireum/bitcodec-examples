@@ -4,20 +4,20 @@ digraph G {
   edge [arrowhead=vee];
 
   n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.0" HREF="#">
       <TR><TD>size:8</TD></TR>
     </TABLE>
   >];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.sixBytes.0" HREF="#">
       <TR><TD>sixBytes:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n3 [shape=point];
 
-  n3 -> n1;
   n0 -> n1 [arrowhead=none];
+  n3 -> n1;
   n1 -> n2;
   n2 -> n3 [arrowhead=none];
 }

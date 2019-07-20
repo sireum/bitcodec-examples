@@ -4,7 +4,7 @@ digraph G {
   edge [arrowhead=vee];
 
   n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.0" HREF="#">
       <TR><TD>size:8</TD><TD>elements:&lt;...&gt;</TD></TR>
     </TABLE>
   >];

@@ -5,19 +5,19 @@ digraph G {
 
   n0 [shape=point];
   n1 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>flag:B</TD><TD>bazz:4</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz.0" HREF="#">
+      <TR><TD>flag:B</TD><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-      <TR><TD>flag:B</TD><TD>b1:B</TD><TD>b2:B</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz.0" HREF="#">
+      <TR><TD>flag:B</TD><TD>bazz:4</TD></TR>
     </TABLE>
   >];
   n3 [shape=point];
 
-  n0 -> n1 [label="F"];
-  n0 -> n2 [label="T"];
-  n2 -> n3 [arrowhead=none];
+  n0 -> n1 [label="T"];
+  n0 -> n2 [label="F"];
   n1 -> n3 [arrowhead=none];
+  n2 -> n3 [arrowhead=none];
 }

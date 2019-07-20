@@ -23,6 +23,87 @@ object BitCodec {
   // ... empty
   // END USER CODE: Members
 
+  object Baz {
+    def empty: Baz = {
+      return Baz(F, F)
+    }
+  }
+
+  @record class Baz(
+    var b1: B,
+    var b2: B
+  ) extends Bar {
+
+    def wellFormed: Z = {
+
+
+      // BEGIN USER CODE: Baz.wellFormed
+
+      // END USER CODE: Baz.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      b1 = Reader.MS.bleB(input, context)
+      b2 = Reader.MS.bleB(input, context)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.bleB(output, context, b1)
+      Writer.bleB(output, context, b2)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_Baz)
+      }
+    }
+
+  }
+
+  object Bazz {
+    def empty: Bazz = {
+      return Bazz(u4"0")
+    }
+  }
+
+  @record class Bazz(
+    var bazz: U4
+  ) extends Bar {
+
+    def wellFormed: Z = {
+
+
+      // BEGIN USER CODE: Bazz.wellFormed
+
+      // END USER CODE: Bazz.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      bazz = Reader.MS.beU4(input, context)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU4(output, context, bazz)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_Bazz)
+      }
+    }
+
+  }
+
   @record trait Bar extends Runtime.Composite
 
   object Bar {
@@ -41,87 +122,6 @@ object BitCodec {
        // END USER CODE: Bar.ChoiceContext
     )
 
-    object Baz {
-      def empty: Baz = {
-        return Baz(F, F)
-      }
-    }
-
-    @record class Baz(
-      var b1: B,
-      var b2: B
-    ) extends Bar {
-
-      def wellFormed: Z = {
-
-
-        // BEGIN USER CODE: Baz.wellFormed
-        // ... empty
-        // END USER CODE: Baz.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        b1 = Reader.MS.bleB(input, context)
-        b2 = Reader.MS.bleB(input, context)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.bleB(output, context, b1)
-        Writer.bleB(output, context, b2)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_Baz)
-        }
-      }
-
-    }
-
-    object Bazz {
-      def empty: Bazz = {
-        return Bazz(u4"0")
-      }
-    }
-
-    @record class Bazz(
-      var bazz: U4
-    ) extends Bar {
-
-      def wellFormed: Z = {
-
-
-        // BEGIN USER CODE: Bazz.wellFormed
-        // ... empty
-        // END USER CODE: Bazz.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        bazz = Reader.MS.beU4(input, context)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.beU4(output, context, bazz)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_Bazz)
-        }
-      }
-
-    }
-
     @enum object Choice {
        'Baz
        'Bazz
@@ -137,7 +137,7 @@ object BitCodec {
 
   object Foo {
     def empty: Foo = {
-      return Foo(F, Bar.Baz.empty)
+      return Foo(F, Baz.empty)
     }
   }
 
@@ -155,8 +155,8 @@ object BitCodec {
 
       // BEGIN USER CODE: Foo.wellFormed
       (flag, bar) match {
-        case (F, _: Bar.Baz) =>
-        case (T, _: Bar.Bazz) =>
+        case (F, _: Baz) =>
+        case (T, _: Bazz) =>
         case _ => return ERROR_Bar
       }
       // END USER CODE: Foo.wellFormed
@@ -171,8 +171,8 @@ object BitCodec {
       barChoiceContext.flag = flag
       // END USER CODE: Bar.ChoiceContext.init
       Bar.choose(input, context, barChoiceContext) match {
-        case Bar.Choice.Baz => bar = Bar.Baz.empty
-        case Bar.Choice.Bazz => bar = Bar.Bazz.empty
+        case Bar.Choice.Baz => bar = Baz.empty
+        case Bar.Choice.Bazz => bar = Bazz.empty
         case _ => context.signalError(ERROR_Bar)
       }
       bar.decode(input, context)
@@ -229,6 +229,6 @@ def test(fooExample: Foo): Unit = {
   println()
 }
 
-test(Foo(F, Bar.Baz(F, T)))
-test(Foo(T, Bar.Bazz(u4"7")))
+test(Foo(F, Baz(F, T)))
+test(Foo(T, Bazz(u4"7")))
 // END USER CODE: Test

@@ -157,213 +157,213 @@ object BitCodec {
 
   }
 
+  object Receiver {
+    def empty: Receiver = {
+      return Receiver(MSZ.create(6, u8"0"))
+    }
+  }
+
+  @record class Receiver(
+    var receiver: MSZ[U8]
+  ) extends HeaderAddress {
+
+    def wellFormed: Z = {
+
+      if (receiver.size != 6) {
+        return ERROR_Receiver
+      }
+
+      // BEGIN USER CODE: Receiver.wellFormed
+      // ... empty
+      // END USER CODE: Receiver.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      Reader.MS.beU8S(input, context, receiver, 6)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU8S(output, context, receiver)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_Receiver)
+      }
+    }
+
+  }
+
+  object ReceiverTransmitter {
+    def empty: ReceiverTransmitter = {
+      return ReceiverTransmitter(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"))
+    }
+  }
+
+  @record class ReceiverTransmitter(
+    var receiver: MSZ[U8],
+    var transmitter: MSZ[U8]
+  ) extends HeaderAddress {
+
+    def wellFormed: Z = {
+
+      if (receiver.size != 6) {
+        return ERROR_ReceiverTransmitter
+      }
+
+      if (transmitter.size != 6) {
+        return ERROR_ReceiverTransmitter
+      }
+
+      // BEGIN USER CODE: ReceiverTransmitter.wellFormed
+      // ... empty
+      // END USER CODE: ReceiverTransmitter.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      Reader.MS.beU8S(input, context, receiver, 6)
+      Reader.MS.beU8S(input, context, transmitter, 6)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU8S(output, context, receiver)
+      Writer.beU8S(output, context, transmitter)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_ReceiverTransmitter)
+      }
+    }
+
+  }
+
+  object SeqControl {
+    def empty: SeqControl = {
+      return SeqControl(u4"0", u12"0")
+    }
+  }
+
+  @record class SeqControl(
+    var fragNumber: U4,
+    var seqNumber: U12
+  ) extends Runtime.Composite {
+
+    def wellFormed: Z = {
+
+
+      // BEGIN USER CODE: SeqControl.wellFormed
+      // ... empty
+      // END USER CODE: SeqControl.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      fragNumber = Reader.MS.beU4(input, context)
+      seqNumber = Reader.MS.beU12(input, context)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU4(output, context, fragNumber)
+      Writer.beU12(output, context, seqNumber)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_SeqControl)
+      }
+    }
+
+  }
+
+  object Data {
+    def empty: Data = {
+      return Data(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"))
+    }
+  }
+
+  @record class Data(
+    var address1: MSZ[U8],
+    var address2: MSZ[U8],
+    var address3: MSZ[U8],
+    var seqControl: SeqControl,
+    var address4: MSZ[U8]
+  ) extends HeaderAddress {
+
+    def wellFormed: Z = {
+
+      if (address1.size != 6) {
+        return ERROR_Data
+      }
+
+      if (address2.size != 6) {
+        return ERROR_Data
+      }
+
+      if (address3.size != 6) {
+        return ERROR_Data
+      }
+
+      val wfSeqControl = seqControl.wellFormed
+      if (wfSeqControl != 0) {
+        return wfSeqControl
+      }
+
+      if (address4.size != 6) {
+        return ERROR_Data
+      }
+
+      // BEGIN USER CODE: Data.wellFormed
+      // ... empty
+      // END USER CODE: Data.wellFormed
+
+      return 0
+    }
+
+    def decode(input: MSZ[B], context: Context): Unit = {
+      Reader.MS.beU8S(input, context, address1, 6)
+      Reader.MS.beU8S(input, context, address2, 6)
+      Reader.MS.beU8S(input, context, address3, 6)
+      seqControl.decode(input, context)
+      Reader.MS.beU8S(input, context, address4, 6)
+
+      val wf = wellFormed
+      if (wf != 0) {
+        context.signalError(wf)
+      }
+    }
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU8S(output, context, address1)
+      Writer.beU8S(output, context, address2)
+      Writer.beU8S(output, context, address3)
+      seqControl.encode(output, context)
+      Writer.beU8S(output, context, address4)
+
+      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
+        context.updateErrorCode(ERROR_Data)
+      }
+    }
+
+  }
+
   @record trait HeaderAddress extends Runtime.Composite
 
   object HeaderAddress {
-
-    object Receiver {
-      def empty: Receiver = {
-        return Receiver(MSZ.create(6, u8"0"))
-      }
-    }
-
-    @record class Receiver(
-      var receiver: MSZ[U8]
-    ) extends HeaderAddress {
-
-      def wellFormed: Z = {
-
-        if (receiver.size != 6) {
-          return ERROR_Receiver
-        }
-
-        // BEGIN USER CODE: Receiver.wellFormed
-        // ... empty
-        // END USER CODE: Receiver.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        Reader.MS.beU8S(input, context, receiver, 6)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.beU8S(output, context, receiver)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_Receiver)
-        }
-      }
-
-    }
-
-    object ReceiverTransmitter {
-      def empty: ReceiverTransmitter = {
-        return ReceiverTransmitter(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"))
-      }
-    }
-
-    @record class ReceiverTransmitter(
-      var receiver: MSZ[U8],
-      var transmitter: MSZ[U8]
-    ) extends HeaderAddress {
-
-      def wellFormed: Z = {
-
-        if (receiver.size != 6) {
-          return ERROR_ReceiverTransmitter
-        }
-
-        if (transmitter.size != 6) {
-          return ERROR_ReceiverTransmitter
-        }
-
-        // BEGIN USER CODE: ReceiverTransmitter.wellFormed
-        // ... empty
-        // END USER CODE: ReceiverTransmitter.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        Reader.MS.beU8S(input, context, receiver, 6)
-        Reader.MS.beU8S(input, context, transmitter, 6)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.beU8S(output, context, receiver)
-        Writer.beU8S(output, context, transmitter)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_ReceiverTransmitter)
-        }
-      }
-
-    }
-
-    object SeqControl {
-      def empty: SeqControl = {
-        return SeqControl(u4"0", u12"0")
-      }
-    }
-
-    @record class SeqControl(
-      var fragNumber: U4,
-      var seqNumber: U12
-    ) extends Runtime.Composite {
-
-      def wellFormed: Z = {
-
-
-        // BEGIN USER CODE: SeqControl.wellFormed
-        // ... empty
-        // END USER CODE: SeqControl.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        fragNumber = Reader.MS.beU4(input, context)
-        seqNumber = Reader.MS.beU12(input, context)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.beU4(output, context, fragNumber)
-        Writer.beU12(output, context, seqNumber)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_SeqControl)
-        }
-      }
-
-    }
-
-    object Data {
-      def empty: Data = {
-        return Data(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"))
-      }
-    }
-
-    @record class Data(
-      var address1: MSZ[U8],
-      var address2: MSZ[U8],
-      var address3: MSZ[U8],
-      var seqControl: SeqControl,
-      var address4: MSZ[U8]
-    ) extends HeaderAddress {
-
-      def wellFormed: Z = {
-
-        if (address1.size != 6) {
-          return ERROR_Data
-        }
-
-        if (address2.size != 6) {
-          return ERROR_Data
-        }
-
-        if (address3.size != 6) {
-          return ERROR_Data
-        }
-
-        val wfSeqControl = seqControl.wellFormed
-        if (wfSeqControl != 0) {
-          return wfSeqControl
-        }
-
-        if (address4.size != 6) {
-          return ERROR_Data
-        }
-
-        // BEGIN USER CODE: Data.wellFormed
-        // ... empty
-        // END USER CODE: Data.wellFormed
-
-        return 0
-      }
-
-      def decode(input: MSZ[B], context: Context): Unit = {
-        Reader.MS.beU8S(input, context, address1, 6)
-        Reader.MS.beU8S(input, context, address2, 6)
-        Reader.MS.beU8S(input, context, address3, 6)
-        seqControl.decode(input, context)
-        Reader.MS.beU8S(input, context, address4, 6)
-
-        val wf = wellFormed
-        if (wf != 0) {
-          context.signalError(wf)
-        }
-      }
-
-      def encode(output: MSZ[B], context: Context): Unit = {
-        Writer.beU8S(output, context, address1)
-        Writer.beU8S(output, context, address2)
-        Writer.beU8S(output, context, address3)
-        seqControl.encode(output, context)
-        Writer.beU8S(output, context, address4)
-
-        if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-          context.updateErrorCode(ERROR_Data)
-        }
-      }
-
-    }
 
     @enum object Choice {
        'Receiver
@@ -393,7 +393,7 @@ object BitCodec {
 
   object MacHeader {
     def empty: MacHeader = {
-      return MacHeader(FrameControl.empty, MSZ.create(2, u8"0"), HeaderAddress.Receiver.empty)
+      return MacHeader(FrameControl.empty, MSZ.create(2, u8"0"), Receiver.empty)
     }
   }
 
@@ -415,9 +415,9 @@ object BitCodec {
       }
 
       (HeaderAddress.choose((frameControl.tpe, frameControl.subType)), headerAddress) match {
-        case (HeaderAddress.Choice.Receiver, _: HeaderAddress.Receiver) =>
-        case (HeaderAddress.Choice.ReceiverTransmitter, _: HeaderAddress.ReceiverTransmitter) =>
-        case (HeaderAddress.Choice.Data, _: HeaderAddress.Data) =>
+        case (HeaderAddress.Choice.Receiver, _: Receiver) =>
+        case (HeaderAddress.Choice.ReceiverTransmitter, _: ReceiverTransmitter) =>
+        case (HeaderAddress.Choice.Data, _: Data) =>
         case _ => return ERROR_HeaderAddress
       }
 
@@ -437,9 +437,9 @@ object BitCodec {
       frameControl.decode(input, context)
       Reader.MS.beU8S(input, context, duration, 2)
       HeaderAddress.choose((frameControl.tpe, frameControl.subType)) match {
-        case HeaderAddress.Choice.Receiver => headerAddress = HeaderAddress.Receiver.empty
-        case HeaderAddress.Choice.ReceiverTransmitter => headerAddress = HeaderAddress.ReceiverTransmitter.empty
-        case HeaderAddress.Choice.Data => headerAddress = HeaderAddress.Data.empty
+        case HeaderAddress.Choice.Receiver => headerAddress = Receiver.empty
+        case HeaderAddress.Choice.ReceiverTransmitter => headerAddress = ReceiverTransmitter.empty
+        case HeaderAddress.Choice.Data => headerAddress = Data.empty
         case _ => context.signalError(ERROR_HeaderAddress)
       }
       headerAddress.decode(input, context)
