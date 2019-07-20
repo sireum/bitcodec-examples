@@ -4,56 +4,56 @@ digraph G {
   edge [arrowhead=vee];
 
   n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.frameControl.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.frameControl" HREF="#">
       <TR><TD>protocol:2</TD><TD>tpe:2</TD><TD>subType:4</TD><TD>toDS:1</TD><TD>fromDS:1</TD><TD>moreFrag:1</TD><TD>retry:1</TD><TD>powerMgmt:1</TD><TD>moreData:1</TD><TD>wep:1</TD><TD>order:1</TD></TR>
     </TABLE>
   >];
   n1 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.1" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader" HREF="#">
       <TR><TD>duration:16 (2*8)</TD></TR>
     </TABLE>
   >];
   n2 [shape=point];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data" HREF="#">
       <TR><TD>address1:48 (6*8)</TD><TD>address2:48 (6*8)</TD><TD>address3:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n4 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiverTransmitter.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiverTransmitter" HREF="#">
       <TR><TD>receiver:48 (6*8)</TD><TD>transmitter:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n5 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiver.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiver" HREF="#">
       <TR><TD>receiver:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n6 [shape=point];
   n7 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data.seqControl.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data.seqControl" HREF="#">
       <TR><TD>fragNumber:4</TD><TD>seqNumber:12</TD></TR>
     </TABLE>
   >];
   n8 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.1" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame" HREF="#">
       <TR><TD>body:&lt;...(macHeader.frameControl.tpe, macHeader.frameControl.subType)&gt;</TD><TD>fcs:32</TD></TR>
     </TABLE>
   >];
   n9 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data.1" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data" HREF="#">
       <TR><TD>address4:48 (6*8)</TD></TR>
     </TABLE>
   >];
 
   n0 -> n1;
   n1 -> n2 [arrowhead=none, label="frameControl.tpe, frameControl.subType", tooltip="p => p match {&#013;  case /* CTS */ (Frame.Control, u4\"0xC\") => 0&#013;  case /* RTS */ (Frame.Control, u4\"0xB\") => 1&#013;  case /* Data */ (Frame.Data, _) => 2&#013;  case _ => -1 // error&#013;}", href="#"];
-  n2 -> n3;
-  n2 -> n4;
-  n2 -> n5;
+  n2 -> n3 [label="2"];
+  n2 -> n4 [label="1"];
+  n2 -> n5 [label="0"];
   n4 -> n6 [arrowhead=none];
-  n5 -> n6 [arrowhead=none];
   n9 -> n6 [arrowhead=none];
+  n5 -> n6 [arrowhead=none];
   n3 -> n7;
   n6 -> n8;
   n7 -> n9;

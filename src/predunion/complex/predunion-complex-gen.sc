@@ -199,6 +199,10 @@ object BitCodec {
 
   object Bar {
 
+    def empty: Bar = {
+      return Baz.empty
+    }
+
     @enum object Choice {
        'Baz
        'Bazz

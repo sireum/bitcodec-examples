@@ -5,13 +5,13 @@ digraph G {
 
   n0 [shape=point];
   n1 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.value.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.value" HREF="#">
       <TR><TD>value:8</TD></TR>
     </TABLE>
   >];
   n2 [shape=point];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.3" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo" HREF="#">
       <TR><TD>end:8</TD></TR>
     </TABLE>
   >];

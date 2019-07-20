@@ -4,26 +4,26 @@ digraph G {
   edge [arrowhead=vee];
 
   n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo" HREF="#">
       <TR><TD>flag:B</TD></TR>
     </TABLE>
   >];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
       <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz.0" HREF="#">
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz" HREF="#">
       <TR><TD>bazz:4</TD></TR>
     </TABLE>
   >];
   n4 [shape=point];
 
   n0 -> n1 [arrowhead=none, label="flag", tooltip="p => if (p) 1 else 0", href="#"];
-  n1 -> n2;
-  n1 -> n3;
+  n1 -> n2 [label="0"];
+  n1 -> n3 [label="1"];
   n3 -> n4 [arrowhead=none];
   n2 -> n4 [arrowhead=none];
 }

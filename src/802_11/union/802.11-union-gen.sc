@@ -365,6 +365,10 @@ object BitCodec {
 
   object HeaderAddress {
 
+    def empty: HeaderAddress = {
+      return Receiver.empty
+    }
+
     @enum object Choice {
        'Receiver
        'ReceiverTransmitter

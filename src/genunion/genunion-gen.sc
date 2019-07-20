@@ -108,6 +108,10 @@ object BitCodec {
 
   object Bar {
 
+    def empty: Bar = {
+      return Baz.empty
+    }
+
     object ChoiceContext {
       def empty: ChoiceContext = {
         // BEGIN USER CODE: Bar.ChoiceContext.empty
