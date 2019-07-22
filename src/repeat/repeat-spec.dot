@@ -1,5 +1,6 @@
 digraph G {
   rankdir = LR;
+  graph [splines=ortho];
   node [shape=plaintext];
   edge [arrowhead=vee];
 
@@ -16,8 +17,8 @@ digraph G {
   >];
   n3 [shape=point];
 
-  n3 -> n1 [label="size", tooltip="p => conversions.U8.toZ(p)", href="#"];
   n0 -> n1 [arrowhead=none];
+  n3 -> n1 [label="size", tooltip="p => conversions.U8.toZ(p)", href="#"];
   n1 -> n2;
   n2 -> n3 [arrowhead=none];
 }

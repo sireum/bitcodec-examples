@@ -1,23 +1,24 @@
 digraph G {
   rankdir = LR;
+  graph [splines=ortho];
   node [shape=plaintext];
   edge [arrowhead=vee];
 
   n0 [shape=point];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="cts" HREF="#">
-      <TR><TD>duration:16 (2*8)</TD><TD>receiver:48 (6*8)</TD><TD>fcs:32</TD></TR>
-    </TABLE>
-  >];
-  n3 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="data" HREF="#">
       <TR><TD>address4:48 (6*8)</TD><TD>body:&lt;...(frameControl.tpe, frameControl.subType)&gt;</TD><TD>fcs:32</TD></TR>
     </TABLE>
   >];
-  n4 [label=<
+  n3 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="rts" HREF="#">
       <TR><TD>duration:16 (2*8)</TD><TD>receiver:48 (6*8)</TD><TD>transmitter:48 (6*8)</TD><TD>fcs:32</TD></TR>
+    </TABLE>
+  >];
+  n4 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="cts" HREF="#">
+      <TR><TD>duration:16 (2*8)</TD><TD>receiver:48 (6*8)</TD><TD>fcs:32</TD></TR>
     </TABLE>
   >];
   n5 [label=<
@@ -47,14 +48,14 @@ digraph G {
   >];
 
   n4 -> n1 [arrowhead=none];
-  n2 -> n1 [arrowhead=none];
   n3 -> n1 [arrowhead=none];
+  n2 -> n1 [arrowhead=none];
   n0 -> n5 [label="_2.u2\"1\".u4\"12\""];
-  n5 -> n2;
+  n5 -> n4;
   n0 -> n6 [label="_2.u2\"1\".u4\"11\""];
-  n6 -> n4;
+  n6 -> n3;
   n0 -> n7 [label="_2.u2\"2\""];
   n7 -> n8;
   n8 -> n9;
-  n9 -> n3;
+  n9 -> n2;
 }
