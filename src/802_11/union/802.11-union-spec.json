@@ -1,5 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
+  "maxSize" : -1,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "MacFrame",
@@ -150,6 +151,7 @@
       {
         "type" : "Spec.Raw",
         "name" : "body",
+        "maxSize" : -1,
         "dependsOn" : ["macHeader.frameControl.tpe", "macHeader.frameControl.subType"],
         "size" : ""
       },
@@ -185,13 +187,16 @@
           "params" : [
             {
               "type" : "org.sireum.lang.ast.Exp.Fun.Param",
-              "id" : {
-                "type" : "org.sireum.lang.ast.Id",
-                "value" : "p",
-                "attr" : {
-                  "type" : "org.sireum.lang.ast.Attr",
-                  "posOpt" : {
-                    "type" : "None"
+              "idOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Id",
+                  "value" : "p",
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.Attr",
+                    "posOpt" : {
+                      "type" : "None"
+                    }
                   }
                 }
               },
@@ -904,13 +909,16 @@
           "params" : [
             {
               "type" : "org.sireum.lang.ast.Exp.Fun.Param",
-              "id" : {
-                "type" : "org.sireum.lang.ast.Id",
-                "value" : "p",
-                "attr" : {
-                  "type" : "org.sireum.lang.ast.Attr",
-                  "posOpt" : {
-                    "type" : "None"
+              "idOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Id",
+                  "value" : "p",
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.Attr",
+                    "posOpt" : {
+                      "type" : "None"
+                    }
                   }
                 }
               },
@@ -1447,6 +1455,19 @@
             }
           }
         }
+      ]
+    ]
+  },
+  "funTexts" : {
+    "type" : "Map",
+    "entries" : [
+      [
+        "HeaderAddress",
+        "p => p match {\n      case \/* CTS *\/ (Frame.Control, u4\"0xC\") => 0\n      case \/* RTS *\/ (Frame.Control, u4\"0xB\") => 1\n      case \/* Data *\/ (Frame.Data, _) => 2\n      case _ => -1 \/\/ error\n    }"
+      ],
+      [
+        "body",
+        "p => p match {\n        case \/* CTS *\/ (Frame.Control, u4\"0xC\") => 0\n        case \/* RTS *\/ (Frame.Control, u4\"0xB\") => 0\n        case _ => -1\n      }"
       ]
     ]
   }

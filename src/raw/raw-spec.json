@@ -1,5 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
+  "maxSize" : -1,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -12,6 +13,7 @@
       {
         "type" : "Spec.Raw",
         "name" : "elements",
+        "maxSize" : -1,
         "dependsOn" : ["size"],
         "size" : ""
       }
@@ -33,13 +35,16 @@
           "params" : [
             {
               "type" : "org.sireum.lang.ast.Exp.Fun.Param",
-              "id" : {
-                "type" : "org.sireum.lang.ast.Id",
-                "value" : "p",
-                "attr" : {
-                  "type" : "org.sireum.lang.ast.Attr",
-                  "posOpt" : {
-                    "type" : "None"
+              "idOpt" : {
+                "type" : "Some",
+                "value" : {
+                  "type" : "org.sireum.lang.ast.Id",
+                  "value" : "p",
+                  "attr" : {
+                    "type" : "org.sireum.lang.ast.Attr",
+                    "posOpt" : {
+                      "type" : "None"
+                    }
                   }
                 }
               },
@@ -369,6 +374,15 @@
             }
           }
         }
+      ]
+    ]
+  },
+  "funTexts" : {
+    "type" : "Map",
+    "entries" : [
+      [
+        "elements",
+        "p => conversions.U8.toZ(p)"
       ]
     ]
   }

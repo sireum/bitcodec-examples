@@ -7,8 +7,9 @@ import org.sireum.bitcodec.Spec.bits
 
 val foo: Spec =
   Concat("Foo", ISZ(
-    PredRepeatWhile(
+    BoundedPredRepeatWhile(
       "elements",
+      10,
       ISZ(boolean(T)),
       Concat("Value", ISZ(
         Boolean("cont"),

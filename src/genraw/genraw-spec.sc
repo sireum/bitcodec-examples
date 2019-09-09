@@ -7,7 +7,7 @@ import org.sireum.bitcodec.Spec._
 val foo: Spec =
   Concat("Foo", ISZ(
     Bits("size", 8),
-    GenRaw("elements")
+    BoundedGenRaw("elements", 10)
   ))
 
 println(foo.toJSON(T))

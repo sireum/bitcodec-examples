@@ -1,5 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
+  "maxSize" : 81,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -145,6 +146,11 @@
     ]
   },
   "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funTexts" : {
     "type" : "Map",
     "entries" : [
     ]

@@ -1,5 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
+  "maxSize" : -1,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -7,6 +8,7 @@
       {
         "type" : "Spec.PredRepeatUntil",
         "name" : "elements",
+        "maxElements" : -1,
         "preds" : [
           {
             "type" : "Spec.Pred.Bits",
@@ -33,6 +35,11 @@
     ]
   },
   "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funTexts" : {
     "type" : "Map",
     "entries" : [
     ]

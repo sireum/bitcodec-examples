@@ -1,5 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
+  "maxSize" : 81,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -7,6 +8,7 @@
       {
         "type" : "Spec.PredRepeatWhile",
         "name" : "elements",
+        "maxElements" : 10,
         "preds" : [
           {
             "type" : "Spec.Pred.Boolean",
@@ -41,6 +43,11 @@
     ]
   },
   "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funTexts" : {
     "type" : "Map",
     "entries" : [
     ]
