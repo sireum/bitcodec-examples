@@ -22,6 +22,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object Value {
+
+    val maxSize: Z = z"8"
+
     def empty: Value = {
       return Value(u8"0")
     }
@@ -63,6 +66,9 @@ object BitCodec {
   }
 
   object Foo {
+
+    val maxSize: Z = z"-1"
+
     def empty: Foo = {
       return Foo(MSZ[Value](), u8"0")
     }

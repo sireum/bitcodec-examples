@@ -29,6 +29,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object Baz {
+
+    val maxSize: Z = z"81"
+
     def empty: Baz = {
       return Baz(F, MSZ.create(2, u8"0"), MSZ.create(1, u64"0"))
     }
@@ -86,6 +89,9 @@ object BitCodec {
   }
 
   object Bazz {
+
+    val maxSize: Z = z"81"
+
     def empty: Bazz = {
       return Bazz(F, MSZ.create(1, u16"0"), MSZ.create(2, u32"0"))
     }
@@ -143,6 +149,9 @@ object BitCodec {
   }
 
   object Bazzz {
+
+    val maxSize: Z = z"17"
+
     def empty: Bazzz = {
       return Bazzz(F, u8"0", u8"0")
     }
@@ -198,6 +207,8 @@ object BitCodec {
   @record trait Bar extends Runtime.Composite
 
   object Bar {
+
+    val maxSize: Z = z"81"
 
     def empty: Bar = {
       return Baz.empty
@@ -302,6 +313,9 @@ object BitCodec {
   }
 
   object Foo {
+
+    val maxSize: Z = z"81"
+
     def empty: Foo = {
       return Foo(Baz.empty)
     }

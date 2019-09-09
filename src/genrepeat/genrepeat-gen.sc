@@ -22,6 +22,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object SixBytes {
+
+    val maxSize: Z = z"48"
+
     def empty: SixBytes = {
       return SixBytes(MSZ.create(6, u8"0"))
     }
@@ -78,6 +81,9 @@ object BitCodec {
   )
 
   object Foo {
+
+    val maxSize: Z = z"488"
+
     def empty: Foo = {
       return Foo(u8"0", MSZ[SixBytes]())
     }

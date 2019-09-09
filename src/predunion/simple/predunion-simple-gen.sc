@@ -24,6 +24,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object Baz {
+
+    val maxSize: Z = z"3"
+
     def empty: Baz = {
       return Baz(F, F, F)
     }
@@ -71,6 +74,9 @@ object BitCodec {
   }
 
   object Bazz {
+
+    val maxSize: Z = z"5"
+
     def empty: Bazz = {
       return Bazz(F, u4"0")
     }
@@ -118,6 +124,8 @@ object BitCodec {
 
   object Bar {
 
+    val maxSize: Z = z"5"
+
     def empty: Bar = {
       return Baz.empty
     }
@@ -154,6 +162,9 @@ object BitCodec {
   }
 
   object Foo {
+
+    val maxSize: Z = z"5"
+
     def empty: Foo = {
       return Foo(Baz.empty)
     }

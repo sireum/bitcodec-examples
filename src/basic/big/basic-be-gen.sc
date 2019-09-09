@@ -22,6 +22,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object Foo {
+
+    val maxSize: Z = z"487"
+
     def empty: Foo = {
       return Foo(F, u7"0", MSZ.create(100, F), MSZ.create(4, u8"0"), MSZ.create(5, u16"0"), MSZ.create(6, u32"0"), MSZ.create(7, u64"0"))
     }

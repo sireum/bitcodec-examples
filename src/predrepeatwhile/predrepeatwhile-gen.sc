@@ -22,6 +22,9 @@ object BitCodec {
   // END USER CODE: Members
 
   object Value {
+
+    val maxSize: Z = z"8"
+
     def empty: Value = {
       return Value(F, u7"0")
     }
@@ -66,6 +69,9 @@ object BitCodec {
   }
 
   object Foo {
+
+    val maxSize: Z = z"81"
+
     def empty: Foo = {
       return Foo(MSZ[Value](), F)
     }
@@ -78,6 +84,9 @@ object BitCodec {
 
     def wellFormed: Z = {
 
+      if (elements.size > 10) {
+        return ERROR_Foo_elements
+      }
 
       // BEGIN USER CODE: Foo.wellFormed
       if (end) {

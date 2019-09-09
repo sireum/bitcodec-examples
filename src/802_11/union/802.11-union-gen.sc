@@ -82,6 +82,9 @@ object BitCodec {
   }
 
   object FrameControl {
+
+    val maxSize: Z = z"16"
+
     def empty: FrameControl = {
       return FrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
     }
@@ -158,6 +161,9 @@ object BitCodec {
   }
 
   object Receiver {
+
+    val maxSize: Z = z"48"
+
     def empty: Receiver = {
       return Receiver(MSZ.create(6, u8"0"))
     }
@@ -200,6 +206,9 @@ object BitCodec {
   }
 
   object ReceiverTransmitter {
+
+    val maxSize: Z = z"96"
+
     def empty: ReceiverTransmitter = {
       return ReceiverTransmitter(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"))
     }
@@ -249,6 +258,9 @@ object BitCodec {
   }
 
   object SeqControl {
+
+    val maxSize: Z = z"16"
+
     def empty: SeqControl = {
       return SeqControl(u4"0", u12"0")
     }
@@ -291,6 +303,9 @@ object BitCodec {
   }
 
   object Data {
+
+    val maxSize: Z = z"208"
+
     def empty: Data = {
       return Data(MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"))
     }
@@ -365,6 +380,8 @@ object BitCodec {
 
   object HeaderAddress {
 
+    val maxSize: Z = z"208"
+
     def empty: HeaderAddress = {
       return Receiver.empty
     }
@@ -396,6 +413,9 @@ object BitCodec {
   }
 
   object MacHeader {
+
+    val maxSize: Z = z"240"
+
     def empty: MacHeader = {
       return MacHeader(FrameControl.empty, MSZ.create(2, u8"0"), Receiver.empty)
     }
@@ -467,6 +487,9 @@ object BitCodec {
   }
 
   object MacFrame {
+
+    val maxSize: Z = z"-1"
+
     def empty: MacFrame = {
       return MacFrame(MacHeader.empty, MSZ[B](), u32"0")
     }

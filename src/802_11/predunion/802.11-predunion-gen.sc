@@ -78,6 +78,9 @@ object BitCodec {
   }
 
   object FrameControl {
+
+    val maxSize: Z = z"16"
+
     def empty: FrameControl = {
       return FrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
     }
@@ -154,6 +157,9 @@ object BitCodec {
   }
 
   object Cts {
+
+    val maxSize: Z = z"112"
+
     def empty: Cts = {
       return Cts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), u32"0")
     }
@@ -214,6 +220,9 @@ object BitCodec {
   }
 
   object Rts {
+
+    val maxSize: Z = z"160"
+
     def empty: Rts = {
       return Rts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), u32"0")
     }
@@ -281,6 +290,9 @@ object BitCodec {
   }
 
   object SeqControl {
+
+    val maxSize: Z = z"16"
+
     def empty: SeqControl = {
       return SeqControl(u4"0", u12"0")
     }
@@ -323,6 +335,9 @@ object BitCodec {
   }
 
   object Data {
+
+    val maxSize: Z = z"-1"
+
     def empty: Data = {
       return Data(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"), MSZ[B](), u32"0")
     }
@@ -443,6 +458,8 @@ object BitCodec {
   @record trait MacFrame extends Runtime.Composite
 
   object MacFrame {
+
+    val maxSize: Z = z"-1"
 
     def empty: MacFrame = {
       return Cts.empty
