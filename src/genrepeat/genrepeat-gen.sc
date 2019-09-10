@@ -96,6 +96,9 @@ object BitCodec {
 
     def wellFormed: Z = {
 
+      if (elements.size > 10) {
+        return ERROR_Foo_elements
+      }
 
       // BEGIN USER CODE: Foo.wellFormed
       // ... empty

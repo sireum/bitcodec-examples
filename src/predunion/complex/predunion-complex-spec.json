@@ -36,12 +36,14 @@
                 {
                   "type" : "Spec.Bytes",
                   "name" : "bs",
-                  "size" : 2
+                  "size" : 2,
+                  "signed" : true
                 },
                 {
                   "type" : "Spec.Longs",
                   "name" : "l",
-                  "size" : 1
+                  "size" : 1,
+                  "signed" : true
                 }
               ]
             }
@@ -73,12 +75,14 @@
                 {
                   "type" : "Spec.Shorts",
                   "name" : "s",
-                  "size" : 1
+                  "size" : 1,
+                  "signed" : true
                 },
                 {
                   "type" : "Spec.Ints",
                   "name" : "is",
-                  "size" : 2
+                  "size" : 2,
+                  "signed" : true
                 }
               ]
             }

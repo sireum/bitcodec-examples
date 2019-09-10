@@ -17,7 +17,8 @@
         "element" : {
           "type" : "Spec.Bytes",
           "name" : "sixBytes",
-          "size" : 6
+          "size" : 6,
+          "signed" : true
         }
       }
     ]

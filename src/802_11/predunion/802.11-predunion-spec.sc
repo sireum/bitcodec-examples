@@ -42,8 +42,8 @@ val macFrame: Spec =
         ISZ(skip(2), bits(2, 1), bits(4, 0xC)),
         Concat("Cts", ISZ(
           frameControl,
-          Bytes("duration", 2),
-          Bytes("receiver", 6),
+          UBytes("duration", 2),
+          UBytes("receiver", 6),
           Bits("fcs", 32),
         ))
       ),
@@ -51,9 +51,9 @@ val macFrame: Spec =
         ISZ(skip(2), bits(2, 1), bits(4, 0xB)),
         Concat("Rts", ISZ(
           frameControl,
-          Bytes("duration", 2),
-          Bytes("receiver", 6),
-          Bytes("transmitter", 6),
+          UBytes("duration", 2),
+          UBytes("receiver", 6),
+          UBytes("transmitter", 6),
           Bits("fcs", 32),
         ))
       ),
@@ -61,12 +61,12 @@ val macFrame: Spec =
         ISZ(skip(2), bits(2, 2)),
         Concat("Data", ISZ(
           frameControl,
-          Bytes("duration", 2),
-          Bytes("address1", 6),
-          Bytes("address2", 6),
-          Bytes("address3", 6),
+          UBytes("duration", 2),
+          UBytes("address1", 6),
+          UBytes("address2", 6),
+          UBytes("address3", 6),
           seqControl,
-          Bytes("address4", 6),
+          UBytes("address4", 6),
           Raw[(Frame.Type, U4)](
             "body",
             ISZ("frameControl.tpe", "frameControl.subType"),

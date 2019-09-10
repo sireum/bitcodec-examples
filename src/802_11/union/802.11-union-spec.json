@@ -73,7 +73,8 @@
           {
             "type" : "Spec.Bytes",
             "name" : "duration",
-            "size" : 2
+            "size" : 2,
+            "signed" : true
           },
           {
             "type" : "Spec.Union",
@@ -84,7 +85,8 @@
               {
                 "type" : "Spec.Bytes",
                 "name" : "receiver",
-                "size" : 6
+                "size" : 6,
+                "signed" : true
               },
               {
                 "type" : "Spec.Concat",
@@ -93,12 +95,14 @@
                   {
                     "type" : "Spec.Bytes",
                     "name" : "receiver",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "transmitter",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   }
                 ]
               },
@@ -109,17 +113,20 @@
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address1",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address2",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address3",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   },
                   {
                     "type" : "Spec.Concat",
@@ -140,7 +147,8 @@
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address4",
-                    "size" : 6
+                    "size" : 6,
+                    "signed" : true
                   }
                 ]
               }

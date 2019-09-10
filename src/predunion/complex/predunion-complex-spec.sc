@@ -14,16 +14,16 @@ val foo: Spec =
           ISZ(skip(1), bytes(ISZ(1, 0)), longs(ISZ(7))),
           Concat("Baz", ISZ(
             Boolean("flag"),
-            Bytes("bs", 2),
-            Longs("l", 1)
+            UBytes("bs", 2),
+            ULongs("l", 1)
           ))
         ),
         PredSpec(
           ISZ(skip(1), shorts(ISZ(2)), ints(ISZ(3, 5))),
           Concat("Bazz", ISZ(
             Boolean("flag"),
-            Shorts("s", 1),
-            Ints("is", 2)
+            UShorts("s", 1),
+            UInts("is", 2)
           ))
         ),
         PredSpec(

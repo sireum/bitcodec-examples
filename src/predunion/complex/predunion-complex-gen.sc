@@ -33,14 +33,14 @@ object BitCodec {
     val maxSize: Z = z"81"
 
     def empty: Baz = {
-      return Baz(F, MSZ.create(2, u8"0"), MSZ.create(1, u64"0"))
+      return Baz(F, MSZ.create(2, u8"0"), u64"0")
     }
   }
 
   @record class Baz(
     var flag: B,
     var bs: MSZ[U8],
-    var l: MSZ[U64]
+    var l: U64
   ) extends Bar {
 
     def wellFormed: Z = {
@@ -49,15 +49,11 @@ object BitCodec {
         return ERROR_Baz
       }
 
-      if (l.size != 1) {
-        return ERROR_Baz
-      }
-
       // BEGIN USER CODE: Baz.wellFormed
       if (bs != MSZ(u8"1", u8"0")) {
         return ERROR_Baz
       }
-      if (l != MSZ(u64"7")) {
+      if (l != u64"7") {
         return ERROR_Baz
       }
       // END USER CODE: Baz.wellFormed
@@ -68,7 +64,7 @@ object BitCodec {
     def decode(input: MSZ[B], context: Context): Unit = {
       flag = Reader.MS.bleB(input, context)
       Reader.MS.beU8S(input, context, bs, 2)
-      Reader.MS.beU64S(input, context, l, 1)
+      l = Reader.MS.beU64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -79,7 +75,7 @@ object BitCodec {
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleB(output, context, flag)
       Writer.beU8S(output, context, bs)
-      Writer.beU64S(output, context, l)
+      Writer.beU64(output, context, l)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Baz)
@@ -93,28 +89,24 @@ object BitCodec {
     val maxSize: Z = z"81"
 
     def empty: Bazz = {
-      return Bazz(F, MSZ.create(1, u16"0"), MSZ.create(2, u32"0"))
+      return Bazz(F, u16"0", MSZ.create(2, u32"0"))
     }
   }
 
   @record class Bazz(
     var flag: B,
-    var s: MSZ[U16],
+    var s: U16,
     var is: MSZ[U32]
   ) extends Bar {
 
     def wellFormed: Z = {
-
-      if (s.size != 1) {
-        return ERROR_Bazz
-      }
 
       if (is.size != 2) {
         return ERROR_Bazz
       }
 
       // BEGIN USER CODE: Bazz.wellFormed
-      if (s != MSZ(u16"2")) {
+      if (s != u16"2") {
         return ERROR_Bazz
       }
       if (is != MSZ(u32"3", u32"5")) {
@@ -127,7 +119,7 @@ object BitCodec {
 
     def decode(input: MSZ[B], context: Context): Unit = {
       flag = Reader.MS.bleB(input, context)
-      Reader.MS.beU16S(input, context, s, 1)
+      s = Reader.MS.beU16(input, context)
       Reader.MS.beU32S(input, context, is, 2)
 
       val wf = wellFormed
@@ -138,7 +130,7 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleB(output, context, flag)
-      Writer.beU16S(output, context, s)
+      Writer.beU16(output, context, s)
       Writer.beU32S(output, context, is)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -394,8 +386,8 @@ def test(fooExample: Foo): Unit = {
   println()
 }
 
-test(Foo(Baz(T, MSZ(u8"1", u8"0"), MSZ(u64"7"))))
-test(Foo(Bazz(F, MSZ(u16"2"), MSZ(u32"3", u32"5"))))
+test(Foo(Baz(T, MSZ(u8"1", u8"0"), u64"7")))
+test(Foo(Bazz(F, u16"2", MSZ(u32"3", u32"5"))))
 test(Foo(Bazzz(F, u8"3", u8"10")))
 test(Foo(Bazzz(F, u8"5", u8"15")))
 // END USER CODE: Test

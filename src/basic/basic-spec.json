@@ -22,22 +22,26 @@
       {
         "type" : "Spec.Bytes",
         "name" : "f4",
-        "size" : 4
+        "size" : 4,
+        "signed" : true
       },
       {
         "type" : "Spec.Shorts",
         "name" : "f5",
-        "size" : 5
+        "size" : 5,
+        "signed" : true
       },
       {
         "type" : "Spec.Ints",
         "name" : "f6",
-        "size" : 6
+        "size" : 6,
+        "signed" : true
       },
       {
         "type" : "Spec.Longs",
         "name" : "f7",
-        "size" : 7
+        "size" : 7,
+        "signed" : true
       },
       {
         "type" : "Spec.Pads",

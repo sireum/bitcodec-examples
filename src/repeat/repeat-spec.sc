@@ -9,7 +9,7 @@ val foo: Spec =
     Bits("size", 8),
     Repeat[U8]("elements", ISZ("size"),
       p => conversions.U8.toZ(p),
-      Bytes("sixBytes", 6)
+      UBytes("sixBytes", 6)
     )
   ))
 

@@ -35,7 +35,7 @@ val seqControl: Spec = Concat("SeqControl", ISZ(
 
 val macHeader: Spec = Concat("MacHeader", ISZ(
   frameControl,
-  Bytes("duration", 2),
+  UBytes("duration", 2),
   Union[(Frame.Type, U4)](
     "HeaderAddress",
     ISZ("frameControl.tpe", "frameControl.subType"),
@@ -46,17 +46,17 @@ val macHeader: Spec = Concat("MacHeader", ISZ(
       case _ => -1 // error
     },
     ISZ(
-      Bytes("receiver", 6),
+      UBytes("receiver", 6),
       Concat("ReceiverTransmitter", ISZ(
-        Bytes("receiver", 6),
-        Bytes("transmitter", 6)
+        UBytes("receiver", 6),
+        UBytes("transmitter", 6)
       )),
       Concat("Data", ISZ(
-        Bytes("address1", 6),
-        Bytes("address2", 6),
-        Bytes("address3", 6),
+        UBytes("address1", 6),
+        UBytes("address2", 6),
+        UBytes("address3", 6),
         seqControl,
-        Bytes("address4", 6)
+        UBytes("address4", 6)
       )),
       // ...
     )
