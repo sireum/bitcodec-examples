@@ -6,7 +6,7 @@ digraph G {
 
   n0 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo" HREF="#">
-      <TR><TD>f1:B</TD><TD>f2:7</TD><TD>f3:100</TD><TD>f4:32 (4*8)</TD><TD>f5:80 (5*16)</TD><TD>f6:192 (6*32)</TD><TD>f7:448 (7*64)</TD><TD>(pads):11</TD></TR>
+      <TR><TD>f1:B</TD><TD>f2:7</TD><TD>f3:100</TD><TD>f4:32 (4*8)</TD><TD>uf4:32 (4*8)</TD><TD>f5:80 (5*16)</TD><TD>uf5:80 (5*16)</TD><TD>f6:192 (6*32)</TD><TD>uf6:192 (6*32)</TD><TD>f7:448 (7*64)</TD><TD>uf7:448 (7*64)</TD><TD>(pads):11</TD></TR>
     </TABLE>
   >];
 

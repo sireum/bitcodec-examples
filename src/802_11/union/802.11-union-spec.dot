@@ -48,10 +48,10 @@ digraph G {
   >];
 
   n0 -> n1;
-  n1 -> n2 [arrowhead=none, label="frameControl.tpe, frameControl.subType", tooltip="p => p match {&#013;  case /* CTS */ (Frame.Control, u4\"0xC\") => 0&#013;  case /* RTS */ (Frame.Control, u4\"0xB\") => 1&#013;  case /* Data */ (Frame.Data, _) => 2&#013;  case _ => -1 // error&#013;}", href="#"];
-  n2 -> n3 [label="2"];
-  n2 -> n4 [label="1"];
-  n2 -> n5 [label="0"];
+  n1 -> n2 [arrowhead=none, xlabel="frameControl.tpe, frameControl.subType", tooltip="p => p match {&#013;  case /* CTS */ (Frame.Control, u4\"0xC\") => 0&#013;  case /* RTS */ (Frame.Control, u4\"0xB\") => 1&#013;  case /* Data */ (Frame.Data, _) => 2&#013;  case _ => -1 // error&#013;}", href="#"];
+  n2 -> n3 [xlabel="2"];
+  n2 -> n4 [xlabel="1"];
+  n2 -> n5 [xlabel="0"];
   n5 -> n6 [arrowhead=none];
   n4 -> n6 [arrowhead=none];
   n9 -> n6 [arrowhead=none];

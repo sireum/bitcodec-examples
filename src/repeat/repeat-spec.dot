@@ -18,7 +18,7 @@ digraph G {
   n3 [shape=point];
 
   n0 -> n1 [arrowhead=none];
-  n3 -> n1 [label="size", tooltip="p => conversions.U8.toZ(p)", href="#"];
+  n3 -> n1 [xlabel="size", tooltip="p => conversions.U8.toZ(p)", href="#"];
   n1 -> n2;
   n2 -> n3 [arrowhead=none];
 }
