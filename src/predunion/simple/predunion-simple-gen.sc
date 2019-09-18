@@ -27,16 +27,42 @@ object BitCodec {
 
     val maxSize: Z = z"3"
 
-    def empty: Baz = {
-      return Baz(F, F, F)
+    def empty: MBaz = {
+      return MBaz(F, F, F)
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Baz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Baz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Baz(
+    val flag: B,
+    val b1: B,
+    val b2: B
+  ) extends Bar {
+
+    @strictpure def toMutable: MBaz = MBaz(flag, b1, b2)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Baz(
+  @record class MBaz(
     var flag: B,
     var b1: B,
     var b2: B
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Baz = Baz(flag, b1, b2)
 
     def wellFormed: Z = {
 
@@ -77,15 +103,40 @@ object BitCodec {
 
     val maxSize: Z = z"5"
 
-    def empty: Bazz = {
-      return Bazz(F, u4"0")
+    def empty: MBazz = {
+      return MBazz(F, u4"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bazz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bazz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Bazz(
+    val flag: B,
+    val bazz: U4
+  ) extends Bar {
+
+    @strictpure def toMutable: MBazz = MBazz(flag, bazz)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Bazz(
+  @record class MBazz(
     var flag: B,
     var bazz: U4
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Bazz = Bazz(flag, bazz)
 
     def wellFormed: Z = {
 
@@ -120,14 +171,28 @@ object BitCodec {
 
   }
 
-  @record trait Bar extends Runtime.Composite
+  @datatype trait Bar {
+    @strictpure def toMutable: MBar
+    def encode(output: MSZ[B], context: Context): Unit
+    def wellFormed: Z
+  }
+
+  @record trait MBar extends Runtime.Composite {
+    @strictpure def toImmutable: Bar
+  }
 
   object Bar {
 
     val maxSize: Z = z"5"
 
-    def empty: Bar = {
+    def empty: MBar = {
       return Baz.empty
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bar] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bar]() else Some(r.toImmutable)
     }
 
     @enum object Choice {
@@ -159,20 +224,45 @@ object BitCodec {
       }
       return Choice.Error
     }
+
   }
 
   object Foo {
 
     val maxSize: Z = z"5"
 
-    def empty: Foo = {
-      return Foo(Baz.empty)
+    def empty: MFoo = {
+      return MFoo(Baz.empty)
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Foo(
+    val bar: Bar
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(bar.toMutable)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Foo(
-    var bar: Bar
+  @record class MFoo(
+    var bar: MBar
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(bar.toImmutable)
 
     def wellFormed: Z = {
 
@@ -213,7 +303,7 @@ object BitCodec {
 // BEGIN USER CODE: Test
 import BitCodec._
 
-def test(fooExample: Foo): Unit = {
+def test(fooExample: MFoo): Unit = {
   println(s"fooExample = $fooExample")
 
   assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
@@ -242,6 +332,6 @@ def test(fooExample: Foo): Unit = {
   assert(fooExample == fooExampleDecoded, s"$fooExample != $fooExampleDecoded")
 }
 
-test(Foo(Bazz(F, u4"7")))
-test(Foo(Baz(T, F, T)))
+test(MFoo(MBazz(F, u4"7")))
+test(MFoo(MBaz(T, F, T)))
 // END USER CODE: Test

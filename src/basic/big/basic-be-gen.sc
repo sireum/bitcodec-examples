@@ -29,12 +29,44 @@ object BitCodec {
 
     val maxSize: Z = z"855"
 
-    def empty: Foo = {
-      return Foo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), MSZ.create(4, u8"0"), MSZ.create(5, s16"0"), MSZ.create(5, u16"0"), MSZ.create(6, s32"0"), MSZ.create(6, u32"0"), MSZ.create(7, s64"0"), MSZ.create(7, u64"0"))
+    def empty: MFoo = {
+      return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), MSZ.create(4, u8"0"), MSZ.create(5, s16"0"), MSZ.create(5, u16"0"), MSZ.create(6, s32"0"), MSZ.create(6, u32"0"), MSZ.create(7, s64"0"), MSZ.create(7, u64"0"))
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Foo(
+    val f1: B,
+    val f2: U7,
+    val f3: ISZ[B],
+    val f4: ISZ[S8],
+    val uf4: ISZ[U8],
+    val f5: ISZ[S16],
+    val uf5: ISZ[U16],
+    val f6: ISZ[S32],
+    val uf6: ISZ[U32],
+    val f7: ISZ[S64],
+    val uf7: ISZ[U64]
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, uf4.toMS, f5.toMS, uf5.toMS, f6.toMS, uf6.toMS, f7.toMS, uf7.toMS)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Foo(
+  @record class MFoo(
     var f1: B,
     var f2: U7,
     var f3: MSZ[B],
@@ -47,6 +79,8 @@ object BitCodec {
     var f7: MSZ[S64],
     var uf7: MSZ[U64]
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, uf4.toIS, f5.toIS, uf5.toIS, f6.toIS, uf6.toIS, f7.toIS, uf7.toIS)
 
     def wellFormed: Z = {
 
@@ -138,7 +172,7 @@ object BitCodec {
 
 // BEGIN USER CODE: Test
 import BitCodec._
-val fooExample = Foo(
+val fooExample = MFoo(
   T,
   u7"11",
   MSZ.create(100, T),

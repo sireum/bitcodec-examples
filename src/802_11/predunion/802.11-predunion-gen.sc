@@ -81,12 +81,44 @@ object BitCodec {
 
     val maxSize: Z = z"16"
 
-    def empty: FrameControl = {
-      return FrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
+    def empty: MFrameControl = {
+      return MFrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[FrameControl] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[FrameControl]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class FrameControl(
+    val protocol: U2,
+    val tpe: Frame.Type,
+    val subType: U4,
+    val toDS: U1,
+    val fromDS: U1,
+    val moreFrag: U1,
+    val retry: U1,
+    val powerMgmt: U1,
+    val moreData: U1,
+    val wep: U1,
+    val order: U1
+  ) {
+
+    @strictpure def toMutable: MFrameControl = MFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class FrameControl(
+  @record class MFrameControl(
     var protocol: U2,
     var tpe: Frame.Type,
     var subType: U4,
@@ -99,6 +131,8 @@ object BitCodec {
     var wep: U1,
     var order: U1
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: FrameControl = FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
 
     def wellFormed: Z = {
 
@@ -160,17 +194,44 @@ object BitCodec {
 
     val maxSize: Z = z"112"
 
-    def empty: Cts = {
-      return Cts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), u32"0")
+    def empty: MCts = {
+      return MCts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), u32"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Cts] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Cts]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Cts(
+    val frameControl: FrameControl,
+    val duration: ISZ[U8],
+    val receiver: ISZ[U8],
+    val fcs: U32
+  ) extends MacFrame {
+
+    @strictpure def toMutable: MCts = MCts(frameControl.toMutable, duration.toMS, receiver.toMS, fcs)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Cts(
-    var frameControl: FrameControl,
+  @record class MCts(
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var receiver: MSZ[U8],
     var fcs: U32
-  ) extends MacFrame {
+  ) extends MMacFrame {
+
+    @strictpure def toImmutable: Cts = Cts(frameControl.toImmutable, duration.toIS, receiver.toIS, fcs)
 
     def wellFormed: Z = {
 
@@ -223,18 +284,46 @@ object BitCodec {
 
     val maxSize: Z = z"160"
 
-    def empty: Rts = {
-      return Rts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), u32"0")
+    def empty: MRts = {
+      return MRts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), u32"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Rts] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Rts]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Rts(
+    val frameControl: FrameControl,
+    val duration: ISZ[U8],
+    val receiver: ISZ[U8],
+    val transmitter: ISZ[U8],
+    val fcs: U32
+  ) extends MacFrame {
+
+    @strictpure def toMutable: MRts = MRts(frameControl.toMutable, duration.toMS, receiver.toMS, transmitter.toMS, fcs)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Rts(
-    var frameControl: FrameControl,
+  @record class MRts(
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var receiver: MSZ[U8],
     var transmitter: MSZ[U8],
     var fcs: U32
-  ) extends MacFrame {
+  ) extends MMacFrame {
+
+    @strictpure def toImmutable: Rts = Rts(frameControl.toImmutable, duration.toIS, receiver.toIS, transmitter.toIS, fcs)
 
     def wellFormed: Z = {
 
@@ -293,15 +382,40 @@ object BitCodec {
 
     val maxSize: Z = z"16"
 
-    def empty: SeqControl = {
-      return SeqControl(u4"0", u12"0")
+    def empty: MSeqControl = {
+      return MSeqControl(u4"0", u12"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[SeqControl] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[SeqControl]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class SeqControl(
+    val fragNumber: U4,
+    val seqNumber: U12
+  ) {
+
+    @strictpure def toMutable: MSeqControl = MSeqControl(fragNumber, seqNumber)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class SeqControl(
+  @record class MSeqControl(
     var fragNumber: U4,
     var seqNumber: U12
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: SeqControl = SeqControl(fragNumber, seqNumber)
 
     def wellFormed: Z = {
 
@@ -338,22 +452,54 @@ object BitCodec {
 
     val maxSize: Z = z"-1"
 
-    def empty: Data = {
-      return Data(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"), MSZ[B](), u32"0")
+    def empty: MData = {
+      return MData(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"), MSZ[B](), u32"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Data] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Data]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Data(
+    val frameControl: FrameControl,
+    val duration: ISZ[U8],
+    val address1: ISZ[U8],
+    val address2: ISZ[U8],
+    val address3: ISZ[U8],
+    val seqControl: SeqControl,
+    val address4: ISZ[U8],
+    val body: ISZ[B],
+    val fcs: U32
+  ) extends MacFrame {
+
+    @strictpure def toMutable: MData = MData(frameControl.toMutable, duration.toMS, address1.toMS, address2.toMS, address3.toMS, seqControl.toMutable, address4.toMS, body.toMS, fcs)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Data(
-    var frameControl: FrameControl,
+  @record class MData(
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var address1: MSZ[U8],
     var address2: MSZ[U8],
     var address3: MSZ[U8],
-    var seqControl: SeqControl,
+    var seqControl: MSeqControl,
     var address4: MSZ[U8],
     var body: MSZ[B],
     var fcs: U32
-  ) extends MacFrame {
+  ) extends MMacFrame {
+
+    @strictpure def toImmutable: Data = Data(frameControl.toImmutable, duration.toIS, address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS, body.toIS, fcs)
 
     def wellFormed: Z = {
 
@@ -455,14 +601,28 @@ object BitCodec {
     }
   }
 
-  @record trait MacFrame extends Runtime.Composite
+  @datatype trait MacFrame {
+    @strictpure def toMutable: MMacFrame
+    def encode(output: MSZ[B], context: Context): Unit
+    def wellFormed: Z
+  }
+
+  @record trait MMacFrame extends Runtime.Composite {
+    @strictpure def toImmutable: MacFrame
+  }
 
   object MacFrame {
 
     val maxSize: Z = z"-1"
 
-    def empty: MacFrame = {
+    def empty: MMacFrame = {
       return Cts.empty
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[MacFrame] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[MacFrame]() else Some(r.toImmutable)
     }
 
     @enum object Choice {
@@ -528,13 +688,14 @@ object BitCodec {
       }
       return Choice.Error
     }
+
   }
 
 }
 
 // BEGIN USER CODE: Test
 // Test 802.11 AST & codec
-val ctsExample = MSZ(
+val ctsExample = ISZ(
   F, F,                   // protocol
   T, F,                   // tpe = control
   F, F, T, T,             // subType = CTS
@@ -563,9 +724,8 @@ val ctsExample = MSZ(
 println(s"ctsExample = $ctsExample, ctsExample.size = ${ctsExample.size}")
 println()
 
-val macFrame = BitCodec.MacFrame.empty
 val ctsExampleInputContext = Context.create
-macFrame.decode(ctsExample, ctsExampleInputContext)
+val macFrame = BitCodec.MacFrame.decode(ctsExample, ctsExampleInputContext).get
 
 println(s"decode(ctsExample) = $macFrame")
 println(s"decode(ctsExample).offset = ${ctsExampleInputContext.offset}")
@@ -583,5 +743,5 @@ println(s"encode(decode(ctsExample)).offset = ${ctsExampleOutputContext.offset}"
 println(s"encode(decode(ctsExample)).errorCode = ${ctsExampleOutputContext.errorCode}")
 println(s"encode(decode(ctsExample)).errorOffset = ${ctsExampleOutputContext.errorOffset}")
 
-assert(ctsExample == ctsExampleCodec, s"$ctsExample != $ctsExampleCodec")
+assert(ctsExample == ctsExampleCodec.toIS, s"$ctsExample != $ctsExampleCodec")
 // END USER CODE: Test

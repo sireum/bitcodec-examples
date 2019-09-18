@@ -37,15 +37,40 @@ object BitCodec {
 
     val maxSize: Z = z"18"
 
-    def empty: Foo = {
-      return Foo(u8"0", MSZ[B]())
+    def empty: MFoo = {
+      return MFoo(u8"0", MSZ[B]())
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Foo(
+    val size: U8,
+    val elements: ISZ[B]
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(size, elements.toMS)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Foo(
+  @record class MFoo(
     var size: U8,
     var elements: MSZ[B]
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(size, elements.toIS)
 
     def wellFormed: Z = {
 
@@ -104,7 +129,7 @@ object BitCodec {
 
 // BEGIN USER CODE: Test
 import BitCodec._
-val fooExample = Foo(u8"3", MSZ(T, F, T))
+val fooExample = MFoo(u8"3", MSZ(T, F, T))
 println(s"fooExample = $fooExample")
 
 assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")

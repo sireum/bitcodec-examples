@@ -27,15 +27,40 @@ object BitCodec {
 
     val maxSize: Z = z"2"
 
-    def empty: Baz = {
-      return Baz(F, F)
+    def empty: MBaz = {
+      return MBaz(F, F)
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Baz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Baz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Baz(
+    val b1: B,
+    val b2: B
+  ) extends Bar {
+
+    @strictpure def toMutable: MBaz = MBaz(b1, b2)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Baz(
+  @record class MBaz(
     var b1: B,
     var b2: B
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Baz = Baz(b1, b2)
 
     def wellFormed: Z = {
 
@@ -72,14 +97,38 @@ object BitCodec {
 
     val maxSize: Z = z"4"
 
-    def empty: Bazz = {
-      return Bazz(u4"0")
+    def empty: MBazz = {
+      return MBazz(u4"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bazz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bazz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Bazz(
+    val bazz: U4
+  ) extends Bar {
+
+    @strictpure def toMutable: MBazz = MBazz(bazz)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Bazz(
+  @record class MBazz(
     var bazz: U4
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Bazz = Bazz(bazz)
 
     def wellFormed: Z = {
 
@@ -110,14 +159,28 @@ object BitCodec {
 
   }
 
-  @record trait Bar extends Runtime.Composite
+  @datatype trait Bar {
+    @strictpure def toMutable: MBar
+    def encode(output: MSZ[B], context: Context): Unit
+    def wellFormed: Z
+  }
+
+  @record trait MBar extends Runtime.Composite {
+    @strictpure def toImmutable: Bar
+  }
 
   object Bar {
 
     val maxSize: Z = z"4"
 
-    def empty: Bar = {
+    def empty: MBar = {
       return Baz.empty
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bar] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bar]() else Some(r.toImmutable)
     }
 
     object ChoiceContext {
@@ -145,21 +208,47 @@ object BitCodec {
       return if (choiceContext.flag) Choice.Bazz else Choice.Baz
       // END USER CODE: Bar.choose
     }
+
   }
 
   object Foo {
 
     val maxSize: Z = z"5"
 
-    def empty: Foo = {
-      return Foo(F, Baz.empty)
+    def empty: MFoo = {
+      return MFoo(F, Baz.empty)
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Foo(
+    val flag: B,
+    val bar: Bar
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(flag, bar.toMutable)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Foo(
+  @record class MFoo(
     var flag: B,
-    var bar: Bar
+    var bar: MBar
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(flag, bar.toImmutable)
 
     def wellFormed: Z = {
 
@@ -170,8 +259,8 @@ object BitCodec {
 
       // BEGIN USER CODE: Foo.wellFormed
       (flag, bar) match {
-        case (F, _: Baz) =>
-        case (T, _: Bazz) =>
+        case (F, _: MBaz) =>
+        case (T, _: MBazz) =>
         case _ => return ERROR_Bar
       }
       // END USER CODE: Foo.wellFormed
@@ -214,9 +303,10 @@ object BitCodec {
 // BEGIN USER CODE: Test
 import BitCodec._
 
-def test(fooExample: Foo): Unit = {
+def test(fooExample: MFoo): Unit = {
   println(s"fooExample = $fooExample")
 
+  println(fooExample.wellFormed)
   assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
 
   val fooExampleOutput = MSZ.create(1000, F)
@@ -244,6 +334,6 @@ def test(fooExample: Foo): Unit = {
   println()
 }
 
-test(Foo(F, Baz(F, T)))
-test(Foo(T, Bazz(u4"7")))
+test(MFoo(F, MBaz(F, T)))
+test(MFoo(T, MBazz(u4"7")))
 // END USER CODE: Test

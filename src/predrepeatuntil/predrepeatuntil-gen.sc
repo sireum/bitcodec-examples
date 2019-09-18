@@ -13,7 +13,7 @@ object BitCodec {
 
   val ERROR_Value: Z = 2
 
-  val ERROR_Foo_elements: Z = 2
+  val ERROR_Foo_elements: Z = 3
 
   val ERROR_Foo: Z = 4
 
@@ -25,14 +25,38 @@ object BitCodec {
 
     val maxSize: Z = z"8"
 
-    def empty: Value = {
-      return Value(u8"0")
+    def empty: MValue = {
+      return MValue(u8"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Value] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Value]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Value(
+    val value: U8
+  ) {
+
+    @strictpure def toMutable: MValue = MValue(value)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Value(
+  @record class MValue(
     var value: U8
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Value = Value(value)
 
     def wellFormed: Z = {
 
@@ -69,15 +93,55 @@ object BitCodec {
 
     val maxSize: Z = z"-1"
 
-    def empty: Foo = {
-      return Foo(MSZ[Value](), u8"0")
+    def empty: MFoo = {
+      return MFoo(MSZ[MValue](), u8"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+    def toMutableElements(s: ISZ[Value]): MSZ[MValue] = {
+      var r = MSZ[MValue]()
+      for (e <- s) {
+        r = r :+ e.toMutable
+      }
+      return r
+    }
+
+    def toImmutableElements(s: MSZ[MValue]): ISZ[Value] = {
+      var r = ISZ[Value]()
+      for (e <- s) {
+        r = r :+ e.toImmutable
+      }
+      return r
     }
   }
 
-  @record class Foo(
-    var elements: MSZ[Value],
+  @datatype class Foo(
+    val elements: ISZ[Value],
+    val end: U8
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(Foo.toMutableElements(elements), end)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
+    }
+  }
+
+  @record class MFoo(
+    var elements: MSZ[MValue],
     var end: U8
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(Foo.toImmutableElements(elements), end)
 
     def wellFormed: Z = {
 
@@ -130,7 +194,7 @@ object BitCodec {
 // BEGIN USER CODE: Test
 import BitCodec._
 
-val fooExample = Foo(MSZ(Value(u8"3"), Value(u8"4"), Value(u8"5")), u8"0")
+val fooExample = MFoo(MSZ(MValue(u8"3"), MValue(u8"4"), MValue(u8"5")), u8"0")
 println(s"fooExample = $fooExample")
 
 assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")

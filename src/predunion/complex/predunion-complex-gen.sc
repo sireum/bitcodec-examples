@@ -32,16 +32,42 @@ object BitCodec {
 
     val maxSize: Z = z"81"
 
-    def empty: Baz = {
-      return Baz(F, MSZ.create(2, u8"0"), u64"0")
+    def empty: MBaz = {
+      return MBaz(F, MSZ.create(2, u8"0"), u64"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Baz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Baz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Baz(
+    val flag: B,
+    val bs: ISZ[U8],
+    val l: U64
+  ) extends Bar {
+
+    @strictpure def toMutable: MBaz = MBaz(flag, bs.toMS, l)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Baz(
+  @record class MBaz(
     var flag: B,
     var bs: MSZ[U8],
     var l: U64
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Baz = Baz(flag, bs.toIS, l)
 
     def wellFormed: Z = {
 
@@ -88,16 +114,42 @@ object BitCodec {
 
     val maxSize: Z = z"81"
 
-    def empty: Bazz = {
-      return Bazz(F, u16"0", MSZ.create(2, u32"0"))
+    def empty: MBazz = {
+      return MBazz(F, u16"0", MSZ.create(2, u32"0"))
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bazz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bazz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Bazz(
+    val flag: B,
+    val s: U16,
+    val is: ISZ[U32]
+  ) extends Bar {
+
+    @strictpure def toMutable: MBazz = MBazz(flag, s, is.toMS)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Bazz(
+  @record class MBazz(
     var flag: B,
     var s: U16,
     var is: MSZ[U32]
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Bazz = Bazz(flag, s, is.toIS)
 
     def wellFormed: Z = {
 
@@ -144,16 +196,42 @@ object BitCodec {
 
     val maxSize: Z = z"17"
 
-    def empty: Bazzz = {
-      return Bazzz(F, u8"0", u8"0")
+    def empty: MBazzz = {
+      return MBazzz(F, u8"0", u8"0")
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bazzz] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bazzz]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Bazzz(
+    val flag: B,
+    val b1: U8,
+    val b2: U8
+  ) extends Bar {
+
+    @strictpure def toMutable: MBazzz = MBazzz(flag, b1, b2)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Bazzz(
+  @record class MBazzz(
     var flag: B,
     var b1: U8,
     var b2: U8
-  ) extends Bar {
+  ) extends MBar {
+
+    @strictpure def toImmutable: Bazzz = Bazzz(flag, b1, b2)
 
     def wellFormed: Z = {
 
@@ -196,14 +274,28 @@ object BitCodec {
 
   }
 
-  @record trait Bar extends Runtime.Composite
+  @datatype trait Bar {
+    @strictpure def toMutable: MBar
+    def encode(output: MSZ[B], context: Context): Unit
+    def wellFormed: Z
+  }
+
+  @record trait MBar extends Runtime.Composite {
+    @strictpure def toImmutable: Bar
+  }
 
   object Bar {
 
     val maxSize: Z = z"81"
 
-    def empty: Bar = {
+    def empty: MBar = {
       return Baz.empty
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Bar] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Bar]() else Some(r.toImmutable)
     }
 
     @enum object Choice {
@@ -302,20 +394,45 @@ object BitCodec {
       }
       return Choice.Error
     }
+
   }
 
   object Foo {
 
     val maxSize: Z = z"81"
 
-    def empty: Foo = {
-      return Foo(Baz.empty)
+    def empty: MFoo = {
+      return MFoo(Baz.empty)
+    }
+
+    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+      val r = empty
+      r.decode(input.toMS, context)
+      return if (context.hasError) None[Foo]() else Some(r.toImmutable)
+    }
+
+  }
+
+  @datatype class Foo(
+    val bar: Bar
+  ) {
+
+    @strictpure def toMutable: MFoo = MFoo(bar.toMutable)
+
+    def encode(output: MSZ[B], context: Context): Unit = {
+      toMutable.encode(output, context)
+    }
+
+    def wellFormed: Z = {
+      return toMutable.wellFormed
     }
   }
 
-  @record class Foo(
-    var bar: Bar
+  @record class MFoo(
+    var bar: MBar
   ) extends Runtime.Composite {
+
+    @strictpure def toImmutable: Foo = Foo(bar.toImmutable)
 
     def wellFormed: Z = {
 
@@ -356,7 +473,7 @@ object BitCodec {
 
 // BEGIN USER CODE: Test
 import BitCodec._
-def test(fooExample: Foo): Unit = {
+def test(fooExample: MFoo): Unit = {
   println(s"fooExample = $fooExample")
 
   assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
@@ -386,8 +503,8 @@ def test(fooExample: Foo): Unit = {
   println()
 }
 
-test(Foo(Baz(T, MSZ(u8"1", u8"0"), u64"7")))
-test(Foo(Bazz(F, u16"2", MSZ(u32"3", u32"5"))))
-test(Foo(Bazzz(F, u8"3", u8"10")))
-test(Foo(Bazzz(F, u8"5", u8"15")))
+test(MFoo(MBaz(T, MSZ(u8"1", u8"0"), u64"7")))
+test(MFoo(MBazz(F, u16"2", MSZ(u32"3", u32"5"))))
+test(MFoo(MBazzz(F, u8"3", u8"10")))
+test(MFoo(MBazzz(F, u8"5", u8"15")))
 // END USER CODE: Test
