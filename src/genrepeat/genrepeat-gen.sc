@@ -31,7 +31,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[SixBytes] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[SixBytes]() else Some(r.toImmutable)
     }
 
@@ -43,8 +43,10 @@ object BitCodec {
 
     @strictpure def toMutable: MSixBytes = MSixBytes(sixBytes.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(48, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -71,8 +73,8 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      Reader.MS.beU8S(input, context, sixBytes, 6)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      Reader.IS.beU8S(input, context, sixBytes, 6)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -114,7 +116,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
     }
 
@@ -142,8 +144,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(size, Foo.toMutableElements(elements))
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(488, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -171,8 +175,8 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      size = Reader.MS.beU8(input, context)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      size = Reader.IS.beU8(input, context)
       elements = MSZ()
       val elementsContext = FooElementsContext.empty
       // BEGIN USER CODE: FooElementsContext.init
@@ -202,13 +206,13 @@ object BitCodec {
       }
     }
 
-    def elementsContinue(input: MSZ[B], context: Context, elementsContext: FooElementsContext): B = {
+    def elementsContinue(input: ISZ[B], context: Context, elementsContext: FooElementsContext): B = {
       // BEGIN USER CODE: Foo.elementsContinue
       return elementsContext.i < size
       // END USER CODE: Foo.elementsContinue
     }
 
-    def elementsUpdate(input: MSZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
+    def elementsUpdate(input: ISZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
       // BEGIN USER CODE: Foo.elementsUpdate
       elementsContext.i = elementsContext.i + u8"1"
       // END USER CODE: Foo.elementsUpdate
@@ -242,7 +246,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")

@@ -47,14 +47,14 @@ object BitCodec {
     'Reserved
   }
 
-  def decodeFrame(input: MSZ[B], context: Context): Frame.Type = {
+  def decodeFrame(input: ISZ[B], context: Context): Frame.Type = {
     if (context.offset + 2 > input.size) {
       context.signalError(ERROR_Frame)
     }
     if (context.hasError) {
       return Frame.Management
     }
-    val r: Frame.Type = Reader.MS.beU2(input, context) match {
+    val r: Frame.Type = Reader.IS.beU2(input, context) match {
       case u2"0" => Frame.Management
       case u2"1" => Frame.Control
       case u2"2" => Frame.Data
@@ -91,7 +91,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[FrameControl] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[FrameControl]() else Some(r.toImmutable)
     }
 
@@ -113,8 +113,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFrameControl = MFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -155,18 +157,18 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      protocol = Reader.MS.beU2(input, context)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      protocol = Reader.IS.beU2(input, context)
       tpe = decodeFrame(input, context)
-      subType = Reader.MS.beU4(input, context)
-      toDS = Reader.MS.bleU1(input, context)
-      fromDS = Reader.MS.bleU1(input, context)
-      moreFrag = Reader.MS.bleU1(input, context)
-      retry = Reader.MS.bleU1(input, context)
-      powerMgmt = Reader.MS.bleU1(input, context)
-      moreData = Reader.MS.bleU1(input, context)
-      wep = Reader.MS.bleU1(input, context)
-      order = Reader.MS.bleU1(input, context)
+      subType = Reader.IS.beU4(input, context)
+      toDS = Reader.IS.bleU1(input, context)
+      fromDS = Reader.IS.bleU1(input, context)
+      moreFrag = Reader.IS.bleU1(input, context)
+      retry = Reader.IS.bleU1(input, context)
+      powerMgmt = Reader.IS.bleU1(input, context)
+      moreData = Reader.IS.bleU1(input, context)
+      wep = Reader.IS.bleU1(input, context)
+      order = Reader.IS.bleU1(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -204,7 +206,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[Receiver] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[Receiver]() else Some(r.toImmutable)
     }
 
@@ -216,8 +218,10 @@ object BitCodec {
 
     @strictpure def toMutable: MReceiver = MReceiver(receiver.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -244,8 +248,8 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      Reader.MS.beU8S(input, context, receiver, 6)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      Reader.IS.beU8S(input, context, receiver, 6)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -273,7 +277,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[ReceiverTransmitter] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[ReceiverTransmitter]() else Some(r.toImmutable)
     }
 
@@ -286,8 +290,10 @@ object BitCodec {
 
     @strictpure def toMutable: MReceiverTransmitter = MReceiverTransmitter(receiver.toMS, transmitter.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -319,9 +325,9 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      Reader.MS.beU8S(input, context, receiver, 6)
-      Reader.MS.beU8S(input, context, transmitter, 6)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      Reader.IS.beU8S(input, context, receiver, 6)
+      Reader.IS.beU8S(input, context, transmitter, 6)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -350,7 +356,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[SeqControl] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[SeqControl]() else Some(r.toImmutable)
     }
 
@@ -363,8 +369,10 @@ object BitCodec {
 
     @strictpure def toMutable: MSeqControl = MSeqControl(fragNumber, seqNumber)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -389,9 +397,9 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      fragNumber = Reader.MS.beU4(input, context)
-      seqNumber = Reader.MS.beU12(input, context)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      fragNumber = Reader.IS.beU4(input, context)
+      seqNumber = Reader.IS.beU12(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -420,7 +428,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[Data] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[Data]() else Some(r.toImmutable)
     }
 
@@ -436,8 +444,10 @@ object BitCodec {
 
     @strictpure def toMutable: MData = MData(address1.toMS, address2.toMS, address3.toMS, seqControl.toMutable, address4.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -485,12 +495,12 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      Reader.MS.beU8S(input, context, address1, 6)
-      Reader.MS.beU8S(input, context, address2, 6)
-      Reader.MS.beU8S(input, context, address3, 6)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      Reader.IS.beU8S(input, context, address1, 6)
+      Reader.IS.beU8S(input, context, address2, 6)
+      Reader.IS.beU8S(input, context, address3, 6)
       seqControl.decode(input, context)
-      Reader.MS.beU8S(input, context, address4, 6)
+      Reader.IS.beU8S(input, context, address4, 6)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -514,7 +524,7 @@ object BitCodec {
 
   @datatype trait HeaderAddress {
     @strictpure def toMutable: MHeaderAddress
-    def encode(output: MSZ[B], context: Context): Unit
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]]
     def wellFormed: Z
   }
 
@@ -532,7 +542,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[HeaderAddress] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[HeaderAddress]() else Some(r.toImmutable)
     }
 
@@ -573,7 +583,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[MacHeader] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[MacHeader]() else Some(r.toImmutable)
     }
 
@@ -587,8 +597,10 @@ object BitCodec {
 
     @strictpure def toMutable: MMacHeader = MMacHeader(frameControl.toMutable, duration.toMS, headerAddress.toMutable)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -634,9 +646,9 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
+    def decode(input: ISZ[B], context: Context): Unit = {
       frameControl.decode(input, context)
-      Reader.MS.beU8S(input, context, duration, 2)
+      Reader.IS.beU8S(input, context, duration, 2)
       HeaderAddress.choose((frameControl.tpe, frameControl.subType)) match {
         case HeaderAddress.Choice.Receiver => headerAddress = Receiver.empty
         case HeaderAddress.Choice.ReceiverTransmitter => headerAddress = ReceiverTransmitter.empty
@@ -673,7 +685,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[MacFrame] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[MacFrame]() else Some(r.toImmutable)
     }
 
@@ -687,8 +699,10 @@ object BitCodec {
 
     @strictpure def toMutable: MMacFrame = MMacFrame(macHeader.toMutable, body.toMS, fcs)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(buffSize, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -723,16 +737,16 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
+    def decode(input: ISZ[B], context: Context): Unit = {
       macHeader.decode(input, context)
       val bodySize = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
       if (bodySize >= 0) {
         body = MSZ.create(bodySize, F)
-        Reader.MS.bleRaw(input, context, body, bodySize)
+        Reader.IS.bleRaw(input, context, body, bodySize)
       } else {
         context.signalError(ERROR_MacFrame_body)
       }
-      fcs = Reader.MS.beU32(input, context)
+      fcs = Reader.IS.beU32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -809,15 +823,14 @@ println(s"decode(ctsExample).errorCode = ${ctsExampleInputContext.errorCode}")
 println(s"decode(ctsExample).errorOffset = ${ctsExampleInputContext.errorOffset}")
 println()
 
-val ctsExampleOutput = MSZ.create(7981 * 8, F) // this can be any size >= 112 for this particular example
 val ctsExampleOutputContext = Context.create
-macFrame.encode(ctsExampleOutput, ctsExampleOutputContext)
-val ctsExampleCodec = Writer.resultMS(ctsExampleOutput, ctsExampleOutputContext)
+val ctsExampleOutput = macFrame.encode(7981 * 8, ctsExampleOutputContext).get // this can be any size >= 112 for this particular example
+val ctsExampleCodec = Writer.resultIS(ctsExampleOutput, ctsExampleOutputContext)
 
 println(s"encode(decode(ctxExample)) = $ctsExampleCodec, encode(decode(ctxExample)).size = ${ctsExampleCodec.size}")
 println(s"encode(decode(ctsExample)).offset = ${ctsExampleOutputContext.offset}")
 println(s"encode(decode(ctsExample)).errorCode = ${ctsExampleOutputContext.errorCode}")
 println(s"encode(decode(ctsExample)).errorOffset = ${ctsExampleOutputContext.errorOffset}")
 
-assert(ctsExample == ctsExampleCodec.toIS, s"$ctsExample != $ctsExampleCodec")
+assert(ctsExample == ctsExampleCodec, s"$ctsExample != $ctsExampleCodec")
 // END USER CODE: Test

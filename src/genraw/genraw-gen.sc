@@ -43,7 +43,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
     }
 
@@ -56,8 +56,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(size, elements.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(18, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -85,15 +87,15 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      size = Reader.MS.beU8(input, context)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      size = Reader.IS.beU8(input, context)
       elements = MSZ()
       val elementsContext = FooElementsContext.empty
       // BEGIN USER CODE: FooElementsContext.init
       // ... empty
       // END USER CODE: FooElementsContext.init
       while (elementsContinue(input, context, elementsContext)) {
-        elements = elements :+ Reader.MS.bleB(input, context)
+        elements = elements :+ Reader.IS.bleB(input, context)
         elementsUpdate(input, context, elementsContext)
       }
 
@@ -112,13 +114,13 @@ object BitCodec {
       }
     }
 
-    def elementsContinue(input: MSZ[B], context: Context, elementsContext: FooElementsContext): B = {
+    def elementsContinue(input: ISZ[B], context: Context, elementsContext: FooElementsContext): B = {
       // BEGIN USER CODE: Foo.elementsContinue
       return elementsContext.i < size
       // END USER CODE: Foo.elementsContinue
     }
 
-    def elementsUpdate(input: MSZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
+    def elementsUpdate(input: ISZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
       // BEGIN USER CODE: Foo.elementsUpdate
       elementsContext.i = elementsContext.i + u8"1"
       // END USER CODE: Foo.elementsUpdate
@@ -147,7 +149,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")

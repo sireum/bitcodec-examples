@@ -35,7 +35,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
       val r = empty
-      r.decode(input.toMS, context)
+      r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
     }
 
@@ -57,8 +57,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, uf4.toMS, f5.toMS, uf5.toMS, f6.toMS, uf6.toMS, f7.toMS, uf7.toMS)
 
-    def encode(output: MSZ[B], context: Context): Unit = {
-      toMutable.encode(output, context)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(855, F)
+      toMutable.encode(buffer, context)
+      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
 
     def wellFormed: Z = {
@@ -127,18 +129,18 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: MSZ[B], context: Context): Unit = {
-      f1 = Reader.MS.bleB(input, context)
-      f2 = Reader.MS.beU7(input, context)
-      Reader.MS.beBS(input, context, f3, 100)
-      Reader.MS.beS8S(input, context, f4, 4)
-      Reader.MS.beU8S(input, context, uf4, 4)
-      Reader.MS.beS16S(input, context, f5, 5)
-      Reader.MS.beU16S(input, context, uf5, 5)
-      Reader.MS.beS32S(input, context, f6, 6)
-      Reader.MS.beU32S(input, context, uf6, 6)
-      Reader.MS.beS64S(input, context, f7, 7)
-      Reader.MS.beU64S(input, context, uf7, 7)
+    def decode(input: ISZ[B], context: Context): Unit = {
+      f1 = Reader.IS.bleB(input, context)
+      f2 = Reader.IS.beU7(input, context)
+      Reader.IS.beBS(input, context, f3, 100)
+      Reader.IS.beS8S(input, context, f4, 4)
+      Reader.IS.beU8S(input, context, uf4, 4)
+      Reader.IS.beS16S(input, context, f5, 5)
+      Reader.IS.beU16S(input, context, uf5, 5)
+      Reader.IS.beS32S(input, context, f6, 6)
+      Reader.IS.beU32S(input, context, uf6, 6)
+      Reader.IS.beS64S(input, context, f7, 7)
+      Reader.IS.beU64S(input, context, uf7, 7)
       context.skip(input.size, 11, ERROR_Foo)
 
       val wf = wellFormed
@@ -202,7 +204,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
