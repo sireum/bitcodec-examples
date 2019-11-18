@@ -1,6 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
-  "maxSize" : 487,
+  "maxSize" : 1975,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -26,10 +26,22 @@
         "signed" : true
       },
       {
+        "type" : "Spec.Bytes",
+        "name" : "uf4",
+        "size" : 4,
+        "signed" : false
+      },
+      {
         "type" : "Spec.Shorts",
         "name" : "f5",
         "size" : 5,
         "signed" : true
+      },
+      {
+        "type" : "Spec.Shorts",
+        "name" : "uf5",
+        "size" : 5,
+        "signed" : false
       },
       {
         "type" : "Spec.Ints",
@@ -38,10 +50,42 @@
         "signed" : true
       },
       {
+        "type" : "Spec.Ints",
+        "name" : "uf6",
+        "size" : 6,
+        "signed" : false
+      },
+      {
         "type" : "Spec.Longs",
         "name" : "f7",
         "size" : 7,
         "signed" : true
+      },
+      {
+        "type" : "Spec.Longs",
+        "name" : "uf7",
+        "size" : 7,
+        "signed" : false
+      },
+      {
+        "type" : "Spec.Floats",
+        "name" : "f8",
+        "size" : 1
+      },
+      {
+        "type" : "Spec.Floats",
+        "name" : "f9",
+        "size" : 2
+      },
+      {
+        "type" : "Spec.Doubles",
+        "name" : "f10",
+        "size" : 1
+      },
+      {
+        "type" : "Spec.Doubles",
+        "name" : "f11",
+        "size" : 3
       },
       {
         "type" : "Spec.Pads",

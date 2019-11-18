@@ -27,10 +27,10 @@ object BitCodec {
 
   object Foo {
 
-    val maxSize: Z = z"855"
+    val maxSize: Z = z"1975"
 
     def empty: MFoo = {
-      return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), MSZ.create(4, u8"0"), MSZ.create(5, s16"0"), MSZ.create(5, u16"0"), MSZ.create(6, s32"0"), MSZ.create(6, u32"0"), MSZ.create(7, s64"0"), MSZ.create(7, u64"0"))
+      return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), MSZ.create(4, u8"0"), MSZ.create(5, s16"0"), MSZ.create(5, u16"0"), MSZ.create(6, s32"0"), MSZ.create(6, u32"0"), MSZ.create(7, s64"0"), MSZ.create(7, u64"0"), 0.0f, MSZ.create(2, 0.0f), 0.0d, MSZ.create(3, 0.0d))
     }
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
@@ -52,13 +52,17 @@ object BitCodec {
     val f6: ISZ[S32],
     val uf6: ISZ[U32],
     val f7: ISZ[S64],
-    val uf7: ISZ[U64]
+    val uf7: ISZ[U64],
+    val f8: F32,
+    val f9: ISZ[F32],
+    val f10: F64,
+    val f11: ISZ[F64]
   ) {
 
-    @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, uf4.toMS, f5.toMS, uf5.toMS, f6.toMS, uf6.toMS, f7.toMS, uf7.toMS)
+    @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, uf4.toMS, f5.toMS, uf5.toMS, f6.toMS, uf6.toMS, f7.toMS, uf7.toMS, f8, f9.toMS, f10, f11.toMS)
 
     def encode(context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(855, F)
+      val buffer = MSZ.create(1975, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -79,10 +83,14 @@ object BitCodec {
     var f6: MSZ[S32],
     var uf6: MSZ[U32],
     var f7: MSZ[S64],
-    var uf7: MSZ[U64]
+    var uf7: MSZ[U64],
+    var f8: F32,
+    var f9: MSZ[F32],
+    var f10: F64,
+    var f11: MSZ[F64]
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, uf4.toIS, f5.toIS, uf5.toIS, f6.toIS, uf6.toIS, f7.toIS, uf7.toIS)
+    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, uf4.toIS, f5.toIS, uf5.toIS, f6.toIS, uf6.toIS, f7.toIS, uf7.toIS, f8, f9.toIS, f10, f11.toIS)
 
     def wellFormed: Z = {
 
@@ -122,6 +130,14 @@ object BitCodec {
         return ERROR_Foo
       }
 
+      if (f9.size != 2) {
+        return ERROR_Foo
+      }
+
+      if (f11.size != 3) {
+        return ERROR_Foo
+      }
+
       // BEGIN USER CODE: Foo.wellFormed
       // ... empty
       // END USER CODE: Foo.wellFormed
@@ -141,6 +157,10 @@ object BitCodec {
       Reader.IS.leU32S(input, context, uf6, 6)
       Reader.IS.leS64S(input, context, f7, 7)
       Reader.IS.leU64S(input, context, uf7, 7)
+      f8 = Reader.IS.leF32(input, context)
+      Reader.IS.leF32S(input, context, f9, 2)
+      f10 = Reader.IS.leF64(input, context)
+      Reader.IS.leF64S(input, context, f11, 3)
       context.skip(input.size, 11, ERROR_Foo)
 
       val wf = wellFormed
@@ -161,6 +181,10 @@ object BitCodec {
       Writer.leU32S(output, context, uf6)
       Writer.leS64S(output, context, f7)
       Writer.leU64S(output, context, uf7)
+      Writer.leF32(output, context, f8)
+      Writer.leF32S(output, context, f9)
+      Writer.leF64(output, context, f10)
+      Writer.leF64S(output, context, f11)
       context.skip(output.size, 11, ERROR_Foo)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -185,7 +209,11 @@ val fooExample = MFoo(
   MSZ(s32"0", s32"1", s32"2", s32"3", s32"4", s32"5"),
   MSZ(u32"0", u32"1", u32"2", u32"3", u32"4", u32"5"),
   MSZ(s64"0", s64"1", s64"2", s64"3", s64"4", s64"5", s64"6"),
-  MSZ(u64"0", u64"1", u64"2", u64"3", u64"4", u64"5", u64"6")
+  MSZ(u64"0", u64"1", u64"2", u64"3", u64"4", u64"5", u64"6"),
+  1.1f,
+  MSZ(2.2f, 3.3f),
+  4.4d,
+  MSZ(5.5d, 6.6d, 7.7d)
 )
 println(s"fooExample = $fooExample")
 

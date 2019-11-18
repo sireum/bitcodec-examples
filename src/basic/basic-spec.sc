@@ -17,6 +17,10 @@ val foo: Spec =
     UInts("uf6", 6),
     Longs("f7", 7),
     ULongs("uf7", 7),
+    Float("f8"),
+    Floats("f9", 2),
+    Double("f10"),
+    Doubles("f11", 3),
     Pads(11)
   ))
 
