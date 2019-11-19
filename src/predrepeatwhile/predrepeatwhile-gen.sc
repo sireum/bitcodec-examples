@@ -168,7 +168,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       elements = MSZ()
-      while (matchElements(input, context)) {
+      while (elements.size < 10 && matchElements(input, context)) {
         elements = elements :+ Value.empty
         elements(elements.size - 1).decode(input, context)
       }
