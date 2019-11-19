@@ -1,0 +1,47 @@
+{
+  "type" : "BitCodecGenSpec",
+  "maxSize" : 80,
+  "spec" : {
+    "type" : "Spec.Concat",
+    "name" : "Foo",
+    "elements" : [
+      {
+        "type" : "Spec.PredRepeatWhile",
+        "name" : "elements",
+        "maxElements" : 10,
+        "preds" : [
+        ],
+        "element" : {
+          "type" : "Spec.Concat",
+          "name" : "Value",
+          "elements" : [
+            {
+              "type" : "Spec.Boolean",
+              "name" : "cont"
+            },
+            {
+              "type" : "Spec.Bits",
+              "name" : "value",
+              "size" : 7
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "enums" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funs" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  },
+  "funTexts" : {
+    "type" : "Map",
+    "entries" : [
+    ]
+  }
+}

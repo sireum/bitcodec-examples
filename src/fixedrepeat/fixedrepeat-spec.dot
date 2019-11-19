@@ -1,0 +1,18 @@
+digraph G {
+  rankdir = LR;
+  graph [splines=ortho];
+  node [shape=plaintext];
+  edge [arrowhead=vee];
+
+  n0 [shape=point];
+  n1 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.value" HREF="#">
+      <TR><TD>cont:B</TD><TD>value:7</TD></TR>
+    </TABLE>
+  >];
+  n2 [shape=point];
+
+  n0 -> n1;
+  n2 -> n0 [xlabel=""];
+  n1 -> n2 [arrowhead=none, xlabel="max: 10"];
+}
