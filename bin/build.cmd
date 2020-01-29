@@ -138,7 +138,7 @@ def runNative(gen: Os.Path): Unit = {
   out.mkdirAll()
 
   println(s"Compiling $genPath to C ...")
-  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
+  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2500",
     "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
   println(st"${(pt.cmds, " ")}".render)
   pt.runCheck()

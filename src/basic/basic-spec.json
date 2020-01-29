@@ -1,6 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
-  "maxSize" : 1975,
+  "maxSize" : 2215,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -23,49 +23,153 @@
         "type" : "Spec.Bytes",
         "name" : "f4",
         "size" : 4,
-        "signed" : true
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Bytes",
+        "name" : "f4c",
+        "size" : 1,
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 10
+        }
       },
       {
         "type" : "Spec.Bytes",
         "name" : "uf4",
         "size" : 4,
-        "signed" : false
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Bytes",
+        "name" : "f4cu",
+        "size" : 1,
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 11
+        }
       },
       {
         "type" : "Spec.Shorts",
         "name" : "f5",
         "size" : 5,
-        "signed" : true
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Shorts",
+        "name" : "f5c",
+        "size" : 1,
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 12
+        }
       },
       {
         "type" : "Spec.Shorts",
         "name" : "uf5",
         "size" : 5,
-        "signed" : false
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Shorts",
+        "name" : "f5cu",
+        "size" : 1,
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 13
+        }
       },
       {
         "type" : "Spec.Ints",
         "name" : "f6",
         "size" : 6,
-        "signed" : true
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Ints",
+        "name" : "f6c",
+        "size" : 1,
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 14
+        }
       },
       {
         "type" : "Spec.Ints",
         "name" : "uf6",
         "size" : 6,
-        "signed" : false
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Ints",
+        "name" : "f6cu",
+        "size" : 1,
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 15
+        }
       },
       {
         "type" : "Spec.Longs",
         "name" : "f7",
         "size" : 7,
-        "signed" : true
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Longs",
+        "name" : "f7c",
+        "size" : 1,
+        "signed" : true,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 16
+        }
       },
       {
         "type" : "Spec.Longs",
         "name" : "uf7",
         "size" : 7,
-        "signed" : false
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Longs",
+        "name" : "f7cu",
+        "size" : 1,
+        "signed" : false,
+        "valueOpt" : {
+          "type" : "Some",
+          "value" : 17
+        }
       },
       {
         "type" : "Spec.Floats",

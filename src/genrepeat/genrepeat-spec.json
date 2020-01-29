@@ -18,7 +18,10 @@
           "type" : "Spec.Bytes",
           "name" : "sixBytes",
           "size" : 6,
-          "signed" : true
+          "signed" : false,
+          "valueOpt" : {
+            "type" : "None"
+          }
         }
       }
     ]

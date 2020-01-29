@@ -74,7 +74,10 @@
             "type" : "Spec.Bytes",
             "name" : "duration",
             "size" : 2,
-            "signed" : true
+            "signed" : false,
+            "valueOpt" : {
+              "type" : "None"
+            }
           },
           {
             "type" : "Spec.Union",
@@ -86,7 +89,10 @@
                 "type" : "Spec.Bytes",
                 "name" : "receiver",
                 "size" : 6,
-                "signed" : true
+                "signed" : false,
+                "valueOpt" : {
+                  "type" : "None"
+                }
               },
               {
                 "type" : "Spec.Concat",
@@ -96,13 +102,19 @@
                     "type" : "Spec.Bytes",
                     "name" : "receiver",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "transmitter",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   }
                 ]
               },
@@ -114,19 +126,28 @@
                     "type" : "Spec.Bytes",
                     "name" : "address1",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address2",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   },
                   {
                     "type" : "Spec.Bytes",
                     "name" : "address3",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   },
                   {
                     "type" : "Spec.Concat",
@@ -148,7 +169,10 @@
                     "type" : "Spec.Bytes",
                     "name" : "address4",
                     "size" : 6,
-                    "signed" : true
+                    "signed" : false,
+                    "valueOpt" : {
+                      "type" : "None"
+                    }
                   }
                 ]
               }
