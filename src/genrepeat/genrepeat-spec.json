@@ -19,7 +19,10 @@
           "name" : "sixBytes",
           "size" : 6,
           "signed" : false,
-          "valueOpt" : {
+          "minOpt" : {
+            "type" : "None"
+          },
+          "maxOpt" : {
             "type" : "None"
           }
         }

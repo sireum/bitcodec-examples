@@ -6,7 +6,7 @@ digraph G {
 
   n0 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo" HREF="#">
-      <TR><TD>f1:B</TD><TD>f2:7</TD><TD>f3:100</TD><TD>f4:32 (4*8)</TD><TD>f4c:8 (= 10)</TD><TD>uf4:32 (4*8)</TD><TD>f4cu:8 (= 11)</TD><TD>f5:80 (5*16)</TD><TD>f5c:16 (= 12)</TD><TD>uf5:80 (5*16)</TD><TD>f5cu:16 (= 13)</TD><TD>f6:192 (6*32)</TD><TD>f6c:32 (= 14)</TD><TD>uf6:192 (6*32)</TD><TD>f6cu:32 (= 15)</TD><TD>f7:448 (7*64)</TD><TD>f7c:64 (= 16)</TD><TD>uf7:448 (7*64)</TD><TD>f7cu:64 (= 17)</TD><TD>f8:32 (1*32)</TD><TD>f9:64 (2*32)</TD><TD>f10:64 (1*64)</TD><TD>f11:192 (3*64)</TD><TD>(pads):11</TD></TR>
+      <TR><TD>f1:B</TD><TD>f2:7</TD><TD>f3:100</TD><TD>f4:32 (4*8)</TD><TD>f4c:8 (= 10)</TD><TD>f4r:8 (-20..-10)</TD><TD>uf4:32 (4*8)</TD><TD>f4cu:8 (= 11)</TD><TD>f4ru:8 (10..20)</TD><TD>f5:80 (5*16)</TD><TD>f5c:16 (= 12)</TD><TD>f5r:16 (-200..-100)</TD><TD>uf5:80 (5*16)</TD><TD>f5cu:16 (= 13)</TD><TD>f5ru:16 (100..200)</TD><TD>f6:192 (6*32)</TD><TD>f6c:32 (= 14)</TD><TD>f6r:32 (-2000..-1000)</TD><TD>uf6:192 (6*32)</TD><TD>f6cu:32 (= 15)</TD><TD>f6ru:32 (1000..2000)</TD><TD>f7:448 (7*64)</TD><TD>f7c:64 (= 16)</TD><TD>f7r:64 (-20000..-10000)</TD><TD>uf7:448 (7*64)</TD><TD>f7cu:64 (= 17)</TD><TD>f7ru:64 (10000..20000)</TD><TD>f8:32 (1*32)</TD><TD>f9:64 (2*32)</TD><TD>f10:64 (1*64)</TD><TD>f11:192 (3*64)</TD><TD>(pads):11</TD></TR>
     </TABLE>
   >];
 

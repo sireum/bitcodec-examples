@@ -75,7 +75,10 @@
             "name" : "duration",
             "size" : 2,
             "signed" : false,
-            "valueOpt" : {
+            "minOpt" : {
+              "type" : "None"
+            },
+            "maxOpt" : {
               "type" : "None"
             }
           },
@@ -90,7 +93,10 @@
                 "name" : "receiver",
                 "size" : 6,
                 "signed" : false,
-                "valueOpt" : {
+                "minOpt" : {
+                  "type" : "None"
+                },
+                "maxOpt" : {
                   "type" : "None"
                 }
               },
@@ -103,7 +109,10 @@
                     "name" : "receiver",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   },
@@ -112,7 +121,10 @@
                     "name" : "transmitter",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   }
@@ -127,7 +139,10 @@
                     "name" : "address1",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   },
@@ -136,7 +151,10 @@
                     "name" : "address2",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   },
@@ -145,7 +163,10 @@
                     "name" : "address3",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   },
@@ -170,7 +191,10 @@
                     "name" : "address4",
                     "size" : 6,
                     "signed" : false,
-                    "valueOpt" : {
+                    "minOpt" : {
+                      "type" : "None"
+                    },
+                    "maxOpt" : {
                       "type" : "None"
                     }
                   }

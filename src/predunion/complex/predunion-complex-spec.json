@@ -38,7 +38,10 @@
                   "name" : "bs",
                   "size" : 2,
                   "signed" : false,
-                  "valueOpt" : {
+                  "minOpt" : {
+                    "type" : "None"
+                  },
+                  "maxOpt" : {
                     "type" : "None"
                   }
                 },
@@ -47,7 +50,10 @@
                   "name" : "l",
                   "size" : 1,
                   "signed" : false,
-                  "valueOpt" : {
+                  "minOpt" : {
+                    "type" : "None"
+                  },
+                  "maxOpt" : {
                     "type" : "None"
                   }
                 }
@@ -83,7 +89,10 @@
                   "name" : "s",
                   "size" : 1,
                   "signed" : false,
-                  "valueOpt" : {
+                  "minOpt" : {
+                    "type" : "None"
+                  },
+                  "maxOpt" : {
                     "type" : "None"
                   }
                 },
@@ -92,7 +101,10 @@
                   "name" : "is",
                   "size" : 2,
                   "signed" : false,
-                  "valueOpt" : {
+                  "minOpt" : {
+                    "type" : "None"
+                  },
+                  "maxOpt" : {
                     "type" : "None"
                   }
                 }

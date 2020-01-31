@@ -27,10 +27,10 @@ object BitCodec {
 
   object Foo {
 
-    val maxSize: Z = z"2215"
+    val maxSize: Z = z"2455"
 
     def empty: MFoo = {
-      return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), s8"0", MSZ.create(4, u8"0"), u8"0", MSZ.create(5, s16"0"), s16"0", MSZ.create(5, u16"0"), u16"0", MSZ.create(6, s32"0"), s32"0", MSZ.create(6, u32"0"), u32"0", MSZ.create(7, s64"0"), s64"0", MSZ.create(7, u64"0"), u64"0", 0.0f, MSZ.create(2, 0.0f), 0.0d, MSZ.create(3, 0.0d))
+      return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), s8"0", s8"0", MSZ.create(4, u8"0"), u8"0", u8"0", MSZ.create(5, s16"0"), s16"0", s16"0", MSZ.create(5, u16"0"), u16"0", u16"0", MSZ.create(6, s32"0"), s32"0", s32"0", MSZ.create(6, u32"0"), u32"0", u32"0", MSZ.create(7, s64"0"), s64"0", s64"0", MSZ.create(7, u64"0"), u64"0", u64"0", 0.0f, MSZ.create(2, 0.0f), 0.0d, MSZ.create(3, 0.0d))
     }
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
@@ -47,30 +47,38 @@ object BitCodec {
     val f3: ISZ[B],
     val f4: ISZ[S8],
     val f4c: S8,
+    val f4r: S8,
     val uf4: ISZ[U8],
     val f4cu: U8,
+    val f4ru: U8,
     val f5: ISZ[S16],
     val f5c: S16,
+    val f5r: S16,
     val uf5: ISZ[U16],
     val f5cu: U16,
+    val f5ru: U16,
     val f6: ISZ[S32],
     val f6c: S32,
+    val f6r: S32,
     val uf6: ISZ[U32],
     val f6cu: U32,
+    val f6ru: U32,
     val f7: ISZ[S64],
     val f7c: S64,
+    val f7r: S64,
     val uf7: ISZ[U64],
     val f7cu: U64,
+    val f7ru: U64,
     val f8: F32,
     val f9: ISZ[F32],
     val f10: F64,
     val f11: ISZ[F64]
   ) {
 
-    @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, f4c, uf4.toMS, f4cu, f5.toMS, f5c, uf5.toMS, f5cu, f6.toMS, f6c, uf6.toMS, f6cu, f7.toMS, f7c, uf7.toMS, f7cu, f8, f9.toMS, f10, f11.toMS)
+    @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, f4c, f4r, uf4.toMS, f4cu, f4ru, f5.toMS, f5c, f5r, uf5.toMS, f5cu, f5ru, f6.toMS, f6c, f6r, uf6.toMS, f6cu, f6ru, f7.toMS, f7c, f7r, uf7.toMS, f7cu, f7ru, f8, f9.toMS, f10, f11.toMS)
 
     def encode(context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(2215, F)
+      val buffer = MSZ.create(2455, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -86,27 +94,35 @@ object BitCodec {
     var f3: MSZ[B],
     var f4: MSZ[S8],
     var f4c: S8,
+    var f4r: S8,
     var uf4: MSZ[U8],
     var f4cu: U8,
+    var f4ru: U8,
     var f5: MSZ[S16],
     var f5c: S16,
+    var f5r: S16,
     var uf5: MSZ[U16],
     var f5cu: U16,
+    var f5ru: U16,
     var f6: MSZ[S32],
     var f6c: S32,
+    var f6r: S32,
     var uf6: MSZ[U32],
     var f6cu: U32,
+    var f6ru: U32,
     var f7: MSZ[S64],
     var f7c: S64,
+    var f7r: S64,
     var uf7: MSZ[U64],
     var f7cu: U64,
+    var f7ru: U64,
     var f8: F32,
     var f9: MSZ[F32],
     var f10: F64,
     var f11: MSZ[F64]
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, f4c, uf4.toIS, f4cu, f5.toIS, f5c, uf5.toIS, f5cu, f6.toIS, f6c, uf6.toIS, f6cu, f7.toIS, f7c, uf7.toIS, f7cu, f8, f9.toIS, f10, f11.toIS)
+    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, f4c, f4r, uf4.toIS, f4cu, f4ru, f5.toIS, f5c, f5r, uf5.toIS, f5cu, f5ru, f6.toIS, f6c, f6r, uf6.toIS, f6cu, f6ru, f7.toIS, f7c, f7r, uf7.toIS, f7cu, f7ru, f8, f9.toIS, f10, f11.toIS)
 
     def wellFormed: Z = {
 
@@ -122,11 +138,19 @@ object BitCodec {
         return ERROR_Foo
       }
 
+      if (f4r < s8"-20" || f4r > s8"-10") {
+        return ERROR_Foo
+      }
+
       if (uf4.size != 4) {
         return ERROR_Foo
       }
 
       if (f4cu != u8"11") {
+        return ERROR_Foo
+      }
+
+      if (f4ru < u8"10" || f4ru > u8"20") {
         return ERROR_Foo
       }
 
@@ -138,11 +162,19 @@ object BitCodec {
         return ERROR_Foo
       }
 
+      if (f5r < s16"-200" || f5r > s16"-100") {
+        return ERROR_Foo
+      }
+
       if (uf5.size != 5) {
         return ERROR_Foo
       }
 
       if (f5cu != u16"13") {
+        return ERROR_Foo
+      }
+
+      if (f5ru < u16"100" || f5ru > u16"200") {
         return ERROR_Foo
       }
 
@@ -154,11 +186,19 @@ object BitCodec {
         return ERROR_Foo
       }
 
+      if (f6r < s32"-2000" || f6r > s32"-1000") {
+        return ERROR_Foo
+      }
+
       if (uf6.size != 6) {
         return ERROR_Foo
       }
 
       if (f6cu != u32"15") {
+        return ERROR_Foo
+      }
+
+      if (f6ru < u32"1000" || f6ru > u32"2000") {
         return ERROR_Foo
       }
 
@@ -170,11 +210,19 @@ object BitCodec {
         return ERROR_Foo
       }
 
+      if (f7r < s64"-20000" || f7r > s64"-10000") {
+        return ERROR_Foo
+      }
+
       if (uf7.size != 7) {
         return ERROR_Foo
       }
 
       if (f7cu != u64"17") {
+        return ERROR_Foo
+      }
+
+      if (f7ru < u64"10000" || f7ru > u64"20000") {
         return ERROR_Foo
       }
 
@@ -199,20 +247,28 @@ object BitCodec {
       Reader.IS.leBS(input, context, f3, 100)
       Reader.IS.leS8S(input, context, f4, 4)
       f4c = Reader.IS.leS8(input, context)
+      f4r = Reader.IS.leS8(input, context)
       Reader.IS.leU8S(input, context, uf4, 4)
       f4cu = Reader.IS.leU8(input, context)
+      f4ru = Reader.IS.leU8(input, context)
       Reader.IS.leS16S(input, context, f5, 5)
       f5c = Reader.IS.leS16(input, context)
+      f5r = Reader.IS.leS16(input, context)
       Reader.IS.leU16S(input, context, uf5, 5)
       f5cu = Reader.IS.leU16(input, context)
+      f5ru = Reader.IS.leU16(input, context)
       Reader.IS.leS32S(input, context, f6, 6)
       f6c = Reader.IS.leS32(input, context)
+      f6r = Reader.IS.leS32(input, context)
       Reader.IS.leU32S(input, context, uf6, 6)
       f6cu = Reader.IS.leU32(input, context)
+      f6ru = Reader.IS.leU32(input, context)
       Reader.IS.leS64S(input, context, f7, 7)
       f7c = Reader.IS.leS64(input, context)
+      f7r = Reader.IS.leS64(input, context)
       Reader.IS.leU64S(input, context, uf7, 7)
       f7cu = Reader.IS.leU64(input, context)
+      f7ru = Reader.IS.leU64(input, context)
       f8 = Reader.IS.leF32(input, context)
       Reader.IS.leF32S(input, context, f9, 2)
       f10 = Reader.IS.leF64(input, context)
@@ -231,20 +287,28 @@ object BitCodec {
       Writer.leBS(output, context, f3)
       Writer.leS8S(output, context, f4)
       Writer.leS8(output, context, f4c)
+      Writer.leS8(output, context, f4r)
       Writer.leU8S(output, context, uf4)
       Writer.leU8(output, context, f4cu)
+      Writer.leU8(output, context, f4ru)
       Writer.leS16S(output, context, f5)
       Writer.leS16(output, context, f5c)
+      Writer.leS16(output, context, f5r)
       Writer.leU16S(output, context, uf5)
       Writer.leU16(output, context, f5cu)
+      Writer.leU16(output, context, f5ru)
       Writer.leS32S(output, context, f6)
       Writer.leS32(output, context, f6c)
+      Writer.leS32(output, context, f6r)
       Writer.leU32S(output, context, uf6)
       Writer.leU32(output, context, f6cu)
+      Writer.leU32(output, context, f6ru)
       Writer.leS64S(output, context, f7)
       Writer.leS64(output, context, f7c)
+      Writer.leS64(output, context, f7r)
       Writer.leU64S(output, context, uf7)
       Writer.leU64(output, context, f7cu)
+      Writer.leU64(output, context, f7ru)
       Writer.leF32(output, context, f8)
       Writer.leF32S(output, context, f9)
       Writer.leF64(output, context, f10)
@@ -268,20 +332,28 @@ val fooExample = MFoo(
   MSZ.create(100, T),
   MSZ(s8"0", s8"1", s8"2", s8"3"),
   s8"10",
+  s8"-15",
   MSZ(u8"0", u8"1", u8"2", u8"3"),
   u8"11",
+  u8"15",
   MSZ(s16"0", s16"1", s16"2", s16"3", s16"4"),
   s16"12",
+  s16"-150",
   MSZ(u16"0", u16"1", u16"2", u16"3", u16"4"),
   u16"13",
+  u16"150",
   MSZ(s32"0", s32"1", s32"2", s32"3", s32"4", s32"5"),
   s32"14",
+  s32"-1500",
   MSZ(u32"0", u32"1", u32"2", u32"3", u32"4", u32"5"),
   u32"15",
+  u32"1500",
   MSZ(s64"0", s64"1", s64"2", s64"3", s64"4", s64"5", s64"6"),
   s64"16",
+  s64"-15000",
   MSZ(u64"0", u64"1", u64"2", u64"3", u64"4", u64"5", u64"6"),
   u64"17",
+  u64"15000",
   1.1f,
   MSZ(2.2f, 3.3f),
   4.4d,

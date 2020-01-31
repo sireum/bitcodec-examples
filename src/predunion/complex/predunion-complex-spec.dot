@@ -6,8 +6,8 @@ digraph G {
 
   n0 [shape=point];
   n1 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazzz" HREF="#">
-      <TR><TD>flag:B</TD><TD>b1:8</TD><TD>b2:8</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
+      <TR><TD>flag:B</TD><TD>bs:16 (2*8)</TD><TD>l:64 (1*64)</TD></TR>
     </TABLE>
   >];
   n2 [label=<
@@ -16,16 +16,16 @@ digraph G {
     </TABLE>
   >];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
-      <TR><TD>flag:B</TD><TD>bs:16 (2*8)</TD><TD>l:64 (1*64)</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazzz" HREF="#">
+      <TR><TD>flag:B</TD><TD>b1:8</TD><TD>b2:8</TD></TR>
     </TABLE>
   >];
   n4 [shape=point];
 
-  n0 -> n1 [xlabel="!(T).(u8\"3\" | u8\"5\").u8(10..15)"];
+  n0 -> n1 [xlabel="_1.u8[01.00].u64[0000000000000007]"];
   n0 -> n2 [xlabel="_1.u16[0002].u32[00000003.00000005]"];
-  n0 -> n3 [xlabel="_1.u8[01.00].u64[0000000000000007]"];
-  n2 -> n4 [arrowhead=none];
+  n0 -> n3 [xlabel="!(T).(u8\"3\" | u8\"5\").u8(10..15)"];
   n3 -> n4 [arrowhead=none];
+  n2 -> n4 [arrowhead=none];
   n1 -> n4 [arrowhead=none];
 }
