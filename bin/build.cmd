@@ -41,7 +41,7 @@ val genBigSuffix: String = s"-be$genSuffix"
 val genLittleSuffix: String = s"-le$genSuffix"
 
 val specs: ISZ[Os.Path] =
-  for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith(specSuffix))) yield spec
+  for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith("basic-spec.sc"))) yield spec
 
 val specGensMap: HashSMap[Os.Path, ISZ[Os.Path]] = {
   var r = HashSMap.empty[Os.Path, ISZ[Os.Path]]
@@ -138,7 +138,7 @@ def runNative(gen: Os.Path): Unit = {
   out.mkdirAll()
 
   println(s"Compiling $genPath to C ...")
-  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2500",
+  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
     "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
   println(st"${(pt.cmds, " ")}".render)
   pt.runCheck()
