@@ -11,13 +11,13 @@ digraph G {
   >];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz" HREF="#">
-      <TR><TD>bazz:4</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
+      <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
-      <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz" HREF="#">
+      <TR><TD>bazz:4</TD></TR>
     </TABLE>
   >];
   n4 [shape=point];

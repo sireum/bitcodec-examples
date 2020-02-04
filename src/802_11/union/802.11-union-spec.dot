@@ -16,18 +16,18 @@ digraph G {
   >];
   n2 [shape=point];
   n3 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data" HREF="#">
+      <TR><TD>address1:48 (6*8)</TD><TD>address2:48 (6*8)</TD><TD>address3:48 (6*8)</TD></TR>
+    </TABLE>
+  >];
+  n4 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiver" HREF="#">
       <TR><TD>receiver:48 (6*8)</TD></TR>
     </TABLE>
   >];
-  n4 [label=<
+  n5 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.receiverTransmitter" HREF="#">
       <TR><TD>receiver:48 (6*8)</TD><TD>transmitter:48 (6*8)</TD></TR>
-    </TABLE>
-  >];
-  n5 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="MacFrame.macHeader.data" HREF="#">
-      <TR><TD>address1:48 (6*8)</TD><TD>address2:48 (6*8)</TD><TD>address3:48 (6*8)</TD></TR>
     </TABLE>
   >];
   n6 [shape=point];
@@ -49,13 +49,13 @@ digraph G {
 
   n0 -> n1;
   n1 -> n2 [arrowhead=none, xlabel="frameControl.tpe, frameControl.subType", tooltip="p => p match {&#013;  case /* CTS */ (Frame.Control, u4\"0xC\") => 0&#013;  case /* RTS */ (Frame.Control, u4\"0xB\") => 1&#013;  case /* Data */ (Frame.Data, _) => 2&#013;  case _ => -1 // error&#013;}", href="#"];
-  n2 -> n3 [xlabel="0"];
-  n2 -> n4 [xlabel="1"];
-  n2 -> n5 [xlabel="2"];
-  n3 -> n6 [arrowhead=none];
+  n2 -> n3 [xlabel="2"];
+  n2 -> n4 [xlabel="0"];
+  n2 -> n5 [xlabel="1"];
+  n5 -> n6 [arrowhead=none];
   n9 -> n6 [arrowhead=none];
   n4 -> n6 [arrowhead=none];
-  n5 -> n7;
+  n3 -> n7;
   n6 -> n8;
   n7 -> n9;
 }
