@@ -1,6 +1,6 @@
 {
   "type" : "BitCodecGenSpec",
-  "maxSize" : 2455,
+  "maxSize" : 3223,
   "spec" : {
     "type" : "Spec.Concat",
     "name" : "Foo",
@@ -61,6 +61,20 @@
       },
       {
         "type" : "Spec.Bytes",
+        "name" : "f4rs",
+        "size" : 2,
+        "signed" : true,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -20
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : -10
+        }
+      },
+      {
+        "type" : "Spec.Bytes",
         "name" : "uf4",
         "size" : 4,
         "signed" : false,
@@ -89,6 +103,20 @@
         "type" : "Spec.Bytes",
         "name" : "f4ru",
         "size" : 1,
+        "signed" : false,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : 10
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 20
+        }
+      },
+      {
+        "type" : "Spec.Bytes",
+        "name" : "f4rus",
+        "size" : 2,
         "signed" : false,
         "minOpt" : {
           "type" : "Some",
@@ -141,6 +169,20 @@
       },
       {
         "type" : "Spec.Shorts",
+        "name" : "f5rs",
+        "size" : 2,
+        "signed" : true,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -200
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : -100
+        }
+      },
+      {
+        "type" : "Spec.Shorts",
         "name" : "uf5",
         "size" : 5,
         "signed" : false,
@@ -169,6 +211,20 @@
         "type" : "Spec.Shorts",
         "name" : "f5ru",
         "size" : 1,
+        "signed" : false,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : 100
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 200
+        }
+      },
+      {
+        "type" : "Spec.Shorts",
+        "name" : "f5rus",
+        "size" : 2,
         "signed" : false,
         "minOpt" : {
           "type" : "Some",
@@ -221,6 +277,20 @@
       },
       {
         "type" : "Spec.Ints",
+        "name" : "f6rs",
+        "size" : 2,
+        "signed" : true,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -2000
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : -1000
+        }
+      },
+      {
+        "type" : "Spec.Ints",
         "name" : "uf6",
         "size" : 6,
         "signed" : false,
@@ -249,6 +319,20 @@
         "type" : "Spec.Ints",
         "name" : "f6ru",
         "size" : 1,
+        "signed" : false,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : 1000
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 2000
+        }
+      },
+      {
+        "type" : "Spec.Ints",
+        "name" : "f6rus",
+        "size" : 2,
         "signed" : false,
         "minOpt" : {
           "type" : "Some",
@@ -301,6 +385,20 @@
       },
       {
         "type" : "Spec.Longs",
+        "name" : "f7rs",
+        "size" : 2,
+        "signed" : true,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -20000
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : -10000
+        }
+      },
+      {
+        "type" : "Spec.Longs",
         "name" : "uf7",
         "size" : 7,
         "signed" : false,
@@ -340,24 +438,114 @@
         }
       },
       {
+        "type" : "Spec.Longs",
+        "name" : "f7rus",
+        "size" : 2,
+        "signed" : false,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : 10000
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 20000
+        }
+      },
+      {
         "type" : "Spec.Floats",
         "name" : "f8",
-        "size" : 1
+        "size" : 1,
+        "minOpt" : {
+          "type" : "None"
+        },
+        "maxOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Floats",
+        "name" : "f8r",
+        "size" : 1,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -100.0
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 100.0
+        }
       },
       {
         "type" : "Spec.Floats",
         "name" : "f9",
-        "size" : 2
+        "size" : 2,
+        "minOpt" : {
+          "type" : "None"
+        },
+        "maxOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Floats",
+        "name" : "f9rs",
+        "size" : 2,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -100.0
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 100.0
+        }
       },
       {
         "type" : "Spec.Doubles",
         "name" : "f10",
-        "size" : 1
+        "size" : 1,
+        "minOpt" : {
+          "type" : "None"
+        },
+        "maxOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Doubles",
+        "name" : "f10r",
+        "size" : 1,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -1000.0
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 1000.0
+        }
       },
       {
         "type" : "Spec.Doubles",
         "name" : "f11",
-        "size" : 3
+        "size" : 3,
+        "minOpt" : {
+          "type" : "None"
+        },
+        "maxOpt" : {
+          "type" : "None"
+        }
+      },
+      {
+        "type" : "Spec.Doubles",
+        "name" : "f10rs",
+        "size" : 2,
+        "minOpt" : {
+          "type" : "Some",
+          "value" : -1000.0
+        },
+        "maxOpt" : {
+          "type" : "Some",
+          "value" : 1000.0
+        }
       },
       {
         "type" : "Spec.Pads",
