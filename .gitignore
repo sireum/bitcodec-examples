@@ -7,5 +7,6 @@ out
 c
 *.cmd.com
 *.sc.com
-*.svg
-*.png
+*.dot.svg
+*.dot.pdf
+*.dot.png

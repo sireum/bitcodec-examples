@@ -41,7 +41,7 @@ val genBigSuffix: String = s"-be$genSuffix"
 val genLittleSuffix: String = s"-le$genSuffix"
 
 val specs: ISZ[Os.Path] =
-  for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith("basic-spec.sc"))) yield spec
+  for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith("-spec.sc"))) yield spec
 
 val specGensMap: HashSMap[Os.Path, ISZ[Os.Path]] = {
   var r = HashSMap.empty[Os.Path, ISZ[Os.Path]]
@@ -69,11 +69,8 @@ def json(): Unit = {
 
     val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
     println(s"Generating bcgen's JSON spec from $spec ...")
-    val big = gens(0)
-    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json", "--name", name,
-      "--output-dir", spec.up.string, spec.string)).console
-    println(st"${(pb.cmds, " ")}".render)
-    pb.runCheck()
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).echo.console.runCheck()
 
     println()
   }
@@ -81,16 +78,19 @@ def json(): Unit = {
 
 def dot(): Unit = {
   for (specGens <- specGensMap.entries) {
-    val (spec, gens) = specGens
+    val (spec, _) = specGens
 
     val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
     println(s"Generating Graphviz .dot from $spec ...")
-    val big = gens(0)
-    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "dot", "--name", name,
-      "--output-dir", spec.up.string, spec.string)).console
-    println(st"${(pb.cmds, " ")}".render)
-    pb.runCheck()
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "dot", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).echo.console.runCheck()
 
+    val r = Os.proc(ISZ("dot", "-V")).run()
+    if (r.exitCode == 0) {
+      val sops = ops.StringOps(spec.name)
+      val dotFile = spec.up / s"${sops.substring(0, sops.lastIndexOf('.'))}.dot"
+      Os.proc(ISZ("dot", "-O", "-Tpdf", dotFile.string)).echo.console.runCheck()
+    }
     println()
   }
 }
@@ -101,17 +101,13 @@ def gen(): Unit = {
 
     println(s"Generating bitcodec from $spec ...")
     val big = gens(0)
-    val pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
-      "--output-dir", big.up.string, spec.string)).console
-    println(st"${(pb.cmds, " ")}".render)
-    pb.runCheck()
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
+      "--output-dir", big.up.string, spec.string)).echo.console.runCheck()
 
     if (gens.size == 2) {
       val little = gens(1)
-      val pl = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
-        "--output-dir", little.up.string, spec.string)).console
-      println(st"${(pl.cmds, " ")}".render)
-      pl.runCheck()
+      Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
+        "--output-dir", little.up.string, spec.string)).echo.console.runCheck()
     }
     println()
   }
@@ -120,9 +116,7 @@ def gen(): Unit = {
 def run(gen: Os.Path): Unit = {
   val genPath = s"$gen.sc"
   println(s"Running $genPath ...")
-  val p = Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).console
-  println(st"${(p.cmds, " ")}".render)
-  p.runCheck()
+  Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).echo.console.runCheck()
   println()
 }
 
@@ -138,21 +132,15 @@ def runNative(gen: Os.Path): Unit = {
   out.mkdirAll()
 
   println(s"Compiling $genPath to C ...")
-  val pt = Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
-    "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).console
-  println(st"${(pt.cmds, " ")}".render)
-  pt.runCheck()
+  Os.proc(ISZ(sireum.string, "slang", "transpilers", "c", "--string-size", "2048",
+    "--sequence", "MSZ[org.sireum.B]=63848", "--output-dir", c.string, "--name", gen.name, genPath)).echo.console.runCheck()
   println()
 
   println(s"Compiling executable $x ...")
-  val px = Os.proc(ISZ("cmake", "-DCMAKE_BUILD_TYPE=Release", s"..${Os.fileSep}c")).at(out).console
-  println(st"${(px.cmds, " ")}".render)
-  px.runCheck()
+  Os.proc(ISZ("cmake", "-DCMAKE_BUILD_TYPE=Release", s"..${Os.fileSep}c")).at(out).echo.console.runCheck()
   println()
 
-  val pm = Os.proc(ISZ("make")).at(out).console
-  println(st"${(pm.cmds, " ")}".render)
-  pm.runCheck()
+  Os.proc(ISZ("make")).at(out).echo.console.runCheck()
   println()
 
   println(s"Running $x ...")
@@ -167,26 +155,20 @@ def all(): Unit = {
 
     println(s"Generating bitcodec from $spec ...")
     val big = gens(0)
-    var pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
-      "--output-dir", big.up.string, spec.string)).console
-    println(st"${(pb.cmds, " ")}".render)
-    pb.runCheck()
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
+      "--output-dir", big.up.string, spec.string)).echo.console.runCheck()
 
     if (gens.size == 2) {
       val little = gens(1)
-      val pl = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
-        "--output-dir", little.up.string, spec.string)).console
-      println(st"${(pl.cmds, " ")}".render)
-      pl.runCheck()
+      Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
+        "--output-dir", little.up.string, spec.string)).echo.console.runCheck()
     }
     println()
 
     println(s"Generating JSON, and Graphviz .dot from $spec ...")
     val name = ops.StringOps(spec.name).substring(0, spec.name.size - 3)
-    pb = Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json,dot", "--name", name,
-      "--output-dir", spec.up.string, spec.string)).console
-    println(st"${(pb.cmds, " ")}".render)
-    pb.runCheck()
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json,dot", "--name", name,
+      "--output-dir", spec.up.string, spec.string)).echo.console.runCheck()
     println()
 
     for (gen <- gens) {
