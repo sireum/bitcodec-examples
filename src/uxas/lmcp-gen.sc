@@ -18,11 +18,11 @@ object BitCodec {
 
   val ERROR_EmptyMessage: Z = 2
 
-  val ERROR_KeepInArea: Z = 3
+  val ERROR_KeepInAreaId: Z = 3
 
   val ERROR_OperatingRegionPayload_keepInAreas: Z = 4
 
-  val ERROR_KeepOutArea: Z = 5
+  val ERROR_KeepOutAreaId: Z = 5
 
   val ERROR_OperatingRegionPayload_keepOutAreas: Z = 6
 
@@ -61,8 +61,8 @@ object BitCodec {
 
     @strictpure def toMutable: MEmptyMessage = MEmptyMessage()
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(0, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -104,30 +104,30 @@ object BitCodec {
 
   }
 
-  object KeepInArea {
+  object KeepInAreaId {
 
     val maxSize: Z = z"64"
 
-    def empty: MKeepInArea = {
-      return MKeepInArea(u64"0")
+    def empty: MKeepInAreaId = {
+      return MKeepInAreaId(u64"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[KeepInArea] = {
+    def decode(input: ISZ[B], context: Context): Option[KeepInAreaId] = {
       val r = empty
       r.decode(input, context)
-      return if (context.hasError) None[KeepInArea]() else Some(r.toImmutable)
+      return if (context.hasError) None[KeepInAreaId]() else Some(r.toImmutable)
     }
 
   }
 
-  @datatype class KeepInArea(
-    val keepInArea: U64
+  @datatype class KeepInAreaId(
+    val keepInAreaId: U64
   ) {
 
-    @strictpure def toMutable: MKeepInArea = MKeepInArea(keepInArea)
+    @strictpure def toMutable: MKeepInAreaId = MKeepInAreaId(keepInAreaId)
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(64, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -137,24 +137,24 @@ object BitCodec {
     }
   }
 
-  @record class MKeepInArea(
-    var keepInArea: U64
+  @record class MKeepInAreaId(
+    var keepInAreaId: U64
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: KeepInArea = KeepInArea(keepInArea)
+    @strictpure def toImmutable: KeepInAreaId = KeepInAreaId(keepInAreaId)
 
     def wellFormed: Z = {
 
 
-      // BEGIN USER CODE: KeepInArea.wellFormed
+      // BEGIN USER CODE: KeepInAreaId.wellFormed
 
-      // END USER CODE: KeepInArea.wellFormed
+      // END USER CODE: KeepInAreaId.wellFormed
 
       return 0
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      keepInArea = Reader.IS.beU64(input, context)
+      keepInAreaId = Reader.IS.beU64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -163,39 +163,39 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU64(output, context, keepInArea)
+      Writer.beU64(output, context, keepInAreaId)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_KeepInArea)
+        context.updateErrorCode(ERROR_KeepInAreaId)
       }
     }
 
   }
 
-  object KeepOutArea {
+  object KeepOutAreaId {
 
     val maxSize: Z = z"64"
 
-    def empty: MKeepOutArea = {
-      return MKeepOutArea(u64"0")
+    def empty: MKeepOutAreaId = {
+      return MKeepOutAreaId(u64"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[KeepOutArea] = {
+    def decode(input: ISZ[B], context: Context): Option[KeepOutAreaId] = {
       val r = empty
       r.decode(input, context)
-      return if (context.hasError) None[KeepOutArea]() else Some(r.toImmutable)
+      return if (context.hasError) None[KeepOutAreaId]() else Some(r.toImmutable)
     }
 
   }
 
-  @datatype class KeepOutArea(
-    val keepOutArea: U64
+  @datatype class KeepOutAreaId(
+    val keepOutAreaId: U64
   ) {
 
-    @strictpure def toMutable: MKeepOutArea = MKeepOutArea(keepOutArea)
+    @strictpure def toMutable: MKeepOutAreaId = MKeepOutAreaId(keepOutAreaId)
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(64, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -205,24 +205,24 @@ object BitCodec {
     }
   }
 
-  @record class MKeepOutArea(
-    var keepOutArea: U64
+  @record class MKeepOutAreaId(
+    var keepOutAreaId: U64
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: KeepOutArea = KeepOutArea(keepOutArea)
+    @strictpure def toImmutable: KeepOutAreaId = KeepOutAreaId(keepOutAreaId)
 
     def wellFormed: Z = {
 
 
-      // BEGIN USER CODE: KeepOutArea.wellFormed
+      // BEGIN USER CODE: KeepOutAreaId.wellFormed
 
-      // END USER CODE: KeepOutArea.wellFormed
+      // END USER CODE: KeepOutAreaId.wellFormed
 
       return 0
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      keepOutArea = Reader.IS.beU64(input, context)
+      keepOutAreaId = Reader.IS.beU64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -231,10 +231,10 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU64(output, context, keepOutArea)
+      Writer.beU64(output, context, keepOutAreaId)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_KeepOutArea)
+        context.updateErrorCode(ERROR_KeepOutAreaId)
       }
     }
 
@@ -242,10 +242,10 @@ object BitCodec {
 
   object OperatingRegionPayload {
 
-    val maxSize: Z = z"-1"
+    val maxSize: Z = z"224"
 
     def empty: MOperatingRegionPayload = {
-      return MOperatingRegionPayload(s64"0", u16"0", MSZ[MKeepInArea](), u16"0", MSZ[MKeepOutArea]())
+      return MOperatingRegionPayload(s64"0", u16"0", MSZ[MKeepInAreaId](), u16"0", MSZ[MKeepOutAreaId]())
     }
 
     def decode(input: ISZ[B], context: Context): Option[OperatingRegionPayload] = {
@@ -254,32 +254,32 @@ object BitCodec {
       return if (context.hasError) None[OperatingRegionPayload]() else Some(r.toImmutable)
     }
 
-    def toMutableKeepInAreas(s: ISZ[KeepInArea]): MSZ[MKeepInArea] = {
-      var r = MSZ[MKeepInArea]()
+    def toMutableKeepInAreas(s: ISZ[KeepInAreaId]): MSZ[MKeepInAreaId] = {
+      var r = MSZ[MKeepInAreaId]()
       for (e <- s) {
         r = r :+ e.toMutable
       }
       return r
     }
 
-    def toImmutableKeepInAreas(s: MSZ[MKeepInArea]): ISZ[KeepInArea] = {
-      var r = ISZ[KeepInArea]()
+    def toImmutableKeepInAreas(s: MSZ[MKeepInAreaId]): ISZ[KeepInAreaId] = {
+      var r = ISZ[KeepInAreaId]()
       for (e <- s) {
         r = r :+ e.toImmutable
       }
       return r
     }
 
-    def toMutableKeepOutAreas(s: ISZ[KeepOutArea]): MSZ[MKeepOutArea] = {
-      var r = MSZ[MKeepOutArea]()
+    def toMutableKeepOutAreas(s: ISZ[KeepOutAreaId]): MSZ[MKeepOutAreaId] = {
+      var r = MSZ[MKeepOutAreaId]()
       for (e <- s) {
         r = r :+ e.toMutable
       }
       return r
     }
 
-    def toImmutableKeepOutAreas(s: MSZ[MKeepOutArea]): ISZ[KeepOutArea] = {
-      var r = ISZ[KeepOutArea]()
+    def toImmutableKeepOutAreas(s: MSZ[MKeepOutAreaId]): ISZ[KeepOutAreaId] = {
+      var r = ISZ[KeepOutAreaId]()
       for (e <- s) {
         r = r :+ e.toImmutable
       }
@@ -290,15 +290,15 @@ object BitCodec {
   @datatype class OperatingRegionPayload(
     val id: S64,
     val keepInAreaLen: U16,
-    val keepInAreas: ISZ[KeepInArea],
+    val keepInAreas: ISZ[KeepInAreaId],
     val keepOutAreaLen: U16,
-    val keepOutAreas: ISZ[KeepOutArea]
+    val keepOutAreas: ISZ[KeepOutAreaId]
   ) extends Payload {
 
     @strictpure def toMutable: MOperatingRegionPayload = MOperatingRegionPayload(id, keepInAreaLen, OperatingRegionPayload.toMutableKeepInAreas(keepInAreas), keepOutAreaLen, OperatingRegionPayload.toMutableKeepOutAreas(keepOutAreas))
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(224, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -311,18 +311,26 @@ object BitCodec {
   @record class MOperatingRegionPayload(
     var id: S64,
     var keepInAreaLen: U16,
-    var keepInAreas: MSZ[MKeepInArea],
+    var keepInAreas: MSZ[MKeepInAreaId],
     var keepOutAreaLen: U16,
-    var keepOutAreas: MSZ[MKeepOutArea]
+    var keepOutAreas: MSZ[MKeepOutAreaId]
   ) extends MPayload {
 
     @strictpure def toImmutable: OperatingRegionPayload = OperatingRegionPayload(id, keepInAreaLen, OperatingRegionPayload.toImmutableKeepInAreas(keepInAreas), keepOutAreaLen, OperatingRegionPayload.toImmutableKeepOutAreas(keepOutAreas))
 
     def wellFormed: Z = {
 
+      if (keepInAreas.size > 1) {
+        return ERROR_OperatingRegionPayload_keepInAreas
+      }
+
       val keepInAreasSize = sizeOfKeepInAreas(keepInAreaLen)
       if (keepInAreas.size != keepInAreasSize) {
         return ERROR_OperatingRegionPayload_keepInAreas
+      }
+
+      if (keepOutAreas.size > 1) {
+        return ERROR_OperatingRegionPayload_keepOutAreas
       }
 
       val keepOutAreasSize = sizeOfKeepOutAreas(keepOutAreaLen)
@@ -342,7 +350,7 @@ object BitCodec {
       keepInAreaLen = Reader.IS.beU16(input, context)
       val keepInAreasSize = sizeOfKeepInAreas(keepInAreaLen)
       if (keepInAreasSize >= 0) {
-        keepInAreas = MSZ.create(keepInAreasSize, KeepInArea.empty)
+        keepInAreas = MSZ.create(keepInAreasSize, KeepInAreaId.empty)
         for (i <- 0 until keepInAreasSize) {
           keepInAreas(i).decode(input, context)
         }
@@ -352,7 +360,7 @@ object BitCodec {
       keepOutAreaLen = Reader.IS.beU16(input, context)
       val keepOutAreasSize = sizeOfKeepOutAreas(keepOutAreaLen)
       if (keepOutAreasSize >= 0) {
-        keepOutAreas = MSZ.create(keepOutAreasSize, KeepOutArea.empty)
+        keepOutAreas = MSZ.create(keepOutAreasSize, KeepOutAreaId.empty)
         for (i <- 0 until keepOutAreasSize) {
           keepOutAreas(i).decode(input, context)
         }
@@ -409,7 +417,7 @@ object BitCodec {
 
   @datatype trait Payload {
     @strictpure def toMutable: MPayload
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]]
+    def encode(context: Context): Option[ISZ[B]]
     def wellFormed: Z
   }
 
@@ -419,7 +427,7 @@ object BitCodec {
 
   object Payload {
 
-    val maxSize: Z = z"-1"
+    val maxSize: Z = z"224"
 
     def empty: MPayload = {
       return OperatingRegionPayload.empty
@@ -454,7 +462,7 @@ object BitCodec {
 
   object NonEmptyMessage {
 
-    val maxSize: Z = z"-1"
+    val maxSize: Z = z"336"
 
     def empty: MNonEmptyMessage = {
       return MNonEmptyMessage(s64"0", u32"0", u16"0", OperatingRegionPayload.empty)
@@ -477,8 +485,8 @@ object BitCodec {
 
     @strictpure def toMutable: MNonEmptyMessage = MNonEmptyMessage(seriesId, messageType, version, payload.toMutable)
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(336, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -547,7 +555,7 @@ object BitCodec {
 
   @datatype trait Content {
     @strictpure def toMutable: MContent
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]]
+    def encode(context: Context): Option[ISZ[B]]
     def wellFormed: Z
   }
 
@@ -557,7 +565,7 @@ object BitCodec {
 
   object Content {
 
-    val maxSize: Z = z"-1"
+    val maxSize: Z = z"336"
 
     def empty: MContent = {
       return EmptyMessage.empty
@@ -591,7 +599,7 @@ object BitCodec {
 
   object LmcpObject {
 
-    val maxSize: Z = z"-1"
+    val maxSize: Z = z"440"
 
     def empty: MLmcpObject = {
       return MLmcpObject(s32"0", u32"0", u8"0", EmptyMessage.empty, u32"0")
@@ -615,8 +623,8 @@ object BitCodec {
 
     @strictpure def toMutable: MLmcpObject = MLmcpObject(controlString, messageSize, isNonNull, content.toMutable, checksum)
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
+    def encode(context: Context): Option[ISZ[B]] = {
+      val buffer = MSZ.create(440, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }

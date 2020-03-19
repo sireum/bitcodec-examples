@@ -6,18 +6,40 @@ import org.sireum.bitcodec.Spec._
 val operatingRegionPayload = Concat(name = "OperatingRegionPayload", elements = ISZ(
   Long(name = "id"),
   UShort(name = "keepInAreaLen"),
-  Repeat[U16](
+  BoundedRepeat[U16](
     name = "keepInAreas",
+    maxElements = 1,
     dependsOn = ISZ("keepInAreaLen"),
     size = l => conversions.U16.toZ(l),
-    element = ULong("keepInArea")
+    element = ULong("keepInAreaId")
   ),
   UShort(name = "keepOutAreaLen"),
-  Repeat[U16](
+  BoundedRepeat[U16](
     name = "keepOutAreas",
+    maxElements = 1,
     dependsOn = ISZ("keepOutAreaLen"),
     size = l => conversions.U16.toZ(l),
-    element = ULong("keepOutArea")
+    element = ULong("keepOutAreaId")
+  )
+))
+
+val emptyMessage = Concat(name = "EmptyMessage", elements = ISZ())
+
+val nonEmptyMessage = Concat(name = "NonEmptyMessage", elements = ISZ(
+  Long(name = "seriesId"),
+  UInt(name = "messageType"),
+  UShort(name = "version"),
+  Union[U32](
+    name = "Payload",
+    dependsOn = ISZ("messageType"),
+    choice = n => conversions.U32.toZ(n) match {
+      case z"39" /* OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h */ => 0
+      case  _ => -1
+    },
+    subs = ISZ(
+      operatingRegionPayload,
+      // ...
+    )
   )
 ))
 
@@ -30,24 +52,8 @@ val lmcpObject = Concat(name = "LmcpObject", elements = ISZ(
     dependsOn = ISZ("isNonNull"),
     choice = b => if (conversions.U8.toZ(b) == 0) 0 else 1,
     subs = ISZ(
-      Concat(name = "EmptyMessage", elements = ISZ()),
-      Concat(name = "NonEmptyMessage", elements = ISZ(
-        Long(name = "seriesId"),
-        UInt(name = "messageType"),
-        UShort(name = "version"),
-        Union[U32](
-          name = "Payload",
-          dependsOn = ISZ("messageType"),
-          choice = n => conversions.U32.toZ(n) match {
-            case z"39" /* OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h */ => 0
-            case  _ => -1
-          },
-          subs = ISZ(
-            operatingRegionPayload,
-            // ...
-          )
-        )
-      ))
+      emptyMessage,
+      nonEmptyMessage
     )
   ),
   UInt(name = "checksum")
