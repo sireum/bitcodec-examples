@@ -4,7 +4,7 @@ import org.sireum._
 import org.sireum.bitcodec.Spec._
 
 val operatingRegionPayload = Concat(name = "OperatingRegionPayload", elements = ISZ(
-  bitcodec.Spec.Long(name = "id"),
+  Long(name = "id"),
   UShort(name = "keepInAreaLen"),
   Repeat[U16](
     name = "keepInAreas",
@@ -32,7 +32,7 @@ val lmcpObject = Concat(name = "LmcpObject", elements = ISZ(
     subs = ISZ(
       Concat(name = "EmptyMessage", elements = ISZ()),
       Concat(name = "NonEmptyMessage", elements = ISZ(
-        bitcodec.Spec.Long(name = "seriesId"),
+        Long(name = "seriesId"),
         UInt(name = "messageType"),
         UShort(name = "version"),
         Union[U32](
