@@ -1,10 +1,10 @@
 // #Sireum
 
 import org.sireum._
+import org.sireum.U8._
 import org.sireum.U16._
 import org.sireum.U32._
 import org.sireum.U64._
-import org.sireum.S8._
 import org.sireum.S32._
 import org.sireum.S64._
 import org.sireum.ops.Bits.{Context, Reader, Writer}
@@ -594,7 +594,7 @@ object BitCodec {
     val maxSize: Z = z"-1"
 
     def empty: MLmcpObject = {
-      return MLmcpObject(s32"0", u32"0", s8"0", EmptyMessage.empty, u32"0")
+      return MLmcpObject(s32"0", u32"0", u8"0", EmptyMessage.empty, u32"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[LmcpObject] = {
@@ -608,7 +608,7 @@ object BitCodec {
   @datatype class LmcpObject(
     val controlString: S32,
     val messageSize: U32,
-    val isNonNull: S8,
+    val isNonNull: U8,
     val content: Content,
     val checksum: U32
   ) {
@@ -629,7 +629,7 @@ object BitCodec {
   @record class MLmcpObject(
     var controlString: S32,
     var messageSize: U32,
-    var isNonNull: S8,
+    var isNonNull: U8,
     var content: MContent,
     var checksum: U32
   ) extends Runtime.Composite {
@@ -663,7 +663,7 @@ object BitCodec {
     def decode(input: ISZ[B], context: Context): Unit = {
       controlString = Reader.IS.beS32(input, context)
       messageSize = Reader.IS.beU32(input, context)
-      isNonNull = Reader.IS.beS8(input, context)
+      isNonNull = Reader.IS.beU8(input, context)
       Content.choose(isNonNull) match {
         case Content.Choice.EmptyMessage => content = EmptyMessage.empty
         case Content.Choice.NonEmptyMessage => content = NonEmptyMessage.empty
@@ -681,7 +681,7 @@ object BitCodec {
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.beS32(output, context, controlString)
       Writer.beU32(output, context, messageSize)
-      Writer.beS8(output, context, isNonNull)
+      Writer.beU8(output, context, isNonNull)
       content.encode(output, context)
       Writer.beU32(output, context, checksum)
 

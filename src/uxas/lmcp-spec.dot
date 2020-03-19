@@ -51,8 +51,8 @@ digraph G {
   n0 -> n1 [arrowhead=none, xlabel="isNonNull", tooltip="b => if (conversions.U8.toZ(b) == 0) 0 else 1", href="#"];
   n1 -> n2 [xlabel="1"];
   n3 -> n4;
-  n1 -> n3 [xlabel="0"];
   n7 -> n3;
+  n1 -> n3 [xlabel="0"];
   n2 -> n5 [arrowhead=none, xlabel="messageType", tooltip="n => conversions.U32.toZ(n) match {&#013;case z\"39\" /* OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h */ => 0&#013;case  _ => -1&#013;}", href="#"];
   n5 -> n6 [xlabel="0"];
   n6 -> n8 [arrowhead=none];
@@ -60,8 +60,8 @@ digraph G {
   n8 -> n9;
   n10 -> n11;
   n9 -> n10 [arrowhead=none];
-  n11 -> n12 [arrowhead=none];
   n14 -> n12 [xlabel="keepOutAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n11 -> n12 [arrowhead=none];
   n12 -> n13;
   n13 -> n14 [arrowhead=none];
   n14 -> n7;

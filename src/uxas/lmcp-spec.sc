@@ -24,7 +24,7 @@ val operatingRegionPayload = Concat(name = "OperatingRegionPayload", elements = 
 val lmcpObject = Concat(name = "LmcpObject", elements = ISZ(
   IntConst(name = "controlString", value = 0x4c4d4350),
   UInt(name = "messageSize"),
-  Byte(name = "isNonNull"), // bool is 1 byte (see getBool in avtas/lmcp/ByteBuffer.cpp)
+  UByte(name = "isNonNull"), // bool is 1 byte (see getBool in avtas/lmcp/ByteBuffer.cpp)
   Union[U8](
     name = "Content",
     dependsOn = ISZ("isNonNull"),
