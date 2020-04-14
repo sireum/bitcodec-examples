@@ -39,29 +39,35 @@ val specSuffix: String = "-spec.sc"
 val genSuffix: String = "-gen"
 val genBigSuffix: String = s"-be$genSuffix"
 val genLittleSuffix: String = s"-le$genSuffix"
+var fEndName: String = "-spec.sc"
 
-val specs: ISZ[Os.Path] =
-  for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith("-spec.sc"))) yield spec
+object Spec {
+  @memoize def specs: ISZ[Os.Path] = {
+    return for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith(fEndName))) yield spec
+  }
 
-val specGensMap: HashSMap[Os.Path, ISZ[Os.Path]] = {
-  var r = HashSMap.empty[Os.Path, ISZ[Os.Path]]
-  for (spec <- specs) {
-    val name = ops.StringOps(spec.name).substring(0, spec.name.size - specSuffix.size)
-    val gen = spec.up / s"$name$genSuffix"
-    if (gen.exists) {
-      r = r + spec ~> ISZ(gen)
-    } else {
-      val big = spec.up / "big" / s"$name$genBigSuffix"
-      val little = spec.up / "little" / s"$name$genLittleSuffix"
-      if ((big.up / s"${big.name}.sc").exists && (little.up / s"${little.name}.sc").exists) {
-        r = r + spec ~> ISZ(big, little)
-      } else {
+  @memoize def specGensMap: HashSMap[Os.Path, ISZ[Os.Path]] = {
+    var r = HashSMap.empty[Os.Path, ISZ[Os.Path]]
+    for (spec <- specs) {
+      val name = ops.StringOps(spec.name).substring(0, spec.name.size - specSuffix.size)
+      val gen = spec.up / s"$name$genSuffix"
+      if (gen.exists) {
         r = r + spec ~> ISZ(gen)
+      } else {
+        val big = spec.up / "big" / s"$name$genBigSuffix"
+        val little = spec.up / "little" / s"$name$genLittleSuffix"
+        if ((big.up / s"${big.name}.sc").exists && (little.up / s"${little.name}.sc").exists) {
+          r = r + spec ~> ISZ(big, little)
+        } else {
+          r = r + spec ~> ISZ(gen)
+        }
       }
     }
+    r
   }
-  r
 }
+
+import Spec._
 
 def json(): Unit = {
   for (specGens <- specGensMap.entries) {
@@ -179,10 +185,15 @@ def all(): Unit = {
 }
 
 def usage(): Unit = {
-  println("Usage: ( gen | json | dot | run | run-native | all )+")
+  println("Usage: ( gen | json | dot | run | run-native | all | <name>-spec.sc )+")
 }
 
 if (Os.cliArgs.size > 0) {
+  for (arg <- Os.cliArgs) {
+    if (ops.StringOps(arg).endsWith(".sc")) {
+      fEndName = arg
+    }    
+  }
   if (ops.ISZOps(Os.cliArgs).exists((arg: String) => arg == "all")) {
     all()
   } else {
@@ -203,7 +214,12 @@ if (Os.cliArgs.size > 0) {
               runNative(gen)
             }
           }
-        case _ => usage()
+        case _ =>
+          if (!ops.StringOps(arg).endsWith("-spec.sc")) {
+            usage()
+            eprintln(s"Unrecognized argument: $arg")
+            Os.exit(-1)
+          }
       }
     }
   }
