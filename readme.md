@@ -1,7 +1,7 @@
 # Bitcodec Examples
 
 Bitcodec is a tool for specifying and generating Slang 
-bit-precise (little/big-endian) encoder/decoder for processing raw byte arrays to structured data.
+bit-precise (little/big-endian) encoder/decoder for processing raw byte arrays from/to structured data.
 The specification input is currently a Slang script that construct
 bitcodec specification objects. 
 This allows one to use the full Slang language features (including IDE support) to specify data layouts. 
