@@ -420,7 +420,7 @@ A `<pred>` can be one of the following:
 
 * `longs(ISZ(<value>, ..., <value>))`: matches a sequence of (signed) 64-bit integer `<value>`
 
-* `skip(<n>)`: matches skips `<n>` bits 
+* `skip(<n>)`: skips `<n>` bits 
 
 * `between(<n>, <min>, <max>)`: matches an `<n>`-bit (signed) integer between `<min>` and `<max>` (inclusive) 
 
