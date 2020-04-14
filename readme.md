@@ -2,7 +2,7 @@
 
 Bitcodec is a tool for specifying and generating Slang 
 bit-precise (little/big-endian) encoder/decoder for processing raw byte arrays from/to structured data.
-The specification input is currently a Slang script that construct
+The specification input is currently a Slang script that constructs
 bitcodec specification objects. 
 This allows one to use the full Slang language features (including IDE support) to specify data layouts. 
 
@@ -143,14 +143,14 @@ To run a specific example for any task (e.g., run):
 ## Quick References
 
 As mentioned previously, bitcodec accepts a Slang script as its input.
-Essentially, one has to program the specification AST object directly in Slang, and
-then the script has to print the JSON representation of the specification AST 
+That is, one has to program the specification AST object directly in the Slang script, and
+then print the JSON representation of the specification AST object
 using the provided bitcodec API (i.e., `println(<spec>.toJSON(T)`):
 
 https://github.com/sireum/runtime/blob/master/library/shared/src/main/scala/org/sireum/bitcodec/Spec.scala
 
-The bitcodec tool runs the script and parses: (a) the JSON string, and (b) the original
-input, to generate specified encoder/decoder and its corresponding AST; 
+The bitcodec tool runs the script and parses: (a) the printed JSON string, and (b) the original
+input -- to generate specified encoder/decoder and its corresponding AST; 
 it can also generate other artifacts such as graph visualization of the data bit-level layout.
 
 Below are some quick references of the API for constructing bitcodec `<spec>` objects.
