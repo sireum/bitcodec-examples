@@ -383,6 +383,14 @@ Example: [src/predrepeatuntil/predrepeatuntil-spec.sc](src/predrepeatuntil/predr
 
 Refer to [Predictive Value Matching Specifications](#predictive-value-matching-specifications) for `<pred>`.
 
+#### FixedRepeat
+
+A repeat that accepts a fixed number of occurrences.
+
+Example: [src/fixedrepeat/fixedrepeat-spec.sc](src/fixedrepeat/fixedrepeat-spec.sc)
+
+`FixedRepeat(<name>, <n>, <spec>)`
+
 #### GenRepeat
 
 A repeat that accepts multiple occurrences by manually implementing 
