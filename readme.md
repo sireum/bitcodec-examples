@@ -19,8 +19,8 @@ to C to produce native ones.
   * [Scalars](#scalars)
   * [Concat](#concat)
   * [Unions](#unions)
-  * [Repeat](#repeats)
-  * [Raw](#raws)
+  * [Repeats](#repeats)
+  * [Raws](#raws)
 
 ## Running Examples
 
@@ -161,8 +161,8 @@ Note that the top-level `<spec>` object has to be a [Concat](#concat).
 * [Scalars](#scalars)
 * [Concat](#concat)
 * [Unions](#unions)
-* [Repeat](#repeats)
-* [Raw](#raws)
+* [Repeats](#repeats)
+* [Raws](#raws)
 
 ### Scalars
 
