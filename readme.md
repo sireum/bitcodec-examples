@@ -1,18 +1,16 @@
 # Bitcodec Examples
 
 Bitcodec is a tool for specifying and generating Slang 
-bit-precise (little/big-endian) encoder/decoder for processing raw byte array.
+bit-precise (little/big-endian) encoder/decoder for processing raw byte arrays to structured data.
 The specification input is currently a Slang script that construct
 bitcodec specification objects. 
 This allows one to use the full Slang language features (including IDE support) to specify data layouts. 
 
-This repository holds bit-codec spec examples in Slang (`*-spec.sc`)
+This repository holds bitcodec spec examples in Slang (`*-spec.sc`)
 along with their corresponding generated codec in Slang 
 scripts (`*-gen.sc`) and other artifacts (e.g., graph visualization of the specified
-bit-level data layout).
- 
-Moreover, the generated Slang codecs can be further translated
-to C to produce native ones.
+bit-level data layout -- `*-spec.dot`).
+The generated Slang codecs can be further translated to C to produce native ones.
 
 * [Running Examples](#running-examples)
 * [Quick References](#quick-references)
