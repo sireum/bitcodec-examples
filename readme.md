@@ -13,6 +13,7 @@ bit-level data layout -- `*-spec.dot`).
 The generated Slang codecs can be further translated to C to produce native ones.
 
 * [Running Examples](#running-examples)
+* [Setting Up Sireum IVE](#setting-up-sireum-ive)
 * [Quick References](#quick-references)
   * [Scalars](#scalars)
   * [Concat](#concat)
@@ -139,6 +140,25 @@ To run a specific example for any task (e.g., run):
   ```cmd
   bin\build.cmd run basic-spec.sc
   ```
+
+## Setting Up Sireum IVE
+
+This repository can be loaded using Sireum IVE. First, change the directory to the cloned `bitcodec-examples` local repo
+and generate the Sireum IVE project files:
+
+* macOS/Linux:
+
+  ```bash
+  $SIREUM_HOME/bin/sireum tools ivegen --name bitcodec-examples .. 
+  ```
+
+* Windows:
+
+  ```cmd
+  %SIREUM_HOME%\bin\sireum tools ivegen --name bitcodec-examples .. 
+  ```
+  
+Then open the local repo directory in Sireum IVE.
 
 ## Quick References
 
