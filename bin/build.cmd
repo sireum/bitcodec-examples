@@ -176,6 +176,10 @@ def all(): Unit = {
     Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "json,dot", "--name", name,
       "--output-dir", spec.up.string, spec.string)).echo.console.runCheck()
     println()
+    val sops = ops.StringOps(spec.name)
+    val dotFile = spec.up / s"${sops.substring(0, sops.lastIndexOf('.'))}.dot"
+    Os.proc(ISZ("dot", "-O", "-Tpdf", dotFile.string)).echo.console.runCheck()
+    println()
 
     for (gen <- gens) {
       run(gen)
