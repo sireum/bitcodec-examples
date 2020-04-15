@@ -703,5 +703,5 @@ object BitCodec {
 }
 
 // BEGIN USER CODE: Test
-
+val bitstream = MSZ[B]() // TODO
 // END USER CODE: Test
