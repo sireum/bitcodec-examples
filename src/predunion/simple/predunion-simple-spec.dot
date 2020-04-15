@@ -19,6 +19,6 @@ digraph G {
 
   n0 -> n1 [xlabel="F"];
   n0 -> n2 [xlabel="T"];
-  n1 -> n3 [arrowhead=none];
   n2 -> n3 [arrowhead=none];
+  n1 -> n3 [arrowhead=none];
 }

@@ -309,6 +309,7 @@
                       "type" : "org.sireum.lang.ast.ResolvedInfo.LocalVar.Scope",
                       "value" : "Current"
                     },
+                    "isSpec" : false,
                     "isVal" : true,
                     "id" : "p"
                   }
@@ -1031,6 +1032,7 @@
                       "type" : "org.sireum.lang.ast.ResolvedInfo.LocalVar.Scope",
                       "value" : "Current"
                     },
+                    "isSpec" : false,
                     "isVal" : true,
                     "id" : "p"
                   }

@@ -11,20 +11,20 @@ digraph G {
   >];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz" HREF="#">
-      <TR><TD>bazz:4</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
+      <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
     </TABLE>
   >];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.baz" HREF="#">
-      <TR><TD>b1:B</TD><TD>b2:B</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="Foo.bazz" HREF="#">
+      <TR><TD>bazz:4</TD></TR>
     </TABLE>
   >];
   n4 [shape=point];
 
   n0 -> n1 [arrowhead=none, xlabel="flag", tooltip="p => if (p) 1 else 0", href="#"];
-  n1 -> n2 [xlabel="1"];
-  n1 -> n3 [xlabel="0"];
+  n1 -> n2 [xlabel="0"];
+  n1 -> n3 [xlabel="1"];
   n3 -> n4 [arrowhead=none];
   n2 -> n4 [arrowhead=none];
 }
