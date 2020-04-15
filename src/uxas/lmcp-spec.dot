@@ -6,63 +6,69 @@ digraph G {
 
   n0 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject" HREF="#">
-      <TR><TD>controlString:32 (= 1280131920)</TD><TD>messageSize:32 (1*32)</TD><TD>isNonNull:8 (1*8)</TD></TR>
+      <TR><TD>controlString:32 (= 1280131920)</TD><TD>messageSize:32 (1*32)</TD></TR>
     </TABLE>
   >];
   n1 [shape=point];
   n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage" HREF="#">
-      <TR><TD>seriesId:64 (1*64)</TD><TD>messageType:32 (1*32)</TD><TD>version:16 (1*16)</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.emptyMessage" HREF="#">
+      <TR><TD>isNonNull:8 (1*8)</TD></TR>
     </TABLE>
   >];
-  n3 [shape=point];
-  n4 [label=<
+  n3 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage" HREF="#">
+      <TR><TD>isNonNull:8 (1*8)</TD><TD>seriesId:64 (1*64)</TD><TD>messageType:32 (1*32)</TD><TD>version:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n4 [shape=point];
+  n5 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject" HREF="#">
       <TR><TD>checksum:32 (1*32)</TD></TR>
     </TABLE>
   >];
-  n5 [shape=point];
-  n6 [label=<
+  n6 [shape=point];
+  n7 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload" HREF="#">
       <TR><TD>id:64 (1*64)</TD><TD>keepInAreaLen:16 (1*16)</TD></TR>
     </TABLE>
   >];
-  n7 [shape=point];
   n8 [shape=point];
-  n9 [label=<
+  n9 [shape=point];
+  n10 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload.keepInAreaId" HREF="#">
       <TR><TD>keepInAreaId:64 (1*64)</TD></TR>
     </TABLE>
   >];
-  n10 [shape=point];
-  n11 [label=<
+  n11 [shape=point];
+  n12 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload" HREF="#">
       <TR><TD>keepOutAreaLen:16 (1*16)</TD></TR>
     </TABLE>
   >];
-  n12 [shape=point];
-  n13 [label=<
+  n13 [shape=point];
+  n14 [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload.keepOutAreaId" HREF="#">
       <TR><TD>keepOutAreaId:64 (1*64)</TD></TR>
     </TABLE>
   >];
-  n14 [shape=point];
+  n15 [shape=point];
 
-  n0 -> n1 [arrowhead=none, xlabel="isNonNull", tooltip="b => if (conversions.U8.toZ(b) == 0) 0 else 1", href="#"];
-  n1 -> n2 [xlabel="1"];
-  n3 -> n4;
-  n7 -> n3;
-  n1 -> n3 [xlabel="0"];
-  n2 -> n5 [arrowhead=none, xlabel="messageType", tooltip="n => conversions.U32.toZ(n) match {&#013;case z\"39\" /* OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h */ => 0&#013;case  _ => -1&#013;}", href="#"];
-  n5 -> n6 [xlabel="0"];
-  n10 -> n8 [xlabel="keepInAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
-  n6 -> n8 [arrowhead=none];
-  n8 -> n9;
-  n10 -> n11;
-  n9 -> n10 [arrowhead=none, xlabel="max: 1"];
-  n11 -> n12 [arrowhead=none];
-  n14 -> n12 [xlabel="keepOutAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
-  n12 -> n13;
-  n13 -> n14 [arrowhead=none, xlabel="max: 1"];
-  n14 -> n7;
+  n0 -> n1 [arrowhead=none];
+  n1 -> n2 [xlabel="u8[00]"];
+  n1 -> n3 [xlabel=""];
+  n4 -> n5;
+  n8 -> n4;
+  n2 -> n4 [arrowhead=none];
+  n3 -> n6 [arrowhead=none, xlabel="seriesId, messageType, version", tooltip="n => n match {&#013;// OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h&#013;case (s64\"0\", u32\"39\", u16\"0\") => 0 // TODO: change s64\"0\" and u16\"0\" to the correct series and version constant&#013;case (_, _, _) => -1&#013;}", href="#"];
+  n6 -> n7 [xlabel="0"];
+  n11 -> n9 [xlabel="keepInAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n7 -> n9 [arrowhead=none];
+  n9 -> n10;
+  n11 -> n12;
+  n10 -> n11 [arrowhead=none, xlabel="max: 1"];
+  n12 -> n13 [arrowhead=none];
+  n15 -> n13 [xlabel="keepOutAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n13 -> n14;
+  n14 -> n15 [arrowhead=none, xlabel="max: 1"];
+  n15 -> n8;
 }

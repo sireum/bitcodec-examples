@@ -42,10 +42,10 @@ object BitCodec {
 
   object EmptyMessage {
 
-    val maxSize: Z = z"0"
+    val maxSize: Z = z"8"
 
     def empty: MEmptyMessage = {
-      return MEmptyMessage()
+      return MEmptyMessage(u8"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[EmptyMessage] = {
@@ -57,12 +57,13 @@ object BitCodec {
   }
 
   @datatype class EmptyMessage(
+    val isNonNull: U8
   ) extends Content {
 
-    @strictpure def toMutable: MEmptyMessage = MEmptyMessage()
+    @strictpure def toMutable: MEmptyMessage = MEmptyMessage(isNonNull)
 
     def encode(context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(0, F)
+      val buffer = MSZ.create(8, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -73,9 +74,10 @@ object BitCodec {
   }
 
   @record class MEmptyMessage(
+    var isNonNull: U8
   ) extends MContent {
 
-    @strictpure def toImmutable: EmptyMessage = EmptyMessage()
+    @strictpure def toImmutable: EmptyMessage = EmptyMessage(isNonNull)
 
     def wellFormed: Z = {
 
@@ -88,6 +90,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
+      isNonNull = Reader.IS.beU8(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -96,6 +99,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU8(output, context, isNonNull)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_EmptyMessage)
@@ -444,11 +448,12 @@ object BitCodec {
        'Error
     }
 
-    def choose(n: U32): Choice.Type = {
+    def choose(n: (S64, U32, U16)): Choice.Type = {
       val r: Z = {
-        conversions.U32.toZ(n) match {
-        case z"39" /* OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h */ => 0
-        case  _ => -1
+        n match {
+        // OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h
+        case (s64"0", u32"39", u16"0") => 0 // TODO: change s64"0" and u16"0" to the correct series and version constant
+        case (_, _, _) => -1
         }
       }
       r match {
@@ -462,10 +467,10 @@ object BitCodec {
 
   object NonEmptyMessage {
 
-    val maxSize: Z = z"336"
+    val maxSize: Z = z"344"
 
     def empty: MNonEmptyMessage = {
-      return MNonEmptyMessage(s64"0", u32"0", u16"0", OperatingRegionPayload.empty)
+      return MNonEmptyMessage(u8"0", s64"0", u32"0", u16"0", OperatingRegionPayload.empty)
     }
 
     def decode(input: ISZ[B], context: Context): Option[NonEmptyMessage] = {
@@ -477,16 +482,17 @@ object BitCodec {
   }
 
   @datatype class NonEmptyMessage(
+    val isNonNull: U8,
     val seriesId: S64,
     val messageType: U32,
     val version: U16,
     val payload: Payload
   ) extends Content {
 
-    @strictpure def toMutable: MNonEmptyMessage = MNonEmptyMessage(seriesId, messageType, version, payload.toMutable)
+    @strictpure def toMutable: MNonEmptyMessage = MNonEmptyMessage(isNonNull, seriesId, messageType, version, payload.toMutable)
 
     def encode(context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(336, F)
+      val buffer = MSZ.create(344, F)
       toMutable.encode(buffer, context)
       return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
     }
@@ -497,17 +503,18 @@ object BitCodec {
   }
 
   @record class MNonEmptyMessage(
+    var isNonNull: U8,
     var seriesId: S64,
     var messageType: U32,
     var version: U16,
     var payload: MPayload
   ) extends MContent {
 
-    @strictpure def toImmutable: NonEmptyMessage = NonEmptyMessage(seriesId, messageType, version, payload.toImmutable)
+    @strictpure def toImmutable: NonEmptyMessage = NonEmptyMessage(isNonNull, seriesId, messageType, version, payload.toImmutable)
 
     def wellFormed: Z = {
 
-      (Payload.choose(messageType), payload) match {
+      (Payload.choose((seriesId, messageType, version)), payload) match {
         case (Payload.Choice.OperatingRegionPayload, _: MOperatingRegionPayload) =>
         case _ => return ERROR_Payload
       }
@@ -525,10 +532,11 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
+      isNonNull = Reader.IS.beU8(input, context)
       seriesId = Reader.IS.beS64(input, context)
       messageType = Reader.IS.beU32(input, context)
       version = Reader.IS.beU16(input, context)
-      Payload.choose(messageType) match {
+      Payload.choose((seriesId, messageType, version)) match {
         case Payload.Choice.OperatingRegionPayload => payload = OperatingRegionPayload.empty
         case _ => context.signalError(ERROR_Payload)
       }
@@ -541,6 +549,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
+      Writer.beU8(output, context, isNonNull)
       Writer.beS64(output, context, seriesId)
       Writer.beU32(output, context, messageType)
       Writer.beU16(output, context, version)
@@ -565,7 +574,7 @@ object BitCodec {
 
   object Content {
 
-    val maxSize: Z = z"336"
+    val maxSize: Z = z"344"
 
     def empty: MContent = {
       return EmptyMessage.empty
@@ -583,14 +592,25 @@ object BitCodec {
        'Error
     }
 
-    def choose(b: U8): Choice.Type = {
-      val r: Z = {
-        if (conversions.U8.toZ(b) == 0) 0 else 1
+    def choose(input: ISZ[B], context: Context): Choice.Type = {
+      {
+        var ctx = context
+        var hasError = F
+        if (!hasError) {
+          val temp = MSZ.create(1, u8"0")
+          Reader.IS.beU8S(input, ctx, temp, 1)
+          hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
+        }
+        if (!hasError && ctx.errorCode == 0) {
+          return Choice.EmptyMessage
+        }
       }
-      r match {
-        case z"0" => return Choice.EmptyMessage
-        case z"1" => return Choice.NonEmptyMessage
-        case _ =>
+      ;{
+        var ctx = context
+        var hasError = F
+        if (!hasError && ctx.errorCode == 0) {
+          return Choice.NonEmptyMessage
+        }
       }
       return Choice.Error
     }
@@ -602,7 +622,7 @@ object BitCodec {
     val maxSize: Z = z"440"
 
     def empty: MLmcpObject = {
-      return MLmcpObject(s32"0", u32"0", u8"0", EmptyMessage.empty, u32"0")
+      return MLmcpObject(s32"0", u32"0", EmptyMessage.empty, u32"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[LmcpObject] = {
@@ -616,12 +636,11 @@ object BitCodec {
   @datatype class LmcpObject(
     val controlString: S32,
     val messageSize: U32,
-    val isNonNull: U8,
     val content: Content,
     val checksum: U32
   ) {
 
-    @strictpure def toMutable: MLmcpObject = MLmcpObject(controlString, messageSize, isNonNull, content.toMutable, checksum)
+    @strictpure def toMutable: MLmcpObject = MLmcpObject(controlString, messageSize, content.toMutable, checksum)
 
     def encode(context: Context): Option[ISZ[B]] = {
       val buffer = MSZ.create(440, F)
@@ -637,28 +656,16 @@ object BitCodec {
   @record class MLmcpObject(
     var controlString: S32,
     var messageSize: U32,
-    var isNonNull: U8,
     var content: MContent,
     var checksum: U32
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: LmcpObject = LmcpObject(controlString, messageSize, isNonNull, content.toImmutable, checksum)
+    @strictpure def toImmutable: LmcpObject = LmcpObject(controlString, messageSize, content.toImmutable, checksum)
 
     def wellFormed: Z = {
 
       if (controlString != s32"1280131920") {
         return ERROR_LmcpObject
-      }
-
-      (Content.choose(isNonNull), content) match {
-        case (Content.Choice.EmptyMessage, _: MEmptyMessage) =>
-        case (Content.Choice.NonEmptyMessage, _: MNonEmptyMessage) =>
-        case _ => return ERROR_Content
-      }
-
-      val wfContent = content.wellFormed
-      if (wfContent != 0) {
-        return wfContent
       }
 
       // BEGIN USER CODE: LmcpObject.wellFormed
@@ -671,8 +678,7 @@ object BitCodec {
     def decode(input: ISZ[B], context: Context): Unit = {
       controlString = Reader.IS.beS32(input, context)
       messageSize = Reader.IS.beU32(input, context)
-      isNonNull = Reader.IS.beU8(input, context)
-      Content.choose(isNonNull) match {
+      Content.choose(input, context) match {
         case Content.Choice.EmptyMessage => content = EmptyMessage.empty
         case Content.Choice.NonEmptyMessage => content = NonEmptyMessage.empty
         case _ => context.signalError(ERROR_Content)
@@ -689,7 +695,6 @@ object BitCodec {
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.beS32(output, context, controlString)
       Writer.beU32(output, context, messageSize)
-      Writer.beU8(output, context, isNonNull)
       content.encode(output, context)
       Writer.beU32(output, context, checksum)
 
