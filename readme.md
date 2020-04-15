@@ -184,7 +184,7 @@ Note that the top-level `<spec>` object has to be a [Concat](#concat).
 
 ### Scalars
 
-Example: [src/basic/basic-spec.sc](src/basic/basic-spec.sc)
+Example: [src/basic/basic-spec.sc](src/basic/basic-spec.sc) ([graph](src/basic/basic-spec.dot.pdf))
 
 Note: the field `<name>` of scalar `<spec>` has to start with a lower-case alphabet.
 
@@ -285,7 +285,7 @@ Note: the field `<name>` of scalar `<spec>` has to start with a lower-case alpha
 
 A concat specifies a sequence of the specified nested elements.
 
-Example: [src/basic/basic-spec.sc](src/basic/basic-spec.sc)
+Example: [src/basic/basic-spec.sc](src/basic/basic-spec.sc) ([graph](src/basic/basic-spec.dot.pdf))
 
 `Concat(<name>, ISZ(<spec>, ..., <spec>))`
 
@@ -301,7 +301,7 @@ Note: the field `<name>` of a union has to start with an upper-case alphabet.
 
 A union that chooses one of the specified elements based on previously decoded value(s).
 
-Example: [src/union/union-spec.sc](src/union/union-spec.sc)
+Example: [src/union/union-spec.sc](src/union/union-spec.sc) ([graph)](src/union/union-spec.dot.pdf))
 
 `Union[<T-1>, ..., <T-N>](<name>, ISZ(<access-1>, ... <access-N>), <var> => <exp>, ISZ(<spec>, ..., <spec>))`
 
@@ -318,8 +318,8 @@ A union that chooses one of the specified elements based on what comes next base
 predictive sequences of value(s).
 
 Examples: 
-* [src/predunion/simple/predunion-simple-spec.sc](src/predunion/simple/predunion-simple-spec.sc)
-* [src/predunion/complex/predunion-complex-spec.sc](src/predunion/complex/predunion-complex-spec.sc)
+* [src/predunion/simple/predunion-simple-spec.sc](src/predunion/simple/predunion-simple-spec.sc) ([graph](src/predunion/simple/predunion-simple-spec.dot.pdf))
+* [src/predunion/complex/predunion-complex-spec.sc](src/predunion/complex/predunion-complex-spec.sc) ([graph](src/predunion/complex/predunion-complex-spec.dot.pdf))
 
 `PredUnion(<name>, ISZ(<pred-spec>, ..., <pred-spec>))`
 
@@ -334,7 +334,7 @@ Refer to [Predictive Value Matching Specifications](#predictive-value-matching-s
 A union that chooses one of the specified elements by manually implementing 
 the distinguishing logic in the generated encoder/decoder.
 
-Example: [src/genunion/genunion-spec.sc](src/genunion/genunion-spec.sc)
+Example: [src/genunion/genunion-spec.sc](src/genunion/genunion-spec.sc) ([graph](src/genunion/genunion-spec.dot.pdf))
 
 `GenUnion(<name>, ISZ(<spec>, ..., <spec>))`
 
@@ -350,9 +350,10 @@ Note: the field `<name>` of a repeat has to start with a lower-case alphabet.
 
 A repeat that specifies multiple occurrences based on previously decoded value(s).
 
-Example: [src/repeat/repeat-spec.sc](src/repeat/repeat-spec.sc)
+Example: [src/repeat/repeat-spec.sc](src/repeat/repeat-spec.sc) ([graph](src/repeat/repeat-spec.dot.pdf))
 
-`Repeat[<T-1>, ..., <T-N>](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
+* `BoundedRepeat[<T-1>, ..., <T-N>](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
+* `Repeat[<T-1>, ..., <T-N>](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
 
 where:
 
@@ -365,7 +366,7 @@ where:
 
 A repeat that accepts multiple occurrences as long as they satisfy some predictive sequences of value(s).
 
-Example: [src/predrepeatwhile/predrepeatwhile-spec.sc](src/predrepeatwhile/predrepeatwhile-spec.sc)
+Example: [src/predrepeatwhile/predrepeatwhile-spec.sc](src/predrepeatwhile/predrepeatwhile-spec.sc) ([graph](src/predrepeatwhile/predrepeatwhile-spec.dot.pdf))
 
 * `BoundedPredRepeatWhile(<name>, <max>, ISZ(<pred>, ..., <pred>), <spec>)`
 * `PredRepeatWhile(<name>, ISZ(<pred>, ..., <pred>), <spec>)`
@@ -376,7 +377,7 @@ Refer to [Predictive Value Matching Specifications](#predictive-value-matching-s
 
 A repeat that accepts multiple occurrences as long as they do not satisfy some predictive sequences of value(s).
 
-Example: [src/predrepeatuntil/predrepeatuntil-spec.sc](src/predrepeatuntil/predrepeatuntil-spec.sc)
+Example: [src/predrepeatuntil/predrepeatuntil-spec.sc](src/predrepeatuntil/predrepeatuntil-spec.sc) ([graph](src/predrepeatuntil/predrepeatuntil-spec.dot.pdf))
 
 * `BoundedPredRepeatUntil(<name>, <max>, ISZ(<pred>, ..., <pred>), <spec>)`
 * `PredRepeatUntil(<name>, ISZ(<pred>, ..., <pred>), <spec>)`
@@ -387,7 +388,7 @@ Refer to [Predictive Value Matching Specifications](#predictive-value-matching-s
 
 A repeat that accepts a fixed number of occurrences.
 
-Example: [src/fixedrepeat/fixedrepeat-spec.sc](src/fixedrepeat/fixedrepeat-spec.sc)
+Example: [src/fixedrepeat/fixedrepeat-spec.sc](src/fixedrepeat/fixedrepeat-spec.sc) ([graph](src/fixedrepeat/fixedrepeat-spec.dot.pdf))
 
 `FixedRepeat(<name>, <n>, <spec>)`
 
@@ -396,7 +397,7 @@ Example: [src/fixedrepeat/fixedrepeat-spec.sc](src/fixedrepeat/fixedrepeat-spec.
 A repeat that accepts multiple occurrences by manually implementing 
 the repeating logic in the generated encoder/decoder.
 
-Example: [src/genrepeat/genrepeat-spec.sc](src/genrepeat/genrepeat-spec.sc)
+Example: [src/genrepeat/genrepeat-spec.sc](src/genrepeat/genrepeat-spec.sc) ([graph](src/genrepeat/genrepeat-spec.dot.pdf))
 
 * `BoundedGenRepeat(<name>, <max>, <spec>)`
 * `GenRepeat(<name>, <spec>)`
@@ -411,7 +412,7 @@ Note: the field `<name>` of a repeat has to start with a lower-case alphabet.
 
 A raw that accepts a variable number of bits based on previously decoded value(s).
 
-Example: [src/raw/raw-spec.sc](src/raw/raw-spec.sc)
+Example: [src/raw/raw-spec.sc](src/raw/raw-spec.sc) ([graph](src/raw/raw-spec.dot.pdf))
 
 * `BoundedRaw[T-1, ..., T-N](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
 * `Raw[T-1, ..., T-N](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
@@ -427,7 +428,7 @@ where:
 A raw that accepts a variable number of bits by manually implementing 
 the size function logic in the generated encoder/decoder.
 
-Example: [src/genraw/genraw-spec.sc](src/genraw/genraw-spec.sc)
+Example: [src/genraw/genraw-spec.sc](src/genraw/genraw-spec.sc) ([graph](src/genraw/genraw-spec.dot.pdf))
 
 * `BoundedGenRaw(<name>, <max>)`
 * `GenRaw(<name>)`
