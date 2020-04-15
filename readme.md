@@ -20,6 +20,7 @@ The generated Slang codecs can be further translated to C to produce native ones
   * [Unions](#unions)
   * [Repeats](#repeats)
   * [Raws](#raws)
+  * [Links](#links)
 
 ## Running Examples
 
@@ -181,6 +182,7 @@ Note that the top-level `<spec>` object has to be a [Concat](#concat).
 * [Unions](#unions)
 * [Repeats](#repeats)
 * [Raws](#raws)
+* [Links](#links)
 
 ### Scalars
 
@@ -303,7 +305,7 @@ A union that chooses one of the specified elements based on previously decoded v
 
 Example: [src/union/union-spec.sc](src/union/union-spec.sc) ([graph)](src/union/union-spec.dot.pdf))
 
-`Union[<T-1>, ..., <T-N>](<name>, ISZ(<access-1>, ... <access-N>), <var> => <exp>, ISZ(<spec>, ..., <spec>))`
+`Union[(<T-1>, ..., <T-N>)](<name>, ISZ(<access-1>, ... <access-N>), <var> => <exp>, ISZ(<spec>, ..., <spec>))`
 
 where:
 
@@ -352,8 +354,8 @@ A repeat that specifies multiple occurrences based on previously decoded value(s
 
 Example: [src/repeat/repeat-spec.sc](src/repeat/repeat-spec.sc) ([graph](src/repeat/repeat-spec.dot.pdf))
 
-* `BoundedRepeat[<T-1>, ..., <T-N>](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
-* `Repeat[<T-1>, ..., <T-N>](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
+* `BoundedRepeat[(<T-1>, ..., <T-N>)](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
+* `Repeat[(<T-1>, ..., <T-N>)](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>, <spec>)`
 
 where:
 
@@ -414,8 +416,8 @@ A raw that accepts a variable number of bits based on previously decoded value(s
 
 Example: [src/raw/raw-spec.sc](src/raw/raw-spec.sc) ([graph](src/raw/raw-spec.dot.pdf))
 
-* `BoundedRaw[T-1, ..., T-N](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
-* `Raw[T-1, ..., T-N](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
+* `BoundedRaw[(T-1, ..., T-N)](<name>, <max>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
+* `Raw[(T-1, ..., T-N)](<name>, ISZ(<access-1>, ..., <access-N>), <var> => <exp>)`
 
 where:
 
@@ -458,3 +460,11 @@ A `<pred>` can be one of the following:
 * `or(ISZ(<pred-spec>), ..., <pred-spec>)`: matches if any of the `<pred-spec>`s matches
 
 * ... more can be added
+
+### Links
+
+* Slang built-in types: https://github.com/sireum/runtime/blob/master/library/shared/src/main/scala/org/sireum/BuiltInTypes.slang
+
+* Slang `@bits` and `@range` types: https://github.com/sireum/runtime/blob/master/library/shared/src/main/scala/org/sireum/BitsRangeTypes.scala
+
+* Type conversion methods: https://github.com/sireum/runtime/blob/master/library/shared/src/main/scala/org/sireum/conversions/conversions.scala
