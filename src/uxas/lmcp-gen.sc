@@ -708,5 +708,6 @@ object BitCodec {
 }
 
 // BEGIN USER CODE: Test
-val bitstream = MSZ[B]() // TODO
+val bitstream = ops.Bits.fromHexString("6a137566f7f7a9f29992974d11001a4cf7c640e7", T)
+println(bitstream)
 // END USER CODE: Test
