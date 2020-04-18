@@ -176,7 +176,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      size = Reader.IS.beU8(input, context)
+      size = Reader.IS.bleU8(input, context)
       elements = MSZ()
       val elementsContext = FooElementsContext.empty
       // BEGIN USER CODE: FooElementsContext.init
@@ -196,7 +196,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU8(output, context, size)
+      Writer.bleU8(output, context, size)
       for (i <- 0 until elements.size) {
         elements(i).encode(output, context)
       }

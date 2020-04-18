@@ -74,7 +74,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       cont = Reader.IS.bleB(input, context)
-      value = Reader.IS.beU7(input, context)
+      value = Reader.IS.bleU7(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -84,7 +84,7 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleB(output, context, cont)
-      Writer.beU7(output, context, value)
+      Writer.bleU7(output, context, value)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Value)

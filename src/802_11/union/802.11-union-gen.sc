@@ -54,7 +54,7 @@ object BitCodec {
     if (context.hasError) {
       return Frame.Management
     }
-    val r: Frame.Type = Reader.IS.beU2(input, context) match {
+    val r: Frame.Type = Reader.IS.bleU2(input, context) match {
       case u2"0" => Frame.Management
       case u2"1" => Frame.Control
       case u2"2" => Frame.Data
@@ -74,10 +74,10 @@ object BitCodec {
       return
     }
     tpe match {
-      case Frame.Management => Writer.beU2(output, context, u2"0")
-      case Frame.Control => Writer.beU2(output, context, u2"1")
-      case Frame.Data => Writer.beU2(output, context, u2"2")
-      case Frame.Reserved => Writer.beU2(output, context, u2"3")
+      case Frame.Management => Writer.bleU2(output, context, u2"0")
+      case Frame.Control => Writer.bleU2(output, context, u2"1")
+      case Frame.Data => Writer.bleU2(output, context, u2"2")
+      case Frame.Reserved => Writer.bleU2(output, context, u2"3")
     }
   }
 
@@ -158,9 +158,9 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      protocol = Reader.IS.beU2(input, context)
+      protocol = Reader.IS.bleU2(input, context)
       tpe = decodeFrame(input, context)
-      subType = Reader.IS.beU4(input, context)
+      subType = Reader.IS.bleU4(input, context)
       toDS = Reader.IS.bleU1(input, context)
       fromDS = Reader.IS.bleU1(input, context)
       moreFrag = Reader.IS.bleU1(input, context)
@@ -177,9 +177,9 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU2(output, context, protocol)
+      Writer.bleU2(output, context, protocol)
       encodeFrame(output, context, tpe)
-      Writer.beU4(output, context, subType)
+      Writer.bleU4(output, context, subType)
       Writer.bleU1(output, context, toDS)
       Writer.bleU1(output, context, fromDS)
       Writer.bleU1(output, context, moreFrag)
@@ -398,7 +398,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      fragNumber = Reader.IS.beU4(input, context)
+      fragNumber = Reader.IS.bleU4(input, context)
       seqNumber = Reader.IS.beU12(input, context)
 
       val wf = wellFormed
@@ -408,7 +408,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU4(output, context, fragNumber)
+      Writer.bleU4(output, context, fragNumber)
       Writer.beU12(output, context, seqNumber)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {

@@ -4,71 +4,482 @@ digraph G {
   node [shape=plaintext];
   edge [arrowhead=vee];
 
-  n0 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject" HREF="#">
-      <TR><TD>controlString:32 (= 1280131920)</TD><TD>messageSize:32 (1*32)</TD></TR>
-    </TABLE>
-  >];
+  n0 [shape=point];
   n1 [shape=point];
-  n2 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.emptyMessage" HREF="#">
-      <TR><TD>isNonNull:8 (1*8)</TD></TR>
-    </TABLE>
-  >];
+  n2 [shape=point];
   n3 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage" HREF="#">
-      <TR><TD>isNonNull:8 (1*8)</TD><TD>seriesId:64 (1*64)</TD><TD>messageType:32 (1*32)</TD><TD>version:16 (1*16)</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.lMCPpayloadStateParameter.packedpayloadStateParameter.packedpayloadStateParameterValue" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
     </TABLE>
   >];
   n4 [shape=point];
-  n5 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject" HREF="#">
-      <TR><TD>checksum:32 (1*32)</TD></TR>
-    </TABLE>
-  >];
+  n5 [shape=point];
   n6 [shape=point];
   n7 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload" HREF="#">
-      <TR><TD>id:64 (1*64)</TD><TD>keepInAreaLen:16 (1*16)</TD></TR>
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.lMCPInfo.packedInfo.packedInfoValue" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
     </TABLE>
   >];
   n8 [shape=point];
   n9 [shape=point];
-  n10 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload.keepInAreaId" HREF="#">
-      <TR><TD>keepInAreaId:64 (1*64)</TD></TR>
+  n10 [shape=point];
+  n11 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task" HREF="#">
+      <TR><TD>taskID:64 (1*64)</TD></TR>
     </TABLE>
   >];
-  n11 [shape=point];
-  n12 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload" HREF="#">
-      <TR><TD>keepOutAreaLen:16 (1*16)</TD></TR>
+  n12 [shape=point];
+  n13 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.lMCPtaskParameter.packedtaskParameter.packedtaskParameterValue" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
     </TABLE>
   >];
-  n13 [shape=point];
-  n14 [label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LmcpObject.nonEmptyMessage.operatingRegionPayload.keepOutAreaId" HREF="#">
-      <TR><TD>keepOutAreaId:64 (1*64)</TD></TR>
-    </TABLE>
-  >];
+  n14 [shape=point];
   n15 [shape=point];
+  n16 [shape=point];
+  n17 [shape=point];
+  n18 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask" HREF="#">
+      <TR><TD>useInertialViewAngles:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n19 [shape=point];
+  n20 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState" HREF="#">
+      <TR><TD>airspeed:32 (1*32)</TD><TD>verticalSpeed:32 (1*32)</TD><TD>windSpeed:32 (1*32)</TD><TD>windDirection:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n21 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage" HREF="#">
+      <TR><TD>checksum:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n22 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.nullValue" HREF="#">
+      <TR><TD>nullValue:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n23 [shape=point];
+  n24 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.operatingRegion.id2" HREF="#">
+      <TR><TD>id:64 (1*64)</TD></TR>
+    </TABLE>
+  >];
+  n25 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.operatingRegion" HREF="#">
+      <TR><TD>id:64 (1*64)</TD><TD>_keepInAreasSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n26 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState" HREF="#">
+      <TR><TD>id:64 (1*64)</TD><TD>u:32 (1*32)</TD><TD>v:32 (1*32)</TD><TD>w:32 (1*32)</TD><TD>udot:32 (1*32)</TD><TD>vdot:32 (1*32)</TD><TD>wdot:32 (1*32)</TD><TD>heading:32 (1*32)</TD><TD>pitch:32 (1*32)</TD><TD>roll:32 (1*32)</TD><TD>p:32 (1*32)</TD><TD>q:32 (1*32)</TD><TD>r:32 (1*32)</TD><TD>course:32 (1*32)</TD><TD>groundspeed:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n27 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (1*64)</TD><TD>typeID:32 (1*32)</TD><TD>seriesVersion:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n28 [shape=point];
+  n29 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.lMCPLMCPLocation3D.packedLMCPLocation3D" HREF="#">
+      <TR><TD>latitude:64 (1*64)</TD><TD>longitude:64 (1*64)</TD><TD>altitude:32 (1*32)</TD><TD>altitudeType:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n30 [shape=point];
+  n31 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.lMCPLMCPLocation3D" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 3)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n32 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState" HREF="#">
+      <TR><TD>energyAvailable:32 (1*32)</TD><TD>actualEnergyRate:32 (1*32)</TD><TD>_payloadStateListSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n33 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.nullValueLMCPLocation3D" HREF="#">
+      <TR><TD>nullValueLMCPLocation3D:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n34 [shape=point];
+  n35 [shape=point];
+  n36 [shape=point];
+  n37 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 6)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n38 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.nullValuePayloadState" HREF="#">
+      <TR><TD>nullValuePayloadState:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n39 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState" HREF="#">
+      <TR><TD>currentWaypoint:64 (1*64)</TD><TD>currentCommand:64 (1*64)</TD><TD>mode:32 (1*32)</TD><TD>_associatedTasksSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n40 [shape=point];
+  n41 [shape=point];
+  n42 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState" HREF="#">
+      <TR><TD>payloadID:64 (1*64)</TD><TD>_parametersSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n43 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.nullValuepayloadStateParameter" HREF="#">
+      <TR><TD>nullValuepayloadStateParameter:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n44 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.lMCPpayloadStateParameter" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 2)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n45 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.lMCPpayloadStateParameter.packedpayloadStateParameter.packedpayloadStateParameterKey" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n46 [shape=point];
+  n47 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.lMCPpayloadStateParameter.packedpayloadStateParameter.packedpayloadStateParameterKey.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n48 [shape=point];
+  n49 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionPayloadState.lMCPPayloadState.packedPayloadState.predUnionpayloadStateParameter.lMCPpayloadStateParameter.packedpayloadStateParameter.packedpayloadStateParameterValue.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n50 [shape=point];
+  n51 [shape=point];
+  n52 [shape=point];
+  n53 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState" HREF="#">
+      <TR><TD>time:64 (1*64)</TD><TD>_infoSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n54 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.nullValueInfo" HREF="#">
+      <TR><TD>nullValueInfo:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n55 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.lMCPInfo" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 2)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n56 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.lMCPInfo.packedInfo.packedInfoKey" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n57 [shape=point];
+  n58 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.lMCPInfo.packedInfo.packedInfoKey.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n59 [shape=point];
+  n60 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.predUnionInfo.lMCPInfo.packedInfo.packedInfoValue.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n61 [shape=point];
+  n62 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task" HREF="#">
+      <TR><TD>_eligibleEntitiesSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n63 [shape=point];
+  n64 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.label.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n65 [shape=point];
+  n66 [shape=point];
+  n67 [shape=point];
+  n68 [shape=point];
+  n69 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task" HREF="#">
+      <TR><TD>revisitRate:32 (1*32)</TD><TD>_parametersSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n70 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.nullValuetaskParameter" HREF="#">
+      <TR><TD>nullValuetaskParameter:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n71 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.lMCPtaskParameter" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 2)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n72 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task" HREF="#">
+      <TR><TD>priority:8 (1*8)</TD><TD>required:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n73 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.lMCPtaskParameter.packedtaskParameter.packedtaskParameterKey" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n74 [shape=point];
+  n75 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.lMCPtaskParameter.packedtaskParameter.packedtaskParameterKey.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n76 [shape=point];
+  n77 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.predUniontaskParameter.lMCPtaskParameter.packedtaskParameter.packedtaskParameterValue.c" HREF="#">
+      <TR><TD>c:8 (1*8)</TD></TR>
+    </TABLE>
+  >];
+  n78 [shape=point];
+  n79 [shape=point];
+  n80 [shape=point];
+  n81 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask" HREF="#">
+      <TR><TD>_pointListSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n82 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionPoint.nullValuePoint" HREF="#">
+      <TR><TD>nullValuePoint:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n83 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionPoint.lMCPPoint" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 3)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n84 [shape=point];
+  n85 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionPoint.lMCPPoint.packedPoint" HREF="#">
+      <TR><TD>latitude:64 (1*64)</TD><TD>longitude:64 (1*64)</TD><TD>altitude:32 (1*32)</TD><TD>altitudeType:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n86 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask" HREF="#">
+      <TR><TD>_viewAngleListSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n87 [shape=point];
+  n88 [shape=point];
+  n89 [shape=point];
+  n90 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionViewAngle.lMCPViewAngle" HREF="#">
+      <TR><TD>nonNullValue:8 (1..255)</TD><TD>seriesID:64 (= 4849604199710720000)</TD><TD>typeID:32 (= 16)</TD><TD>seriesVersion:16 (= 3)</TD></TR>
+    </TABLE>
+  >];
+  n91 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionViewAngle.nullValueViewAngle" HREF="#">
+      <TR><TD>nullValueViewAngle:8 (= 0)</TD></TR>
+    </TABLE>
+  >];
+  n92 [shape=point];
+  n93 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.predUnionViewAngle.lMCPViewAngle.packedViewAngle" HREF="#">
+      <TR><TD>azimuthCenterline:32 (1*32)</TD><TD>verticalCenterline:32 (1*32)</TD><TD>azimuthExtent:32 (1*32)</TD><TD>verticalExtent:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n94 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage" HREF="#">
+      <TR><TD>controlString:32 (= 1280131920)</TD><TD>messageSize:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n95 [shape=point];
+  n96 [shape=point];
+  n97 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.operatingRegion.id" HREF="#">
+      <TR><TD>id:64 (1*64)</TD></TR>
+    </TABLE>
+  >];
+  n98 [shape=point];
+  n99 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.operatingRegion" HREF="#">
+      <TR><TD>_keepOutAreasSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n100 [shape=point];
+  n101 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.airVehicleState.entityState.id" HREF="#">
+      <TR><TD>id:64 (1*64)</TD></TR>
+    </TABLE>
+  >];
+  n102 [shape=point];
+  n103 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.label" HREF="#">
+      <TR><TD>_stringCharsSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n104 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.task.entity" HREF="#">
+      <TR><TD>entity:64 (1*64)</TD></TR>
+    </TABLE>
+  >];
+  n105 [shape=point];
+  n106 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask" HREF="#">
+      <TR><TD>_desiredWavelengthBandsSize:16 (1*16)</TD></TR>
+    </TABLE>
+  >];
+  n107 [shape=point];
+  n108 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask.band" HREF="#">
+      <TR><TD>band:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
+  n109 [shape=point];
+  n110 [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" TOOLTIP="LMCPMessage.lMCPObjectDecode.lineSearchTask.searchTask" HREF="#">
+      <TR><TD>dwellTime:64 (1*64)</TD><TD>groundSampleDistance:32 (1*32)</TD></TR>
+    </TABLE>
+  >];
 
-  n0 -> n1 [arrowhead=none];
-  n1 -> n2 [xlabel="u8[00]"];
-  n1 -> n3 [xlabel=""];
+  n38 -> n1 [arrowhead=none];
+  n0 -> n1;
+  n2 -> n3;
   n4 -> n5;
-  n8 -> n4;
-  n2 -> n4 [arrowhead=none];
-  n3 -> n6 [arrowhead=none, xlabel="seriesId, messageType, version", tooltip="n => n match {&#013;// OPERATINGREGION is 39 in afrl/cmasi/CMASIEnum.h&#013;case (s64\"0\", u32\"39\", u16\"0\") => 0 // TODO: change s64\"0\" and u16\"0\" to the correct series and version constant&#013;case (_, _, _) => -1&#013;}", href="#"];
-  n6 -> n7 [xlabel="0"];
-  n11 -> n9 [xlabel="keepInAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
-  n7 -> n9 [arrowhead=none];
-  n9 -> n10;
-  n11 -> n12;
-  n10 -> n11 [arrowhead=none, xlabel="max: 1"];
-  n12 -> n13 [arrowhead=none];
-  n15 -> n13 [xlabel="keepOutAreaLen", tooltip="l => conversions.U16.toZ(l)", href="#"];
-  n13 -> n14;
-  n14 -> n15 [arrowhead=none, xlabel="max: 1"];
-  n15 -> n8;
+  n43 -> n5 [arrowhead=none];
+  n6 -> n7;
+  n8 -> n9;
+  n54 -> n9 [arrowhead=none];
+  n10 -> n11 [xlabel="2"];
+  n12 -> n13;
+  n70 -> n15 [arrowhead=none];
+  n14 -> n15;
+  n16 -> n17;
+  n22 -> n17 [arrowhead=none];
+  n18 -> n16 [arrowhead=none];
+  n20 -> n16 [arrowhead=none];
+  n19 -> n16;
+  n17 -> n21;
+  n99 -> n23 [arrowhead=none];
+  n19 -> n23 [xlabel="_keepOutAreasSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n24 -> n19 [arrowhead=none, xlabel="max: 1"];
+  n10 -> n25 [xlabel="0"];
+  n10 -> n26 [xlabel="1"];
+  n27 -> n10 [arrowhead=none, xlabel="seriesID, typeID, seriesVersion", tooltip="n => n match {&#013;// OperatingRegion (see ./afrl/cmasi/afrlcmasiOperatingRegion.cpp)&#013;case (CMASISeriesID, OPERATINGREGION, CMASISeriesVersion) => 0&#013;// AirVehicleState (see ./afrl/cmasi/afrlcmasiAirVehicleState.cpp)&#013;case (CMASISeriesID, AIRVEHICLESTATE, CMASISeriesVersion) => 1&#013;// LineSearchTask (see ./afrl/cmasi/afrlcmasiLineSearchTask.cpp)&#013;case (CMASISeriesID, LINESEARCHTASK, CMASISeriesVersion) => 2&#013;case (_, _, _) => -1&#013;}", href="#"];
+  n26 -> n28 [arrowhead=none];
+  n29 -> n30 [arrowhead=none];
+  n33 -> n30 [arrowhead=none];
+  n31 -> n29;
+  n30 -> n32;
+  n34 -> n35;
+  n32 -> n34 [arrowhead=none];
+  n36 -> n34 [xlabel="_payloadStateListSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n35 -> n37 [xlabel=""];
+  n35 -> n38 [xlabel="u8[00]"];
+  n1 -> n36 [xlabel="max: 8"];
+  n36 -> n39;
+  n42 -> n40 [arrowhead=none];
+  n0 -> n40 [xlabel="_parametersSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n5 -> n0 [xlabel="max: 8"];
+  n40 -> n41;
+  n41 -> n43 [xlabel="u8[00]"];
+  n41 -> n44 [xlabel=""];
+  n44 -> n45;
+  n45 -> n46 [arrowhead=none];
+  n2 -> n46 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n47 -> n2 [arrowhead=none, xlabel="max: 65535"];
+  n4 -> n48 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n3 -> n48 [arrowhead=none];
+  n49 -> n4 [arrowhead=none, xlabel="max: 65535"];
+  n53 -> n51 [arrowhead=none];
+  n50 -> n51 [xlabel="_infoSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n50 -> n20;
+  n9 -> n50 [xlabel="max: 32"];
+  n51 -> n52;
+  n52 -> n54 [xlabel="u8[00]"];
+  n52 -> n55 [xlabel=""];
+  n55 -> n56;
+  n56 -> n57 [arrowhead=none];
+  n6 -> n57 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n58 -> n6 [arrowhead=none, xlabel="max: 65535"];
+  n8 -> n59 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n7 -> n59 [arrowhead=none];
+  n60 -> n8 [arrowhead=none, xlabel="max: 65535"];
+  n61 -> n62;
+  n103 -> n63 [arrowhead=none];
+  n61 -> n63 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n64 -> n61 [arrowhead=none, xlabel="max: 65535"];
+  n105 -> n65 [xlabel="_eligibleEntitiesSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n62 -> n65 [arrowhead=none];
+  n66 -> n67;
+  n69 -> n66 [arrowhead=none];
+  n68 -> n66 [xlabel="_parametersSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n67 -> n70 [xlabel="u8[00]"];
+  n67 -> n71 [xlabel=""];
+  n15 -> n68 [xlabel="max: 8"];
+  n68 -> n72;
+  n71 -> n73;
+  n12 -> n74 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n73 -> n74 [arrowhead=none];
+  n75 -> n12 [arrowhead=none, xlabel="max: 65535"];
+  n13 -> n76 [arrowhead=none];
+  n14 -> n76 [xlabel="_stringCharsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n77 -> n14 [arrowhead=none, xlabel="max: 65535"];
+  n78 -> n79;
+  n80 -> n78 [xlabel="_pointListSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n81 -> n78 [arrowhead=none];
+  n79 -> n82 [xlabel="u8[00]"];
+  n79 -> n83 [xlabel=""];
+  n84 -> n80 [xlabel="max: 1024"];
+  n82 -> n84 [arrowhead=none];
+  n85 -> n84 [arrowhead=none];
+  n80 -> n86;
+  n83 -> n85;
+  n87 -> n88;
+  n86 -> n87 [arrowhead=none];
+  n89 -> n87 [xlabel="_viewAngleListSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n88 -> n90 [xlabel=""];
+  n88 -> n91 [xlabel="u8[00]"];
+  n92 -> n89 [xlabel="max: 16"];
+  n93 -> n92 [arrowhead=none];
+  n91 -> n92 [arrowhead=none];
+  n89 -> n18;
+  n90 -> n93;
+  n94 -> n95 [arrowhead=none];
+  n95 -> n22 [xlabel="u8[00]"];
+  n95 -> n27 [xlabel=""];
+  n25 -> n96 [arrowhead=none];
+  n98 -> n96 [xlabel="_keepInAreasSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n96 -> n97;
+  n97 -> n98 [arrowhead=none, xlabel="max: 1"];
+  n98 -> n99;
+  n23 -> n24;
+  n28 -> n33 [xlabel="u8[00]"];
+  n28 -> n31 [xlabel=""];
+  n102 -> n100 [xlabel="_associatedTasksSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n39 -> n100 [arrowhead=none];
+  n100 -> n101;
+  n37 -> n42;
+  n46 -> n47;
+  n48 -> n49;
+  n101 -> n102 [arrowhead=none, xlabel="max: 8"];
+  n102 -> n53;
+  n57 -> n58;
+  n59 -> n60;
+  n11 -> n103;
+  n63 -> n64;
+  n65 -> n104;
+  n104 -> n105 [arrowhead=none, xlabel="max: 32"];
+  n105 -> n69;
+  n72 -> n106;
+  n106 -> n107 [arrowhead=none];
+  n109 -> n107 [xlabel="_desiredWavelengthBandsSize", tooltip="l => conversions.U16.toZ(l)", href="#"];
+  n74 -> n75;
+  n76 -> n77;
+  n107 -> n108;
+  n108 -> n109 [arrowhead=none, xlabel="max: 8"];
+  n109 -> n110;
+  n110 -> n81;
 }

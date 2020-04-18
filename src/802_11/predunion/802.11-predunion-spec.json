@@ -29,7 +29,7 @@
           "elements" : [
             {
               "type" : "Spec.Concat",
-              "name" : "FrameControl",
+              "name" : "CtsFrameControl",
               "elements" : [
                 {
                   "type" : "Spec.Bits",
@@ -144,7 +144,7 @@
           "elements" : [
             {
               "type" : "Spec.Concat",
-              "name" : "FrameControl",
+              "name" : "RtsFrameControl",
               "elements" : [
                 {
                   "type" : "Spec.Bits",
@@ -266,7 +266,7 @@
           "elements" : [
             {
               "type" : "Spec.Concat",
-              "name" : "FrameControl",
+              "name" : "DataFrameControl",
               "elements" : [
                 {
                   "type" : "Spec.Bits",
@@ -405,7 +405,7 @@
               "type" : "Spec.Raw",
               "name" : "body",
               "maxSize" : -1,
-              "dependsOn" : ["frameControl.tpe", "frameControl.subType"],
+              "dependsOn" : ["dataFrameControl.tpe", "dataFrameControl.subType"],
               "size" : ""
             },
             {

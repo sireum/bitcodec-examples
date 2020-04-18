@@ -88,7 +88,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      size = Reader.IS.beU8(input, context)
+      size = Reader.IS.bleU8(input, context)
       elements = MSZ()
       val elementsContext = FooElementsContext.empty
       // BEGIN USER CODE: FooElementsContext.init
@@ -106,7 +106,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU8(output, context, size)
+      Writer.bleU8(output, context, size)
       Writer.bleRaw(output, context, elements, elements.size)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {

@@ -259,8 +259,8 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       flag = Reader.IS.bleB(input, context)
-      b1 = Reader.IS.beU8(input, context)
-      b2 = Reader.IS.beU8(input, context)
+      b1 = Reader.IS.bleU8(input, context)
+      b2 = Reader.IS.bleU8(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -270,8 +270,8 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleB(output, context, flag)
-      Writer.beU8(output, context, b1)
-      Writer.beU8(output, context, b2)
+      Writer.bleU8(output, context, b1)
+      Writer.bleU8(output, context, b2)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Bazzz)
@@ -368,7 +368,7 @@ object BitCodec {
           var found = F
           if (!found) {
             if (!hasError) {
-              val temp = Reader.IS.beU8(input, ctx)
+              val temp = Reader.IS.bleU8(input, ctx)
               hasError = !(ctx.errorCode == 0 && temp == u8"3")
             }
             found = !hasError
@@ -379,7 +379,7 @@ object BitCodec {
           }
           if (!found) {
             if (!hasError) {
-              val temp = Reader.IS.beU8(input, ctx)
+              val temp = Reader.IS.bleU8(input, ctx)
               hasError = !(ctx.errorCode == 0 && temp == u8"5")
             }
             found = !hasError
@@ -391,7 +391,7 @@ object BitCodec {
           hasError = !found
         }
         if (!hasError) {
-          val temp = Reader.IS.beU8(input, ctx)
+          val temp = Reader.IS.bleU8(input, ctx)
           hasError = !(ctx.errorCode == 0 && u8"10" <= temp && temp <= u8"15")
         }
         if (!hasError && ctx.errorCode == 0) {

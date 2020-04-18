@@ -290,7 +290,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      id = Reader.IS.beU64(input, context)
+      id = Reader.IS.leU64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -299,7 +299,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU64(output, context, id)
+      Writer.leU64(output, context, id)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Id)
@@ -414,8 +414,8 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      id = Reader.IS.beS64(input, context)
-      _keepInAreasSize = Reader.IS.beU16(input, context)
+      id = Reader.IS.leS64(input, context)
+      _keepInAreasSize = Reader.IS.leU16(input, context)
       val keepInAreasSize = sizeOfKeepInAreas(_keepInAreasSize)
       if (keepInAreasSize >= 0) {
         keepInAreas = MSZ.create(keepInAreasSize, Id.empty)
@@ -425,7 +425,7 @@ object BitCodec {
       } else {
         context.signalError(ERROR_OperatingRegion_keepInAreas)
       }
-      _keepOutAreasSize = Reader.IS.beU16(input, context)
+      _keepOutAreasSize = Reader.IS.leU16(input, context)
       val keepOutAreasSize = sizeOfKeepOutAreas(_keepOutAreasSize)
       if (keepOutAreasSize >= 0) {
         keepOutAreas = MSZ.create(keepOutAreasSize, Id.empty)
@@ -443,8 +443,8 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS64(output, context, id)
-      Writer.beU16(output, context, _keepInAreasSize)
+      Writer.leS64(output, context, id)
+      Writer.leU16(output, context, _keepInAreasSize)
       val keepInAreasSize = sizeOfKeepInAreas(_keepInAreasSize)
       if (keepInAreasSize >= 0) {
         for (i <- 0 until keepInAreasSize) {
@@ -453,7 +453,7 @@ object BitCodec {
       } else {
         context.signalError(ERROR_OperatingRegion_keepInAreas)
       }
-      Writer.beU16(output, context, _keepOutAreasSize)
+      Writer.leU16(output, context, _keepOutAreasSize)
       val keepOutAreasSize = sizeOfKeepOutAreas(_keepOutAreasSize)
       if (keepOutAreasSize >= 0) {
         for (i <- 0 until keepOutAreasSize) {
@@ -610,10 +610,10 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      latitude = Reader.IS.beF64(input, context)
-      longitude = Reader.IS.beF64(input, context)
-      altitude = Reader.IS.beF32(input, context)
-      altitudeType = Reader.IS.beS32(input, context)
+      latitude = Reader.IS.leF64(input, context)
+      longitude = Reader.IS.leF64(input, context)
+      altitude = Reader.IS.leF32(input, context)
+      altitudeType = Reader.IS.leS32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -622,10 +622,10 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beF64(output, context, latitude)
-      Writer.beF64(output, context, longitude)
-      Writer.beF32(output, context, altitude)
-      Writer.beS32(output, context, altitudeType)
+      Writer.leF64(output, context, latitude)
+      Writer.leF64(output, context, longitude)
+      Writer.leF32(output, context, altitude)
+      Writer.leS32(output, context, altitudeType)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_PackedLMCPLocation3D)
@@ -713,9 +713,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedLMCPLocation3D.decode(input, context)
 
       val wf = wellFormed
@@ -726,9 +726,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedLMCPLocation3D.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -774,7 +774,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -1078,7 +1078,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -1096,7 +1096,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -1194,7 +1194,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -1212,7 +1212,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -1395,9 +1395,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedpayloadStateParameter.decode(input, context)
 
       val wf = wellFormed
@@ -1408,9 +1408,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedpayloadStateParameter.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -1456,7 +1456,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -1552,8 +1552,8 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      payloadID = Reader.IS.beS64(input, context)
-      _parametersSize = Reader.IS.beU16(input, context)
+      payloadID = Reader.IS.leS64(input, context)
+      _parametersSize = Reader.IS.leU16(input, context)
       val parametersSize = sizeOfParameters(_parametersSize)
       if (parametersSize >= 0) {
         parameters = MSZ.create(parametersSize, PredUnionpayloadStateParameter.empty)
@@ -1571,8 +1571,8 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS64(output, context, payloadID)
-      Writer.beU16(output, context, _parametersSize)
+      Writer.leS64(output, context, payloadID)
+      Writer.leU16(output, context, _parametersSize)
       val parametersSize = sizeOfParameters(_parametersSize)
       if (parametersSize >= 0) {
         for (i <- 0 until parametersSize) {
@@ -1674,9 +1674,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedPayloadState.decode(input, context)
 
       val wf = wellFormed
@@ -1687,9 +1687,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedPayloadState.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -1735,7 +1735,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -1900,7 +1900,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -1918,7 +1918,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -2016,7 +2016,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -2034,7 +2034,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -2217,9 +2217,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedInfo.decode(input, context)
 
       val wf = wellFormed
@@ -2230,9 +2230,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedInfo.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -2278,7 +2278,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -2474,30 +2474,30 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      id = Reader.IS.beS64(input, context)
-      u = Reader.IS.beF32(input, context)
-      v = Reader.IS.beF32(input, context)
-      w = Reader.IS.beF32(input, context)
-      udot = Reader.IS.beF32(input, context)
-      vdot = Reader.IS.beF32(input, context)
-      wdot = Reader.IS.beF32(input, context)
-      heading = Reader.IS.beF32(input, context)
-      pitch = Reader.IS.beF32(input, context)
-      roll = Reader.IS.beF32(input, context)
-      p = Reader.IS.beF32(input, context)
-      q = Reader.IS.beF32(input, context)
-      r = Reader.IS.beF32(input, context)
-      course = Reader.IS.beF32(input, context)
-      groundspeed = Reader.IS.beF32(input, context)
+      id = Reader.IS.leS64(input, context)
+      u = Reader.IS.leF32(input, context)
+      v = Reader.IS.leF32(input, context)
+      w = Reader.IS.leF32(input, context)
+      udot = Reader.IS.leF32(input, context)
+      vdot = Reader.IS.leF32(input, context)
+      wdot = Reader.IS.leF32(input, context)
+      heading = Reader.IS.leF32(input, context)
+      pitch = Reader.IS.leF32(input, context)
+      roll = Reader.IS.leF32(input, context)
+      p = Reader.IS.leF32(input, context)
+      q = Reader.IS.leF32(input, context)
+      r = Reader.IS.leF32(input, context)
+      course = Reader.IS.leF32(input, context)
+      groundspeed = Reader.IS.leF32(input, context)
       PredUnionLMCPLocation3D.choose(input, context) match {
         case PredUnionLMCPLocation3D.Choice.NullValueLMCPLocation3D => predUnionLMCPLocation3D = NullValueLMCPLocation3D.empty
         case PredUnionLMCPLocation3D.Choice.LMCPLMCPLocation3D => predUnionLMCPLocation3D = LMCPLMCPLocation3D.empty
         case _ => context.signalError(ERROR_PredUnionLMCPLocation3D)
       }
       predUnionLMCPLocation3D.decode(input, context)
-      energyAvailable = Reader.IS.beF32(input, context)
-      actualEnergyRate = Reader.IS.beF32(input, context)
-      _payloadStateListSize = Reader.IS.beU16(input, context)
+      energyAvailable = Reader.IS.leF32(input, context)
+      actualEnergyRate = Reader.IS.leF32(input, context)
+      _payloadStateListSize = Reader.IS.leU16(input, context)
       val payloadStateListSize = sizeOfPayloadStateList(_payloadStateListSize)
       if (payloadStateListSize >= 0) {
         payloadStateList = MSZ.create(payloadStateListSize, PredUnionPayloadState.empty)
@@ -2507,10 +2507,10 @@ object BitCodec {
       } else {
         context.signalError(ERROR_EntityState_payloadStateList)
       }
-      currentWaypoint = Reader.IS.beS64(input, context)
-      currentCommand = Reader.IS.beS64(input, context)
-      mode = Reader.IS.beS32(input, context)
-      _associatedTasksSize = Reader.IS.beU16(input, context)
+      currentWaypoint = Reader.IS.leS64(input, context)
+      currentCommand = Reader.IS.leS64(input, context)
+      mode = Reader.IS.leS32(input, context)
+      _associatedTasksSize = Reader.IS.leU16(input, context)
       val associatedTasksSize = sizeOfAssociatedTasks(_associatedTasksSize)
       if (associatedTasksSize >= 0) {
         associatedTasks = MSZ.create(associatedTasksSize, Id.empty)
@@ -2520,8 +2520,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_EntityState_associatedTasks)
       }
-      time = Reader.IS.beS64(input, context)
-      _infoSize = Reader.IS.beU16(input, context)
+      time = Reader.IS.leS64(input, context)
+      _infoSize = Reader.IS.leU16(input, context)
       val infoSize = sizeOfInfo(_infoSize)
       if (infoSize >= 0) {
         info = MSZ.create(infoSize, PredUnionInfo.empty)
@@ -2539,25 +2539,25 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS64(output, context, id)
-      Writer.beF32(output, context, u)
-      Writer.beF32(output, context, v)
-      Writer.beF32(output, context, w)
-      Writer.beF32(output, context, udot)
-      Writer.beF32(output, context, vdot)
-      Writer.beF32(output, context, wdot)
-      Writer.beF32(output, context, heading)
-      Writer.beF32(output, context, pitch)
-      Writer.beF32(output, context, roll)
-      Writer.beF32(output, context, p)
-      Writer.beF32(output, context, q)
-      Writer.beF32(output, context, r)
-      Writer.beF32(output, context, course)
-      Writer.beF32(output, context, groundspeed)
+      Writer.leS64(output, context, id)
+      Writer.leF32(output, context, u)
+      Writer.leF32(output, context, v)
+      Writer.leF32(output, context, w)
+      Writer.leF32(output, context, udot)
+      Writer.leF32(output, context, vdot)
+      Writer.leF32(output, context, wdot)
+      Writer.leF32(output, context, heading)
+      Writer.leF32(output, context, pitch)
+      Writer.leF32(output, context, roll)
+      Writer.leF32(output, context, p)
+      Writer.leF32(output, context, q)
+      Writer.leF32(output, context, r)
+      Writer.leF32(output, context, course)
+      Writer.leF32(output, context, groundspeed)
       predUnionLMCPLocation3D.encode(output, context)
-      Writer.beF32(output, context, energyAvailable)
-      Writer.beF32(output, context, actualEnergyRate)
-      Writer.beU16(output, context, _payloadStateListSize)
+      Writer.leF32(output, context, energyAvailable)
+      Writer.leF32(output, context, actualEnergyRate)
+      Writer.leU16(output, context, _payloadStateListSize)
       val payloadStateListSize = sizeOfPayloadStateList(_payloadStateListSize)
       if (payloadStateListSize >= 0) {
         for (i <- 0 until payloadStateListSize) {
@@ -2566,10 +2566,10 @@ object BitCodec {
       } else {
         context.signalError(ERROR_EntityState_payloadStateList)
       }
-      Writer.beS64(output, context, currentWaypoint)
-      Writer.beS64(output, context, currentCommand)
-      Writer.beS32(output, context, mode)
-      Writer.beU16(output, context, _associatedTasksSize)
+      Writer.leS64(output, context, currentWaypoint)
+      Writer.leS64(output, context, currentCommand)
+      Writer.leS32(output, context, mode)
+      Writer.leU16(output, context, _associatedTasksSize)
       val associatedTasksSize = sizeOfAssociatedTasks(_associatedTasksSize)
       if (associatedTasksSize >= 0) {
         for (i <- 0 until associatedTasksSize) {
@@ -2578,8 +2578,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_EntityState_associatedTasks)
       }
-      Writer.beS64(output, context, time)
-      Writer.beU16(output, context, _infoSize)
+      Writer.leS64(output, context, time)
+      Writer.leU16(output, context, _infoSize)
       val infoSize = sizeOfInfo(_infoSize)
       if (infoSize >= 0) {
         for (i <- 0 until infoSize) {
@@ -2679,10 +2679,10 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       entityState.decode(input, context)
-      airspeed = Reader.IS.beF32(input, context)
-      verticalSpeed = Reader.IS.beF32(input, context)
-      windSpeed = Reader.IS.beF32(input, context)
-      windDirection = Reader.IS.beF32(input, context)
+      airspeed = Reader.IS.leF32(input, context)
+      verticalSpeed = Reader.IS.leF32(input, context)
+      windSpeed = Reader.IS.leF32(input, context)
+      windDirection = Reader.IS.leF32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -2692,10 +2692,10 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       entityState.encode(output, context)
-      Writer.beF32(output, context, airspeed)
-      Writer.beF32(output, context, verticalSpeed)
-      Writer.beF32(output, context, windSpeed)
-      Writer.beF32(output, context, windDirection)
+      Writer.leF32(output, context, airspeed)
+      Writer.leF32(output, context, verticalSpeed)
+      Writer.leF32(output, context, windSpeed)
+      Writer.leF32(output, context, windDirection)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_AirVehicleState)
@@ -2779,7 +2779,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -2797,7 +2797,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -2870,7 +2870,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      entity = Reader.IS.beS64(input, context)
+      entity = Reader.IS.leS64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -2879,7 +2879,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS64(output, context, entity)
+      Writer.leS64(output, context, entity)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Entity)
@@ -3034,7 +3034,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -3052,7 +3052,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -3150,7 +3150,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      _stringCharsSize = Reader.IS.beU16(input, context)
+      _stringCharsSize = Reader.IS.leU16(input, context)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         stringChars = MSZ.create(stringCharsSize, C.empty)
@@ -3168,7 +3168,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beU16(output, context, _stringCharsSize)
+      Writer.leU16(output, context, _stringCharsSize)
       val stringCharsSize = sizeOfStringChars(_stringCharsSize)
       if (stringCharsSize >= 0) {
         for (i <- 0 until stringCharsSize) {
@@ -3351,9 +3351,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedtaskParameter.decode(input, context)
 
       val wf = wellFormed
@@ -3364,9 +3364,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedtaskParameter.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -3412,7 +3412,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -3550,9 +3550,9 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      taskID = Reader.IS.beS64(input, context)
+      taskID = Reader.IS.leS64(input, context)
       label.decode(input, context)
-      _eligibleEntitiesSize = Reader.IS.beU16(input, context)
+      _eligibleEntitiesSize = Reader.IS.leU16(input, context)
       val eligibleEntitiesSize = sizeOfEligibleEntities(_eligibleEntitiesSize)
       if (eligibleEntitiesSize >= 0) {
         eligibleEntities = MSZ.create(eligibleEntitiesSize, Entity.empty)
@@ -3562,8 +3562,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_Task_eligibleEntities)
       }
-      revisitRate = Reader.IS.beF32(input, context)
-      _parametersSize = Reader.IS.beU16(input, context)
+      revisitRate = Reader.IS.leF32(input, context)
+      _parametersSize = Reader.IS.leU16(input, context)
       val parametersSize = sizeOfParameters(_parametersSize)
       if (parametersSize >= 0) {
         parameters = MSZ.create(parametersSize, PredUniontaskParameter.empty)
@@ -3583,9 +3583,9 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS64(output, context, taskID)
+      Writer.leS64(output, context, taskID)
       label.encode(output, context)
-      Writer.beU16(output, context, _eligibleEntitiesSize)
+      Writer.leU16(output, context, _eligibleEntitiesSize)
       val eligibleEntitiesSize = sizeOfEligibleEntities(_eligibleEntitiesSize)
       if (eligibleEntitiesSize >= 0) {
         for (i <- 0 until eligibleEntitiesSize) {
@@ -3594,8 +3594,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_Task_eligibleEntities)
       }
-      Writer.beF32(output, context, revisitRate)
-      Writer.beU16(output, context, _parametersSize)
+      Writer.leF32(output, context, revisitRate)
+      Writer.leU16(output, context, _parametersSize)
       val parametersSize = sizeOfParameters(_parametersSize)
       if (parametersSize >= 0) {
         for (i <- 0 until parametersSize) {
@@ -3677,7 +3677,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      band = Reader.IS.beS32(input, context)
+      band = Reader.IS.leS32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -3686,7 +3686,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS32(output, context, band)
+      Writer.leS32(output, context, band)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Band)
@@ -3782,7 +3782,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       task.decode(input, context)
-      _desiredWavelengthBandsSize = Reader.IS.beU16(input, context)
+      _desiredWavelengthBandsSize = Reader.IS.leU16(input, context)
       val desiredWavelengthBandsSize = sizeOfDesiredWavelengthBands(_desiredWavelengthBandsSize)
       if (desiredWavelengthBandsSize >= 0) {
         desiredWavelengthBands = MSZ.create(desiredWavelengthBandsSize, Band.empty)
@@ -3792,8 +3792,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_SearchTask_desiredWavelengthBands)
       }
-      dwellTime = Reader.IS.beS64(input, context)
-      groundSampleDistance = Reader.IS.beF32(input, context)
+      dwellTime = Reader.IS.leS64(input, context)
+      groundSampleDistance = Reader.IS.leF32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -3803,7 +3803,7 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       task.encode(output, context)
-      Writer.beU16(output, context, _desiredWavelengthBandsSize)
+      Writer.leU16(output, context, _desiredWavelengthBandsSize)
       val desiredWavelengthBandsSize = sizeOfDesiredWavelengthBands(_desiredWavelengthBandsSize)
       if (desiredWavelengthBandsSize >= 0) {
         for (i <- 0 until desiredWavelengthBandsSize) {
@@ -3812,8 +3812,8 @@ object BitCodec {
       } else {
         context.signalError(ERROR_SearchTask_desiredWavelengthBands)
       }
-      Writer.beS64(output, context, dwellTime)
-      Writer.beF32(output, context, groundSampleDistance)
+      Writer.leS64(output, context, dwellTime)
+      Writer.leF32(output, context, groundSampleDistance)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_SearchTask)
@@ -3955,10 +3955,10 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      latitude = Reader.IS.beF64(input, context)
-      longitude = Reader.IS.beF64(input, context)
-      altitude = Reader.IS.beF32(input, context)
-      altitudeType = Reader.IS.beS32(input, context)
+      latitude = Reader.IS.leF64(input, context)
+      longitude = Reader.IS.leF64(input, context)
+      altitude = Reader.IS.leF32(input, context)
+      altitudeType = Reader.IS.leS32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -3967,10 +3967,10 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beF64(output, context, latitude)
-      Writer.beF64(output, context, longitude)
-      Writer.beF32(output, context, altitude)
-      Writer.beS32(output, context, altitudeType)
+      Writer.leF64(output, context, latitude)
+      Writer.leF64(output, context, longitude)
+      Writer.leF32(output, context, altitude)
+      Writer.leS32(output, context, altitudeType)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_PackedPoint)
@@ -4058,9 +4058,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedPoint.decode(input, context)
 
       val wf = wellFormed
@@ -4071,9 +4071,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedPoint.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -4119,7 +4119,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -4265,10 +4265,10 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      azimuthCenterline = Reader.IS.beF32(input, context)
-      verticalCenterline = Reader.IS.beF32(input, context)
-      azimuthExtent = Reader.IS.beF32(input, context)
-      verticalExtent = Reader.IS.beF32(input, context)
+      azimuthCenterline = Reader.IS.leF32(input, context)
+      verticalCenterline = Reader.IS.leF32(input, context)
+      azimuthExtent = Reader.IS.leF32(input, context)
+      verticalExtent = Reader.IS.leF32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -4277,10 +4277,10 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beF32(output, context, azimuthCenterline)
-      Writer.beF32(output, context, verticalCenterline)
-      Writer.beF32(output, context, azimuthExtent)
-      Writer.beF32(output, context, verticalExtent)
+      Writer.leF32(output, context, azimuthCenterline)
+      Writer.leF32(output, context, verticalCenterline)
+      Writer.leF32(output, context, azimuthExtent)
+      Writer.leF32(output, context, verticalExtent)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_PackedViewAngle)
@@ -4368,9 +4368,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       packedViewAngle.decode(input, context)
 
       val wf = wellFormed
@@ -4381,9 +4381,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       packedViewAngle.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -4429,7 +4429,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -4562,7 +4562,7 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       searchTask.decode(input, context)
-      _pointListSize = Reader.IS.beU16(input, context)
+      _pointListSize = Reader.IS.leU16(input, context)
       val pointListSize = sizeOfPointList(_pointListSize)
       if (pointListSize >= 0) {
         pointList = MSZ.create(pointListSize, PredUnionPoint.empty)
@@ -4572,7 +4572,7 @@ object BitCodec {
       } else {
         context.signalError(ERROR_LineSearchTask_pointList)
       }
-      _viewAngleListSize = Reader.IS.beU16(input, context)
+      _viewAngleListSize = Reader.IS.leU16(input, context)
       val viewAngleListSize = sizeOfViewAngleList(_viewAngleListSize)
       if (viewAngleListSize >= 0) {
         viewAngleList = MSZ.create(viewAngleListSize, PredUnionViewAngle.empty)
@@ -4592,7 +4592,7 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       searchTask.encode(output, context)
-      Writer.beU16(output, context, _pointListSize)
+      Writer.leU16(output, context, _pointListSize)
       val pointListSize = sizeOfPointList(_pointListSize)
       if (pointListSize >= 0) {
         for (i <- 0 until pointListSize) {
@@ -4601,7 +4601,7 @@ object BitCodec {
       } else {
         context.signalError(ERROR_LineSearchTask_pointList)
       }
-      Writer.beU16(output, context, _viewAngleListSize)
+      Writer.leU16(output, context, _viewAngleListSize)
       val viewAngleListSize = sizeOfViewAngleList(_viewAngleListSize)
       if (viewAngleListSize >= 0) {
         for (i <- 0 until viewAngleListSize) {
@@ -4760,9 +4760,9 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       nonNullValue = Reader.IS.bleU8(input, context)
-      seriesID = Reader.IS.beS64(input, context)
-      typeID = Reader.IS.beU32(input, context)
-      seriesVersion = Reader.IS.beU16(input, context)
+      seriesID = Reader.IS.leS64(input, context)
+      typeID = Reader.IS.leU32(input, context)
+      seriesVersion = Reader.IS.leU16(input, context)
       LMCPObject.choose((seriesID, typeID, seriesVersion)) match {
         case LMCPObject.Choice.OperatingRegion => lMCPObject = OperatingRegion.empty
         case LMCPObject.Choice.AirVehicleState => lMCPObject = AirVehicleState.empty
@@ -4779,9 +4779,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, nonNullValue)
-      Writer.beS64(output, context, seriesID)
-      Writer.beU32(output, context, typeID)
-      Writer.beU16(output, context, seriesVersion)
+      Writer.leS64(output, context, seriesID)
+      Writer.leU32(output, context, typeID)
+      Writer.leU16(output, context, seriesVersion)
       lMCPObject.encode(output, context)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
@@ -4827,7 +4827,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           val temp = MSZ.create(1, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 1)
+          Reader.IS.leU8S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"0"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -4905,15 +4905,15 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      controlString = Reader.IS.beS32(input, context)
-      messageSize = Reader.IS.beU32(input, context)
+      controlString = Reader.IS.leS32(input, context)
+      messageSize = Reader.IS.leU32(input, context)
       LMCPObjectNullCheck.choose(input, context) match {
         case LMCPObjectNullCheck.Choice.NullValue => lMCPObjectNullCheck = NullValue.empty
         case LMCPObjectNullCheck.Choice.LMCPObjectDecode => lMCPObjectNullCheck = LMCPObjectDecode.empty
         case _ => context.signalError(ERROR_LMCPObjectNullCheck)
       }
       lMCPObjectNullCheck.decode(input, context)
-      checksum = Reader.IS.beU32(input, context)
+      checksum = Reader.IS.leU32(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -4922,10 +4922,10 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.beS32(output, context, controlString)
-      Writer.beU32(output, context, messageSize)
+      Writer.leS32(output, context, controlString)
+      Writer.leU32(output, context, messageSize)
       lMCPObjectNullCheck.encode(output, context)
-      Writer.beU32(output, context, checksum)
+      Writer.leU32(output, context, checksum)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_LMCPMessage)
@@ -4943,12 +4943,12 @@ val operatingRegionBitstreamLE = ops.Bits.fromHexString("500100000000000001004E0
 val operatingRegionBitstream = ops.Bits.fromHexString("00000000000001500001000000000000014E0001000000000000014F")
 val operatingRegionContext = Context.create
 val operatingRegionDecoded = OperatingRegion.empty
-operatingRegionDecoded.decode(operatingRegionBitstream, operatingRegionContext)
+operatingRegionDecoded.decode(operatingRegionBitstreamLE, operatingRegionContext)
 println(s"decode(bitstream) = $operatingRegionDecoded")
 println(s"decode(bitstream).offset = ${operatingRegionContext.offset}")
 println(s"decode(bitstream).errorCode = ${operatingRegionContext.errorCode}")
 println(s"decode(bitstream).errorOffset = ${operatingRegionContext.errorOffset}")
-/*
+
 val lmcpOperatingRegionBitstreamLE = ops.Bits.fromHexString("010000004953414D43270000000300500100000000000001004E0100000000000001004F01000000000000")
 val lmcpOperatingRegionContext = Context.create
 val lmcpOperatingRegionDecoded = LMCPObjectDecode.empty
@@ -4966,5 +4966,5 @@ println(s"decode(bitstream) = $lmcpMessageDecoded")
 println(s"decode(bitstream).offset = ${lmcpMessageInputContext.offset}")
 println(s"decode(bitstream).errorCode = ${lmcpMessageInputContext.errorCode}")
 println(s"decode(bitstream).errorOffset = ${lmcpMessageInputContext.errorOffset}")
- */
+
 // END USER CODE: Test
