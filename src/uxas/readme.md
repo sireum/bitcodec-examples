@@ -1,0 +1,1 @@
+See https://github.com/loonwerks/CASE/tree/509328610b72ce1d21af01871c6c945098580f3d/TA2/lmcp-message-format/bitcodec/src/uxas
