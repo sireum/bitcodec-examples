@@ -11,92 +11,20 @@ import org.sireum.bitcodec.Runtime
 
 object BitCodec {
 
-  val ERROR_Value: Z = 2
+  val ERROR_Foo_elements: Z = 2
 
-  val ERROR_Foo_elements: Z = 3
-
-  val ERROR_Foo: Z = 4
+  val ERROR_Foo: Z = 3
 
   // BEGIN USER CODE: Members
   // ... empty
   // END USER CODE: Members
-
-  object Value {
-
-    val maxSize: Z = z"8"
-
-    def empty: MValue = {
-      return MValue(u8"0")
-    }
-
-    def decode(input: ISZ[B], context: Context): Option[Value] = {
-      val r = empty
-      r.decode(input, context)
-      return if (context.hasError) None[Value]() else Some(r.toImmutable)
-    }
-
-  }
-
-  @datatype class Value(
-    val value: U8
-  ) {
-
-    @strictpure def toMutable: MValue = MValue(value)
-
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
-      toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
-    }
-
-    def wellFormed: Z = {
-      return toMutable.wellFormed
-    }
-  }
-
-  @record class MValue(
-    var value: U8
-  ) extends Runtime.Composite {
-
-    @strictpure def toImmutable: Value = Value(value)
-
-    def wellFormed: Z = {
-
-
-      // BEGIN USER CODE: Value.wellFormed
-      if (value == u8"0") {
-        return ERROR_Value
-      }
-      // END USER CODE: Value.wellFormed
-
-      return 0
-    }
-
-    def decode(input: ISZ[B], context: Context): Unit = {
-      value = Reader.IS.bleU8(input, context)
-
-      val wf = wellFormed
-      if (wf != 0) {
-        context.signalError(wf)
-      }
-    }
-
-    def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.bleU8(output, context, value)
-
-      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_Value)
-      }
-    }
-
-  }
 
   object Foo {
 
     val maxSize: Z = z"-1"
 
     def empty: MFoo = {
-      return MFoo(MSZ[MValue](), u8"0")
+      return MFoo(MSZ[U8](), u8"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[Foo] = {
@@ -105,25 +33,25 @@ object BitCodec {
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
     }
 
-    def toMutableElements(s: ISZ[Value]): MSZ[MValue] = {
-      var r = MSZ[MValue]()
+    def toMutableElements(s: ISZ[U8]): MSZ[U8] = {
+      var r = MSZ[U8]()
       for (e <- s) {
-        r = r :+ e.toMutable
+        r = r :+ e
       }
       return r
     }
 
-    def toImmutableElements(s: MSZ[MValue]): ISZ[Value] = {
-      var r = ISZ[Value]()
+    def toImmutableElements(s: MSZ[U8]): ISZ[U8] = {
+      var r = ISZ[U8]()
       for (e <- s) {
-        r = r :+ e.toImmutable
+        r = r :+ e
       }
       return r
     }
   }
 
   @datatype class Foo(
-    val elements: ISZ[Value],
+    val elements: ISZ[U8],
     val end: U8
   ) {
 
@@ -141,7 +69,7 @@ object BitCodec {
   }
 
   @record class MFoo(
-    var elements: MSZ[MValue],
+    var elements: MSZ[U8],
     var end: U8
   ) extends Runtime.Composite {
 
@@ -160,8 +88,8 @@ object BitCodec {
     def decode(input: ISZ[B], context: Context): Unit = {
       elements = MSZ()
       while (!matchElements(input, context)) {
-        elements = elements :+ Value.empty
-        elements(elements.size - 1).decode(input, context)
+        val value = Reader.IS.bleU8(input, context)
+        elements = elements :+ value
       }
       end = Reader.IS.bleU8(input, context)
 
@@ -173,7 +101,8 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       for (i <- 0 until elements.size) {
-        elements(i).encode(output, context)
+        val value = elements(i)
+        Writer.bleU8(output, context, value)
       }
       Writer.bleU8(output, context, end)
 
@@ -198,7 +127,7 @@ object BitCodec {
 // BEGIN USER CODE: Test
 import BitCodec._
 
-val fooExample = MFoo(MSZ(MValue(u8"3"), MValue(u8"4"), MValue(u8"5")), u8"0")
+val fooExample = MFoo(MSZ(u8"3", u8"4", u8"5"), u8"0")
 println(s"fooExample = $fooExample")
 
 assert(fooExample.wellFormed == 0, "fooExample is not well-formed!")
