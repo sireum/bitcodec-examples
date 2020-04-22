@@ -62,8 +62,8 @@ object BitCodec {
 
     def wellFormed: Z = {
 
-      val elementsSize = sizeOfElements(size)
-      if (elements.size != elementsSize) {
+      val elementsSz = sizeOfElements(size)
+      if (elements.size != elementsSz) {
         return ERROR_Foo_elements
       }
 
@@ -76,10 +76,10 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       size = Reader.IS.bleU8(input, context)
-      val elementsSize = sizeOfElements(size)
-      if (elementsSize >= 0) {
-        elements = MSZ.create(elementsSize, F)
-        Reader.IS.bleRaw(input, context, elements, elementsSize)
+      val elementsSz = sizeOfElements(size)
+      if (elementsSz >= 0) {
+        elements = MSZ.create(elementsSz, F)
+        Reader.IS.bleRaw(input, context, elements, elementsSz)
       } else {
         context.signalError(ERROR_Foo_elements)
       }
@@ -92,9 +92,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       Writer.bleU8(output, context, size)
-      val elementsSize = sizeOfElements(size)
-      if (elementsSize >= 0) {
-        Writer.bleRaw(output, context, elements, elementsSize)
+      val elementsSz = sizeOfElements(size)
+      if (elementsSz >= 0) {
+        Writer.bleRaw(output, context, elements, elementsSz)
       } else {
         context.signalError(ERROR_Foo_elements)
       }

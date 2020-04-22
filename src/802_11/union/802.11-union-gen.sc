@@ -725,8 +725,8 @@ object BitCodec {
         return wfMacHeader
       }
 
-      val bodySize = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
-      if (body.size != bodySize) {
+      val bodySz = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
+      if (body.size != bodySz) {
         return ERROR_MacFrame_body
       }
 
@@ -739,10 +739,10 @@ object BitCodec {
 
     def decode(input: ISZ[B], context: Context): Unit = {
       macHeader.decode(input, context)
-      val bodySize = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
-      if (bodySize >= 0) {
-        body = MSZ.create(bodySize, F)
-        Reader.IS.bleRaw(input, context, body, bodySize)
+      val bodySz = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
+      if (bodySz >= 0) {
+        body = MSZ.create(bodySz, F)
+        Reader.IS.bleRaw(input, context, body, bodySz)
       } else {
         context.signalError(ERROR_MacFrame_body)
       }
@@ -756,9 +756,9 @@ object BitCodec {
 
     def encode(output: MSZ[B], context: Context): Unit = {
       macHeader.encode(output, context)
-      val bodySize = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
-      if (bodySize >= 0) {
-        Writer.bleRaw(output, context, body, bodySize)
+      val bodySz = sizeOfBody((macHeader.frameControl.tpe, macHeader.frameControl.subType))
+      if (bodySz >= 0) {
+        Writer.bleRaw(output, context, body, bodySz)
       } else {
         context.signalError(ERROR_MacFrame_body)
       }

@@ -18,15 +18,11 @@ object BitCodec {
 
   val ERROR_Frame: Z = 2
 
-  val ERROR_CtsFrameControl: Z = 3
+  val ERROR_FrameControl: Z = 3
 
   val ERROR_Cts: Z = 4
 
-  val ERROR_RtsFrameControl: Z = 6
-
   val ERROR_Rts: Z = 7
-
-  val ERROR_DataFrameControl: Z = 9
 
   val ERROR_SeqControl: Z = 10
 
@@ -81,23 +77,23 @@ object BitCodec {
     }
   }
 
-  object CtsFrameControl {
+  object FrameControl {
 
     val maxSize: Z = z"16"
 
-    def empty: MCtsFrameControl = {
-      return MCtsFrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
+    def empty: MFrameControl = {
+      return MFrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[CtsFrameControl] = {
+    def decode(input: ISZ[B], context: Context): Option[FrameControl] = {
       val r = empty
       r.decode(input, context)
-      return if (context.hasError) None[CtsFrameControl]() else Some(r.toImmutable)
+      return if (context.hasError) None[FrameControl]() else Some(r.toImmutable)
     }
 
   }
 
-  @datatype class CtsFrameControl(
+  @datatype class FrameControl(
     val protocol: U2,
     val tpe: Frame.Type,
     val subType: U4,
@@ -111,7 +107,7 @@ object BitCodec {
     val order: U1
   ) {
 
-    @strictpure def toMutable: MCtsFrameControl = MCtsFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    @strictpure def toMutable: MFrameControl = MFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
 
     def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
       val buffer = MSZ.create(buffSize, F)
@@ -124,7 +120,7 @@ object BitCodec {
     }
   }
 
-  @record class MCtsFrameControl(
+  @record class MFrameControl(
     var protocol: U2,
     var tpe: Frame.Type,
     var subType: U4,
@@ -138,14 +134,14 @@ object BitCodec {
     var order: U1
   ) extends Runtime.Composite {
 
-    @strictpure def toImmutable: CtsFrameControl = CtsFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    @strictpure def toImmutable: FrameControl = FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
 
     def wellFormed: Z = {
 
 
-      // BEGIN USER CODE: CtsFrameControl.wellFormed
+      // BEGIN USER CODE: FrameControl.wellFormed
 
-      // END USER CODE: CtsFrameControl.wellFormed
+      // END USER CODE: FrameControl.wellFormed
 
       return 0
     }
@@ -183,7 +179,7 @@ object BitCodec {
       Writer.bleU1(output, context, order)
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_CtsFrameControl)
+        context.updateErrorCode(ERROR_FrameControl)
       }
     }
 
@@ -194,7 +190,7 @@ object BitCodec {
     val maxSize: Z = z"112"
 
     def empty: MCts = {
-      return MCts(CtsFrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), u32"0")
+      return MCts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), u32"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[Cts] = {
@@ -206,13 +202,13 @@ object BitCodec {
   }
 
   @datatype class Cts(
-    val ctsFrameControl: CtsFrameControl,
+    val frameControl: FrameControl,
     val duration: ISZ[U8],
     val receiver: ISZ[U8],
     val fcs: U32
   ) extends MacFrame {
 
-    @strictpure def toMutable: MCts = MCts(ctsFrameControl.toMutable, duration.toMS, receiver.toMS, fcs)
+    @strictpure def toMutable: MCts = MCts(frameControl.toMutable, duration.toMS, receiver.toMS, fcs)
 
     def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
       val buffer = MSZ.create(buffSize, F)
@@ -226,19 +222,19 @@ object BitCodec {
   }
 
   @record class MCts(
-    var ctsFrameControl: MCtsFrameControl,
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var receiver: MSZ[U8],
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Cts = Cts(ctsFrameControl.toImmutable, duration.toIS, receiver.toIS, fcs)
+    @strictpure def toImmutable: Cts = Cts(frameControl.toImmutable, duration.toIS, receiver.toIS, fcs)
 
     def wellFormed: Z = {
 
-      val wfCtsFrameControl = ctsFrameControl.wellFormed
-      if (wfCtsFrameControl != 0) {
-        return wfCtsFrameControl
+      val wfFrameControl = frameControl.wellFormed
+      if (wfFrameControl != 0) {
+        return wfFrameControl
       }
 
       if (duration.size != 2) {
@@ -257,7 +253,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      ctsFrameControl.decode(input, context)
+      frameControl.decode(input, context)
       Reader.IS.beU8S(input, context, duration, 2)
       Reader.IS.beU8S(input, context, receiver, 6)
       fcs = Reader.IS.beU32(input, context)
@@ -269,7 +265,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      ctsFrameControl.encode(output, context)
+      frameControl.encode(output, context)
       Writer.beU8S(output, context, duration)
       Writer.beU8S(output, context, receiver)
       Writer.beU32(output, context, fcs)
@@ -281,120 +277,12 @@ object BitCodec {
 
   }
 
-  object RtsFrameControl {
-
-    val maxSize: Z = z"16"
-
-    def empty: MRtsFrameControl = {
-      return MRtsFrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
-    }
-
-    def decode(input: ISZ[B], context: Context): Option[RtsFrameControl] = {
-      val r = empty
-      r.decode(input, context)
-      return if (context.hasError) None[RtsFrameControl]() else Some(r.toImmutable)
-    }
-
-  }
-
-  @datatype class RtsFrameControl(
-    val protocol: U2,
-    val tpe: Frame.Type,
-    val subType: U4,
-    val toDS: U1,
-    val fromDS: U1,
-    val moreFrag: U1,
-    val retry: U1,
-    val powerMgmt: U1,
-    val moreData: U1,
-    val wep: U1,
-    val order: U1
-  ) {
-
-    @strictpure def toMutable: MRtsFrameControl = MRtsFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
-
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
-      toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
-    }
-
-    def wellFormed: Z = {
-      return toMutable.wellFormed
-    }
-  }
-
-  @record class MRtsFrameControl(
-    var protocol: U2,
-    var tpe: Frame.Type,
-    var subType: U4,
-    var toDS: U1,
-    var fromDS: U1,
-    var moreFrag: U1,
-    var retry: U1,
-    var powerMgmt: U1,
-    var moreData: U1,
-    var wep: U1,
-    var order: U1
-  ) extends Runtime.Composite {
-
-    @strictpure def toImmutable: RtsFrameControl = RtsFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
-
-    def wellFormed: Z = {
-
-
-      // BEGIN USER CODE: RtsFrameControl.wellFormed
-
-      // END USER CODE: RtsFrameControl.wellFormed
-
-      return 0
-    }
-
-    def decode(input: ISZ[B], context: Context): Unit = {
-      protocol = Reader.IS.bleU2(input, context)
-      tpe = decodeFrame(input, context)
-      subType = Reader.IS.bleU4(input, context)
-      toDS = Reader.IS.bleU1(input, context)
-      fromDS = Reader.IS.bleU1(input, context)
-      moreFrag = Reader.IS.bleU1(input, context)
-      retry = Reader.IS.bleU1(input, context)
-      powerMgmt = Reader.IS.bleU1(input, context)
-      moreData = Reader.IS.bleU1(input, context)
-      wep = Reader.IS.bleU1(input, context)
-      order = Reader.IS.bleU1(input, context)
-
-      val wf = wellFormed
-      if (wf != 0) {
-        context.signalError(wf)
-      }
-    }
-
-    def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.bleU2(output, context, protocol)
-      encodeFrame(output, context, tpe)
-      Writer.bleU4(output, context, subType)
-      Writer.bleU1(output, context, toDS)
-      Writer.bleU1(output, context, fromDS)
-      Writer.bleU1(output, context, moreFrag)
-      Writer.bleU1(output, context, retry)
-      Writer.bleU1(output, context, powerMgmt)
-      Writer.bleU1(output, context, moreData)
-      Writer.bleU1(output, context, wep)
-      Writer.bleU1(output, context, order)
-
-      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_RtsFrameControl)
-      }
-    }
-
-  }
-
   object Rts {
 
     val maxSize: Z = z"160"
 
     def empty: MRts = {
-      return MRts(RtsFrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), u32"0")
+      return MRts(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), u32"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[Rts] = {
@@ -406,14 +294,14 @@ object BitCodec {
   }
 
   @datatype class Rts(
-    val rtsFrameControl: RtsFrameControl,
+    val frameControl: FrameControl,
     val duration: ISZ[U8],
     val receiver: ISZ[U8],
     val transmitter: ISZ[U8],
     val fcs: U32
   ) extends MacFrame {
 
-    @strictpure def toMutable: MRts = MRts(rtsFrameControl.toMutable, duration.toMS, receiver.toMS, transmitter.toMS, fcs)
+    @strictpure def toMutable: MRts = MRts(frameControl.toMutable, duration.toMS, receiver.toMS, transmitter.toMS, fcs)
 
     def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
       val buffer = MSZ.create(buffSize, F)
@@ -427,20 +315,20 @@ object BitCodec {
   }
 
   @record class MRts(
-    var rtsFrameControl: MRtsFrameControl,
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var receiver: MSZ[U8],
     var transmitter: MSZ[U8],
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Rts = Rts(rtsFrameControl.toImmutable, duration.toIS, receiver.toIS, transmitter.toIS, fcs)
+    @strictpure def toImmutable: Rts = Rts(frameControl.toImmutable, duration.toIS, receiver.toIS, transmitter.toIS, fcs)
 
     def wellFormed: Z = {
 
-      val wfRtsFrameControl = rtsFrameControl.wellFormed
-      if (wfRtsFrameControl != 0) {
-        return wfRtsFrameControl
+      val wfFrameControl = frameControl.wellFormed
+      if (wfFrameControl != 0) {
+        return wfFrameControl
       }
 
       if (duration.size != 2) {
@@ -463,7 +351,7 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      rtsFrameControl.decode(input, context)
+      frameControl.decode(input, context)
       Reader.IS.beU8S(input, context, duration, 2)
       Reader.IS.beU8S(input, context, receiver, 6)
       Reader.IS.beU8S(input, context, transmitter, 6)
@@ -476,7 +364,7 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      rtsFrameControl.encode(output, context)
+      frameControl.encode(output, context)
       Writer.beU8S(output, context, duration)
       Writer.beU8S(output, context, receiver)
       Writer.beU8S(output, context, transmitter)
@@ -484,114 +372,6 @@ object BitCodec {
 
       if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
         context.updateErrorCode(ERROR_Rts)
-      }
-    }
-
-  }
-
-  object DataFrameControl {
-
-    val maxSize: Z = z"16"
-
-    def empty: MDataFrameControl = {
-      return MDataFrameControl(u2"0", Frame.Management, u4"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0", u1"0")
-    }
-
-    def decode(input: ISZ[B], context: Context): Option[DataFrameControl] = {
-      val r = empty
-      r.decode(input, context)
-      return if (context.hasError) None[DataFrameControl]() else Some(r.toImmutable)
-    }
-
-  }
-
-  @datatype class DataFrameControl(
-    val protocol: U2,
-    val tpe: Frame.Type,
-    val subType: U4,
-    val toDS: U1,
-    val fromDS: U1,
-    val moreFrag: U1,
-    val retry: U1,
-    val powerMgmt: U1,
-    val moreData: U1,
-    val wep: U1,
-    val order: U1
-  ) {
-
-    @strictpure def toMutable: MDataFrameControl = MDataFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
-
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
-      val buffer = MSZ.create(buffSize, F)
-      toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
-    }
-
-    def wellFormed: Z = {
-      return toMutable.wellFormed
-    }
-  }
-
-  @record class MDataFrameControl(
-    var protocol: U2,
-    var tpe: Frame.Type,
-    var subType: U4,
-    var toDS: U1,
-    var fromDS: U1,
-    var moreFrag: U1,
-    var retry: U1,
-    var powerMgmt: U1,
-    var moreData: U1,
-    var wep: U1,
-    var order: U1
-  ) extends Runtime.Composite {
-
-    @strictpure def toImmutable: DataFrameControl = DataFrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
-
-    def wellFormed: Z = {
-
-
-      // BEGIN USER CODE: DataFrameControl.wellFormed
-
-      // END USER CODE: DataFrameControl.wellFormed
-
-      return 0
-    }
-
-    def decode(input: ISZ[B], context: Context): Unit = {
-      protocol = Reader.IS.bleU2(input, context)
-      tpe = decodeFrame(input, context)
-      subType = Reader.IS.bleU4(input, context)
-      toDS = Reader.IS.bleU1(input, context)
-      fromDS = Reader.IS.bleU1(input, context)
-      moreFrag = Reader.IS.bleU1(input, context)
-      retry = Reader.IS.bleU1(input, context)
-      powerMgmt = Reader.IS.bleU1(input, context)
-      moreData = Reader.IS.bleU1(input, context)
-      wep = Reader.IS.bleU1(input, context)
-      order = Reader.IS.bleU1(input, context)
-
-      val wf = wellFormed
-      if (wf != 0) {
-        context.signalError(wf)
-      }
-    }
-
-    def encode(output: MSZ[B], context: Context): Unit = {
-      Writer.bleU2(output, context, protocol)
-      encodeFrame(output, context, tpe)
-      Writer.bleU4(output, context, subType)
-      Writer.bleU1(output, context, toDS)
-      Writer.bleU1(output, context, fromDS)
-      Writer.bleU1(output, context, moreFrag)
-      Writer.bleU1(output, context, retry)
-      Writer.bleU1(output, context, powerMgmt)
-      Writer.bleU1(output, context, moreData)
-      Writer.bleU1(output, context, wep)
-      Writer.bleU1(output, context, order)
-
-      if (context.errorCode == Writer.INSUFFICIENT_BUFFER_SIZE) {
-        context.updateErrorCode(ERROR_DataFrameControl)
       }
     }
 
@@ -674,7 +454,7 @@ object BitCodec {
     val maxSize: Z = z"-1"
 
     def empty: MData = {
-      return MData(DataFrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"), MSZ[B](), u32"0")
+      return MData(FrameControl.empty, MSZ.create(2, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), MSZ.create(6, u8"0"), SeqControl.empty, MSZ.create(6, u8"0"), MSZ[B](), u32"0")
     }
 
     def decode(input: ISZ[B], context: Context): Option[Data] = {
@@ -686,7 +466,7 @@ object BitCodec {
   }
 
   @datatype class Data(
-    val dataFrameControl: DataFrameControl,
+    val frameControl: FrameControl,
     val duration: ISZ[U8],
     val address1: ISZ[U8],
     val address2: ISZ[U8],
@@ -697,7 +477,7 @@ object BitCodec {
     val fcs: U32
   ) extends MacFrame {
 
-    @strictpure def toMutable: MData = MData(dataFrameControl.toMutable, duration.toMS, address1.toMS, address2.toMS, address3.toMS, seqControl.toMutable, address4.toMS, body.toMS, fcs)
+    @strictpure def toMutable: MData = MData(frameControl.toMutable, duration.toMS, address1.toMS, address2.toMS, address3.toMS, seqControl.toMutable, address4.toMS, body.toMS, fcs)
 
     def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
       val buffer = MSZ.create(buffSize, F)
@@ -711,7 +491,7 @@ object BitCodec {
   }
 
   @record class MData(
-    var dataFrameControl: MDataFrameControl,
+    var frameControl: MFrameControl,
     var duration: MSZ[U8],
     var address1: MSZ[U8],
     var address2: MSZ[U8],
@@ -722,13 +502,13 @@ object BitCodec {
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Data = Data(dataFrameControl.toImmutable, duration.toIS, address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS, body.toIS, fcs)
+    @strictpure def toImmutable: Data = Data(frameControl.toImmutable, duration.toIS, address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS, body.toIS, fcs)
 
     def wellFormed: Z = {
 
-      val wfDataFrameControl = dataFrameControl.wellFormed
-      if (wfDataFrameControl != 0) {
-        return wfDataFrameControl
+      val wfFrameControl = frameControl.wellFormed
+      if (wfFrameControl != 0) {
+        return wfFrameControl
       }
 
       if (duration.size != 2) {
@@ -756,8 +536,8 @@ object BitCodec {
         return ERROR_Data
       }
 
-      val bodySize = sizeOfBody((dataFrameControl.tpe, dataFrameControl.subType))
-      if (body.size != bodySize) {
+      val bodySz = sizeOfBody((frameControl.tpe, frameControl.subType))
+      if (body.size != bodySz) {
         return ERROR_Data_body
       }
 
@@ -769,17 +549,17 @@ object BitCodec {
     }
 
     def decode(input: ISZ[B], context: Context): Unit = {
-      dataFrameControl.decode(input, context)
+      frameControl.decode(input, context)
       Reader.IS.beU8S(input, context, duration, 2)
       Reader.IS.beU8S(input, context, address1, 6)
       Reader.IS.beU8S(input, context, address2, 6)
       Reader.IS.beU8S(input, context, address3, 6)
       seqControl.decode(input, context)
       Reader.IS.beU8S(input, context, address4, 6)
-      val bodySize = sizeOfBody((dataFrameControl.tpe, dataFrameControl.subType))
-      if (bodySize >= 0) {
-        body = MSZ.create(bodySize, F)
-        Reader.IS.bleRaw(input, context, body, bodySize)
+      val bodySz = sizeOfBody((frameControl.tpe, frameControl.subType))
+      if (bodySz >= 0) {
+        body = MSZ.create(bodySz, F)
+        Reader.IS.bleRaw(input, context, body, bodySz)
       } else {
         context.signalError(ERROR_Data_body)
       }
@@ -792,16 +572,16 @@ object BitCodec {
     }
 
     def encode(output: MSZ[B], context: Context): Unit = {
-      dataFrameControl.encode(output, context)
+      frameControl.encode(output, context)
       Writer.beU8S(output, context, duration)
       Writer.beU8S(output, context, address1)
       Writer.beU8S(output, context, address2)
       Writer.beU8S(output, context, address3)
       seqControl.encode(output, context)
       Writer.beU8S(output, context, address4)
-      val bodySize = sizeOfBody((dataFrameControl.tpe, dataFrameControl.subType))
-      if (bodySize >= 0) {
-        Writer.bleRaw(output, context, body, bodySize)
+      val bodySz = sizeOfBody((frameControl.tpe, frameControl.subType))
+      if (bodySz >= 0) {
+        Writer.bleRaw(output, context, body, bodySz)
       } else {
         context.signalError(ERROR_Data_body)
       }

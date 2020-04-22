@@ -15,7 +15,7 @@ import org.sireum.bitcodec.Spec.bits
   'Reserved // 3
 }
 
-@strictpure def frameControl(ctx: String): Spec = Concat(s"${ctx}FrameControl", ISZ(
+val frameControl: Spec = Concat("FrameControl", ISZ(
   Bits("protocol", 2),
   Enum("tpe", "Frame"),
   Bits("subType", 4),
@@ -41,7 +41,7 @@ val macFrame: Spec =
       PredSpec(
         ISZ(skip(2), bits(2, 1), bits(4, 0xC)),
         Concat("Cts", ISZ(
-          frameControl("Cts"),
+          frameControl,
           UBytes("duration", 2),
           UBytes("receiver", 6),
           Bits("fcs", 32),
@@ -50,7 +50,7 @@ val macFrame: Spec =
       PredSpec(
         ISZ(skip(2), bits(2, 1), bits(4, 0xB)),
         Concat("Rts", ISZ(
-          frameControl("Rts"),
+          frameControl,
           UBytes("duration", 2),
           UBytes("receiver", 6),
           UBytes("transmitter", 6),
@@ -60,7 +60,7 @@ val macFrame: Spec =
       PredSpec(
         ISZ(skip(2), bits(2, 2)),
         Concat("Data", ISZ(
-          frameControl("Data"),
+          frameControl,
           UBytes("duration", 2),
           UBytes("address1", 6),
           UBytes("address2", 6),
@@ -69,7 +69,7 @@ val macFrame: Spec =
           UBytes("address4", 6),
           Raw[(Frame.Type, U4)](
             "body",
-            ISZ("dataFrameControl.tpe", "dataFrameControl.subType"),
+            ISZ("frameControl.tpe", "frameControl.subType"),
             p => p match {
               case /* CTS */ (Frame.Control, u4"0xC") => 0
               case /* RTS */ (Frame.Control, u4"0xB") => 0
