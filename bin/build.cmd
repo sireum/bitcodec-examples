@@ -122,7 +122,7 @@ def gen(): Unit = {
 def run(gen: Os.Path): Unit = {
   val genPath = s"$gen.sc"
   println(s"Running $genPath ...")
-  Os.proc(ISZ(sireum.string, "slang", "run", "--no-server", genPath)).echo.console.runCheck()
+  Os.proc(ISZ(sireum.string, "slang", "run", genPath)).echo.console.runCheck()
   println()
 }
 
