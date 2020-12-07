@@ -27,7 +27,7 @@ object BitCodec {
       return MFoo(MSZ[U8](), u8"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+    def decode(input: MSZ[B], context: Context): Option[Foo] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
@@ -57,10 +57,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(Foo.toMutableElements(elements), end)
 
-    def encode(buffSize: Z, context: Context): Option[ISZ[B]] = {
+    def encode(buffSize: Z, context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(buffSize, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -71,7 +71,7 @@ object BitCodec {
   @record class MFoo(
     var elements: MSZ[U8],
     var end: U8
-  ) extends Runtime.Composite {
+  ) extends Runtime.MComposite {
 
     @strictpure def toImmutable: Foo = Foo(Foo.toImmutableElements(elements), end)
 
@@ -85,13 +85,13 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
+    def decode(input: MSZ[B], context: Context): Unit = {
       elements = MSZ()
       while (!matchElements(input, context)) {
-        val value = Reader.IS.bleU8(input, context)
+        val value = Reader.MS.bleU8(input, context)
         elements = elements :+ value
       }
-      end = Reader.IS.bleU8(input, context)
+      end = Reader.MS.bleU8(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -111,11 +111,11 @@ object BitCodec {
       }
     }
 
-    def matchElements(input: ISZ[B], context: Context): B = {
+    def matchElements(input: MSZ[B], context: Context): B = {
       var ctx = context
       var hasError = F
       if (!hasError) {
-        val temp = Reader.IS.bleU8(input, ctx)
+        val temp = Reader.MS.bleU8(input, ctx)
         hasError = !(ctx.errorCode == 0 && temp == u8"0")
       }
       return !hasError
@@ -145,7 +145,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")

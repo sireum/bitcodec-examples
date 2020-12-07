@@ -29,19 +29,20 @@ exit /B %errorlevel%
 // #Sireum
 import org.sireum._
 
-val homeBin = Os.slashDir
-val home = homeBin.up
-val homeSrc = home / "src"
-val sireumHome = Os.path(Os.env("SIREUM_HOME").get)
-val sireum: Os.Path = sireumHome / "bin" / (if (Os.isWin) "sireum.bat" else "sireum")
-
-val specSuffix: String = "-spec.sc"
-val genSuffix: String = "-gen"
-val genBigSuffix: String = s"-be$genSuffix"
-val genLittleSuffix: String = s"-le$genSuffix"
-var fEndName: String = "-spec.sc"
 
 object Spec {
+  val homeBin: Os.Path = Os.slashDir
+  val home: Os.Path = homeBin.up
+  val homeSrc: Os.Path = home / "src"
+  val sireumHome: Os.Path = Os.path(Os.env("SIREUM_HOME").get)
+  val sireum: Os.Path = sireumHome / "bin" / (if (Os.isWin) "sireum.bat" else "sireum")
+
+  val specSuffix: String = "-spec.sc"
+  val genSuffix: String = "-gen"
+  val genBigSuffix: String = s"-be$genSuffix"
+  val genLittleSuffix: String = s"-le$genSuffix"
+  var fEndName: String = "-spec.sc"
+
   @memoize def specs: ISZ[Os.Path] = {
     return for (spec <- Os.Path.walk(homeSrc, F, F, p => ops.StringOps(p.name).endsWith(fEndName))) yield spec
   }
@@ -107,12 +108,12 @@ def gen(): Unit = {
 
     println(s"Generating bitcodec from $spec ...")
     val big = gens(0)
-    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mode", "script", "--name", big.name,
+    Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mutable", "--mode", "script", "--name", big.name,
       "--output-dir", big.up.string, spec.string)).echo.console.runCheck()
 
     if (gens.size == 2) {
       val little = gens(1)
-      Os.proc(ISZ(sireum.string, "tools", "bcgen", "--little", "--mode", "script", "--name", little.name,
+      Os.proc(ISZ(sireum.string, "tools", "bcgen", "--mutable", "--little", "--mode", "script", "--name", little.name,
         "--output-dir", little.up.string, spec.string)).echo.console.runCheck()
     }
     println()

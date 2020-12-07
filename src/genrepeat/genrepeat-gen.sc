@@ -29,7 +29,7 @@ object BitCodec {
       return MSixBytes(MSZ.create(6, u8"0"))
     }
 
-    def decode(input: ISZ[B], context: Context): Option[SixBytes] = {
+    def decode(input: MSZ[B], context: Context): Option[SixBytes] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[SixBytes]() else Some(r.toImmutable)
@@ -43,10 +43,10 @@ object BitCodec {
 
     @strictpure def toMutable: MSixBytes = MSixBytes(sixBytes.toMS)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(48, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -56,7 +56,7 @@ object BitCodec {
 
   @record class MSixBytes(
     var sixBytes: MSZ[U8]
-  ) extends Runtime.Composite {
+  ) extends Runtime.MComposite {
 
     @strictpure def toImmutable: SixBytes = SixBytes(sixBytes.toIS)
 
@@ -73,8 +73,8 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      Reader.IS.beU8S(input, context, sixBytes, 6)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      Reader.MS.beU8S(input, context, sixBytes, 6)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -114,7 +114,7 @@ object BitCodec {
       return MFoo(u8"0", MSZ[MSixBytes]())
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+    def decode(input: MSZ[B], context: Context): Option[Foo] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
@@ -144,10 +144,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(size, Foo.toMutableElements(elements))
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(488, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -158,7 +158,7 @@ object BitCodec {
   @record class MFoo(
     var size: U8,
     var elements: MSZ[MSixBytes]
-  ) extends Runtime.Composite {
+  ) extends Runtime.MComposite {
 
     @strictpure def toImmutable: Foo = Foo(size, Foo.toImmutableElements(elements))
 
@@ -175,8 +175,8 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      size = Reader.IS.bleU8(input, context)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      size = Reader.MS.bleU8(input, context)
       elements = MSZ()
       val elementsContext = FooElementsContext.empty
       // BEGIN USER CODE: FooElementsContext.init
@@ -206,13 +206,13 @@ object BitCodec {
       }
     }
 
-    def elementsContinue(input: ISZ[B], context: Context, elementsContext: FooElementsContext): B = {
+    def elementsContinue(input: MSZ[B], context: Context, elementsContext: FooElementsContext): B = {
       // BEGIN USER CODE: Foo.elementsContinue
       return elementsContext.i < size
       // END USER CODE: Foo.elementsContinue
     }
 
-    def elementsUpdate(input: ISZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
+    def elementsUpdate(input: MSZ[B], context: Context, elementsContext: FooElementsContext): Unit = {
       // BEGIN USER CODE: Foo.elementsUpdate
       elementsContext.i = elementsContext.i + u8"1"
       // END USER CODE: Foo.elementsUpdate
@@ -246,7 +246,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")

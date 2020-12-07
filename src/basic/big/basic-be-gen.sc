@@ -33,7 +33,7 @@ object BitCodec {
       return MFoo(F, u7"0", MSZ.create(100, F), MSZ.create(4, s8"0"), s8"0", s8"0", MSZ.create(2, s8"0"), MSZ.create(4, u8"0"), u8"0", u8"0", MSZ.create(2, u8"0"), MSZ.create(5, s16"0"), s16"0", s16"0", MSZ.create(2, s16"0"), MSZ.create(5, u16"0"), u16"0", u16"0", MSZ.create(2, u16"0"), MSZ.create(6, s32"0"), s32"0", s32"0", MSZ.create(2, s32"0"), MSZ.create(6, u32"0"), u32"0", u32"0", MSZ.create(2, u32"0"), MSZ.create(7, s64"0"), s64"0", s64"0", MSZ.create(2, s64"0"), MSZ.create(7, u64"0"), u64"0", u64"0", MSZ.create(2, u64"0"), 0.0f, 0.0f, MSZ.create(2, 0.0f), MSZ.create(2, 0.0f), 0.0d, 0.0d, MSZ.create(3, 0.0d), MSZ.create(2, 0.0d))
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+    def decode(input: MSZ[B], context: Context): Option[Foo] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
@@ -89,10 +89,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(f1, f2, f3.toMS, f4.toMS, f4c, f4r, f4rs.toMS, uf4.toMS, f4cu, f4ru, f4rus.toMS, f5.toMS, f5c, f5r, f5rs.toMS, uf5.toMS, f5cu, f5ru, f5rus.toMS, f6.toMS, f6c, f6r, f6rs.toMS, uf6.toMS, f6cu, f6ru, f6rus.toMS, f7.toMS, f7c, f7r, f7rs.toMS, uf7.toMS, f7cu, f7ru, f7rus.toMS, f8, f8r, f9.toMS, f9rs.toMS, f10, f10r, f11.toMS, f10rs.toMS)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(3223, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -144,7 +144,7 @@ object BitCodec {
     var f10r: F64,
     var f11: MSZ[F64],
     var f10rs: MSZ[F64]
-  ) extends Runtime.Composite {
+  ) extends Runtime.MComposite {
 
     @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, f4c, f4r, f4rs.toIS, uf4.toIS, f4cu, f4ru, f4rus.toIS, f5.toIS, f5c, f5r, f5rs.toIS, uf5.toIS, f5cu, f5ru, f5rus.toIS, f6.toIS, f6c, f6r, f6rs.toIS, uf6.toIS, f6cu, f6ru, f6rus.toIS, f7.toIS, f7c, f7r, f7rs.toIS, uf7.toIS, f7cu, f7ru, f7rus.toIS, f8, f8r, f9.toIS, f9rs.toIS, f10, f10r, f11.toIS, f10rs.toIS)
 
@@ -373,50 +373,50 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      f1 = Reader.IS.bleB(input, context)
-      f2 = Reader.IS.bleU7(input, context)
-      Reader.IS.beBS(input, context, f3, 100)
-      Reader.IS.beS8S(input, context, f4, 4)
-      f4c = Reader.IS.bleS8(input, context)
-      f4r = Reader.IS.bleS8(input, context)
-      Reader.IS.beS8S(input, context, f4rs, 2)
-      Reader.IS.beU8S(input, context, uf4, 4)
-      f4cu = Reader.IS.bleU8(input, context)
-      f4ru = Reader.IS.bleU8(input, context)
-      Reader.IS.beU8S(input, context, f4rus, 2)
-      Reader.IS.beS16S(input, context, f5, 5)
-      f5c = Reader.IS.beS16(input, context)
-      f5r = Reader.IS.beS16(input, context)
-      Reader.IS.beS16S(input, context, f5rs, 2)
-      Reader.IS.beU16S(input, context, uf5, 5)
-      f5cu = Reader.IS.beU16(input, context)
-      f5ru = Reader.IS.beU16(input, context)
-      Reader.IS.beU16S(input, context, f5rus, 2)
-      Reader.IS.beS32S(input, context, f6, 6)
-      f6c = Reader.IS.beS32(input, context)
-      f6r = Reader.IS.beS32(input, context)
-      Reader.IS.beS32S(input, context, f6rs, 2)
-      Reader.IS.beU32S(input, context, uf6, 6)
-      f6cu = Reader.IS.beU32(input, context)
-      f6ru = Reader.IS.beU32(input, context)
-      Reader.IS.beU32S(input, context, f6rus, 2)
-      Reader.IS.beS64S(input, context, f7, 7)
-      f7c = Reader.IS.beS64(input, context)
-      f7r = Reader.IS.beS64(input, context)
-      Reader.IS.beS64S(input, context, f7rs, 2)
-      Reader.IS.beU64S(input, context, uf7, 7)
-      f7cu = Reader.IS.beU64(input, context)
-      f7ru = Reader.IS.beU64(input, context)
-      Reader.IS.beU64S(input, context, f7rus, 2)
-      f8 = Reader.IS.beF32(input, context)
-      f8r = Reader.IS.beF32(input, context)
-      Reader.IS.beF32S(input, context, f9, 2)
-      Reader.IS.beF32S(input, context, f9rs, 2)
-      f10 = Reader.IS.beF64(input, context)
-      f10r = Reader.IS.beF64(input, context)
-      Reader.IS.beF64S(input, context, f11, 3)
-      Reader.IS.beF64S(input, context, f10rs, 2)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      f1 = Reader.MS.bleB(input, context)
+      f2 = Reader.MS.bleU7(input, context)
+      Reader.MS.beBS(input, context, f3, 100)
+      Reader.MS.beS8S(input, context, f4, 4)
+      f4c = Reader.MS.bleS8(input, context)
+      f4r = Reader.MS.bleS8(input, context)
+      Reader.MS.beS8S(input, context, f4rs, 2)
+      Reader.MS.beU8S(input, context, uf4, 4)
+      f4cu = Reader.MS.bleU8(input, context)
+      f4ru = Reader.MS.bleU8(input, context)
+      Reader.MS.beU8S(input, context, f4rus, 2)
+      Reader.MS.beS16S(input, context, f5, 5)
+      f5c = Reader.MS.beS16(input, context)
+      f5r = Reader.MS.beS16(input, context)
+      Reader.MS.beS16S(input, context, f5rs, 2)
+      Reader.MS.beU16S(input, context, uf5, 5)
+      f5cu = Reader.MS.beU16(input, context)
+      f5ru = Reader.MS.beU16(input, context)
+      Reader.MS.beU16S(input, context, f5rus, 2)
+      Reader.MS.beS32S(input, context, f6, 6)
+      f6c = Reader.MS.beS32(input, context)
+      f6r = Reader.MS.beS32(input, context)
+      Reader.MS.beS32S(input, context, f6rs, 2)
+      Reader.MS.beU32S(input, context, uf6, 6)
+      f6cu = Reader.MS.beU32(input, context)
+      f6ru = Reader.MS.beU32(input, context)
+      Reader.MS.beU32S(input, context, f6rus, 2)
+      Reader.MS.beS64S(input, context, f7, 7)
+      f7c = Reader.MS.beS64(input, context)
+      f7r = Reader.MS.beS64(input, context)
+      Reader.MS.beS64S(input, context, f7rs, 2)
+      Reader.MS.beU64S(input, context, uf7, 7)
+      f7cu = Reader.MS.beU64(input, context)
+      f7ru = Reader.MS.beU64(input, context)
+      Reader.MS.beU64S(input, context, f7rus, 2)
+      f8 = Reader.MS.beF32(input, context)
+      f8r = Reader.MS.beF32(input, context)
+      Reader.MS.beF32S(input, context, f9, 2)
+      Reader.MS.beF32S(input, context, f9rs, 2)
+      f10 = Reader.MS.beF64(input, context)
+      f10r = Reader.MS.beF64(input, context)
+      Reader.MS.beF64S(input, context, f11, 3)
+      Reader.MS.beF64S(input, context, f10rs, 2)
       context.skip(input.size, 11, ERROR_Foo)
 
       val wf = wellFormed
@@ -544,7 +544,7 @@ assert(fooExampleOutputContext.errorCode == 0 && fooExampleOutputContext.errorOf
 
 val fooExampleInputContext = Context.create
 val fooExampleDecoded = Foo.empty
-fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
+fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
 println(s"decode(encode(fooExample)) = $fooExampleDecoded")
 println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
 println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")

@@ -36,7 +36,7 @@ object BitCodec {
       return MBaz(F, MSZ.create(2, u8"0"), u64"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Baz] = {
+    def decode(input: MSZ[B], context: Context): Option[Baz] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Baz]() else Some(r.toImmutable)
@@ -52,10 +52,10 @@ object BitCodec {
 
     @strictpure def toMutable: MBaz = MBaz(flag, bs.toMS, l)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(81, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -89,10 +89,10 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      flag = Reader.IS.bleB(input, context)
-      Reader.IS.beU8S(input, context, bs, 2)
-      l = Reader.IS.beU64(input, context)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      flag = Reader.MS.bleB(input, context)
+      Reader.MS.beU8S(input, context, bs, 2)
+      l = Reader.MS.beU64(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -120,7 +120,7 @@ object BitCodec {
       return MBazz(F, u16"0", MSZ.create(2, u32"0"))
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Bazz] = {
+    def decode(input: MSZ[B], context: Context): Option[Bazz] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Bazz]() else Some(r.toImmutable)
@@ -136,10 +136,10 @@ object BitCodec {
 
     @strictpure def toMutable: MBazz = MBazz(flag, s, is.toMS)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(81, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -173,10 +173,10 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      flag = Reader.IS.bleB(input, context)
-      s = Reader.IS.beU16(input, context)
-      Reader.IS.beU32S(input, context, is, 2)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      flag = Reader.MS.bleB(input, context)
+      s = Reader.MS.beU16(input, context)
+      Reader.MS.beU32S(input, context, is, 2)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -204,7 +204,7 @@ object BitCodec {
       return MBazzz(F, u8"0", u8"0")
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Bazzz] = {
+    def decode(input: MSZ[B], context: Context): Option[Bazzz] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Bazzz]() else Some(r.toImmutable)
@@ -220,10 +220,10 @@ object BitCodec {
 
     @strictpure def toMutable: MBazzz = MBazzz(flag, b1, b2)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(17, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -257,10 +257,10 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
-      flag = Reader.IS.bleB(input, context)
-      b1 = Reader.IS.bleU8(input, context)
-      b2 = Reader.IS.bleU8(input, context)
+    def decode(input: MSZ[B], context: Context): Unit = {
+      flag = Reader.MS.bleB(input, context)
+      b1 = Reader.MS.bleU8(input, context)
+      b2 = Reader.MS.bleU8(input, context)
 
       val wf = wellFormed
       if (wf != 0) {
@@ -282,11 +282,11 @@ object BitCodec {
 
   @datatype trait Bar {
     @strictpure def toMutable: MBar
-    def encode(context: Context): Option[ISZ[B]]
+    def encode(context: Context): MOption[MSZ[B]]
     def wellFormed: Z
   }
 
-  @record trait MBar extends Runtime.Composite {
+  @record trait MBar extends Runtime.MComposite {
     @strictpure def toImmutable: Bar
   }
 
@@ -298,7 +298,7 @@ object BitCodec {
       return Baz.empty
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Bar] = {
+    def decode(input: MSZ[B], context: Context): Option[Bar] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Bar]() else Some(r.toImmutable)
@@ -311,7 +311,7 @@ object BitCodec {
        'Error
     }
 
-    def choose(input: ISZ[B], context: Context): Choice.Type = {
+    def choose(input: MSZ[B], context: Context): Choice.Type = {
       {
         var ctx = context
         var hasError = F
@@ -321,12 +321,12 @@ object BitCodec {
         }
         if (!hasError) {
           val temp = MSZ.create(2, u8"0")
-          Reader.IS.beU8S(input, ctx, temp, 2)
+          Reader.MS.beU8S(input, ctx, temp, 2)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u8"1", u8"0"))
         }
         if (!hasError) {
           val temp = MSZ.create(1, u64"0")
-          Reader.IS.beU64S(input, ctx, temp, 1)
+          Reader.MS.beU64S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u64"7"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -342,12 +342,12 @@ object BitCodec {
         }
         if (!hasError) {
           val temp = MSZ.create(1, u16"0")
-          Reader.IS.beU16S(input, ctx, temp, 1)
+          Reader.MS.beU16S(input, ctx, temp, 1)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u16"2"))
         }
         if (!hasError) {
           val temp = MSZ.create(2, u32"0")
-          Reader.IS.beU32S(input, ctx, temp, 2)
+          Reader.MS.beU32S(input, ctx, temp, 2)
           hasError = !(ctx.errorCode == 0 && temp == MSZ(u32"3", u32"5"))
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -359,7 +359,7 @@ object BitCodec {
         var hasError = F
         if (!hasError) {
           if(!hasError) {
-            hasError = !Reader.IS.bleB(input, ctx)
+            hasError = !Reader.MS.bleB(input, ctx)
           }
           hasError = !hasError
         }
@@ -368,7 +368,7 @@ object BitCodec {
           var found = F
           if (!found) {
             if (!hasError) {
-              val temp = Reader.IS.bleU8(input, ctx)
+              val temp = Reader.MS.bleU8(input, ctx)
               hasError = !(ctx.errorCode == 0 && temp == u8"3")
             }
             found = !hasError
@@ -379,7 +379,7 @@ object BitCodec {
           }
           if (!found) {
             if (!hasError) {
-              val temp = Reader.IS.bleU8(input, ctx)
+              val temp = Reader.MS.bleU8(input, ctx)
               hasError = !(ctx.errorCode == 0 && temp == u8"5")
             }
             found = !hasError
@@ -391,7 +391,7 @@ object BitCodec {
           hasError = !found
         }
         if (!hasError) {
-          val temp = Reader.IS.bleU8(input, ctx)
+          val temp = Reader.MS.bleU8(input, ctx)
           hasError = !(ctx.errorCode == 0 && u8"10" <= temp && temp <= u8"15")
         }
         if (!hasError && ctx.errorCode == 0) {
@@ -411,7 +411,7 @@ object BitCodec {
       return MFoo(Baz.empty)
     }
 
-    def decode(input: ISZ[B], context: Context): Option[Foo] = {
+    def decode(input: MSZ[B], context: Context): Option[Foo] = {
       val r = empty
       r.decode(input, context)
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
@@ -425,10 +425,10 @@ object BitCodec {
 
     @strictpure def toMutable: MFoo = MFoo(bar.toMutable)
 
-    def encode(context: Context): Option[ISZ[B]] = {
+    def encode(context: Context): MOption[MSZ[B]] = {
       val buffer = MSZ.create(81, F)
       toMutable.encode(buffer, context)
-      return if (context.hasError) None[ISZ[B]]() else Some(buffer.toIS)
+      return if (context.hasError) MNone[MSZ[B]]() else MSome(buffer)
     }
 
     def wellFormed: Z = {
@@ -438,7 +438,7 @@ object BitCodec {
 
   @record class MFoo(
     var bar: MBar
-  ) extends Runtime.Composite {
+  ) extends Runtime.MComposite {
 
     @strictpure def toImmutable: Foo = Foo(bar.toImmutable)
 
@@ -452,7 +452,7 @@ object BitCodec {
       return 0
     }
 
-    def decode(input: ISZ[B], context: Context): Unit = {
+    def decode(input: MSZ[B], context: Context): Unit = {
       Bar.choose(input, context) match {
         case Bar.Choice.Baz => bar = Baz.empty
         case Bar.Choice.Bazz => bar = Bazz.empty
@@ -499,7 +499,7 @@ def test(fooExample: MFoo): Unit = {
 
   val fooExampleInputContext = Context.create
   val fooExampleDecoded = Foo.empty
-  fooExampleDecoded.decode(fooExampleEncoded.toIS, fooExampleInputContext)
+  fooExampleDecoded.decode(fooExampleEncoded, fooExampleInputContext)
   println(s"decode(encode(fooExample)) = $fooExampleDecoded")
   println(s"decode(encode(fooExample)).offset = ${fooExampleInputContext.offset}")
   println(s"decode(encode(fooExample)).errorCode = ${fooExampleInputContext.errorCode}")
