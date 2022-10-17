@@ -146,7 +146,9 @@ object BitCodec {
     var f10rs: MSZ[F64]
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: Foo = Foo(f1, f2, f3.toIS, f4.toIS, f4c, f4r, f4rs.toIS, uf4.toIS, f4cu, f4ru, f4rus.toIS, f5.toIS, f5c, f5r, f5rs.toIS, uf5.toIS, f5cu, f5ru, f5rus.toIS, f6.toIS, f6c, f6r, f6rs.toIS, uf6.toIS, f6cu, f6ru, f6rus.toIS, f7.toIS, f7c, f7r, f7rs.toIS, uf7.toIS, f7cu, f7ru, f7rus.toIS, f8, f8r, f9.toIS, f9rs.toIS, f10, f10r, f11.toIS, f10rs.toIS)
+    def toImmutable: Foo = {
+      return Foo(f1, f2, f3.toIS, f4.toIS, f4c, f4r, f4rs.toIS, uf4.toIS, f4cu, f4ru, f4rus.toIS, f5.toIS, f5c, f5r, f5rs.toIS, uf5.toIS, f5cu, f5ru, f5rus.toIS, f6.toIS, f6c, f6r, f6rs.toIS, uf6.toIS, f6cu, f6ru, f6rus.toIS, f7.toIS, f7c, f7r, f7rs.toIS, uf7.toIS, f7cu, f7ru, f7rus.toIS, f8, f8r, f9.toIS, f9rs.toIS, f10, f10r, f11.toIS, f10rs.toIS)
+    }
 
     def wellFormed: Z = {
 

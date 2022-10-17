@@ -138,7 +138,9 @@ object BitCodec {
     var order: U1
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: FrameControl = FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    def toImmutable: FrameControl = {
+      return FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    }
 
     def wellFormed: Z = {
 
@@ -233,7 +235,9 @@ object BitCodec {
     var receiver: MSZ[U8]
   ) extends MHeaderAddress {
 
-    @strictpure def toImmutable: Receiver = Receiver(receiver.toIS)
+    def toImmutable: Receiver = {
+      return Receiver(receiver.toIS)
+    }
 
     def wellFormed: Z = {
 
@@ -306,7 +310,9 @@ object BitCodec {
     var transmitter: MSZ[U8]
   ) extends MHeaderAddress {
 
-    @strictpure def toImmutable: ReceiverTransmitter = ReceiverTransmitter(receiver.toIS, transmitter.toIS)
+    def toImmutable: ReceiverTransmitter = {
+      return ReceiverTransmitter(receiver.toIS, transmitter.toIS)
+    }
 
     def wellFormed: Z = {
 
@@ -385,7 +391,9 @@ object BitCodec {
     var seqNumber: U12
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: SeqControl = SeqControl(fragNumber, seqNumber)
+    def toImmutable: SeqControl = {
+      return SeqControl(fragNumber, seqNumber)
+    }
 
     def wellFormed: Z = {
 
@@ -463,7 +471,9 @@ object BitCodec {
     var address4: MSZ[U8]
   ) extends MHeaderAddress {
 
-    @strictpure def toImmutable: Data = Data(address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS)
+    def toImmutable: Data = {
+      return Data(address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS)
+    }
 
     def wellFormed: Z = {
 
@@ -523,13 +533,13 @@ object BitCodec {
   }
 
   @datatype trait HeaderAddress {
-    @strictpure def toMutable: MHeaderAddress
+    @pure def toMutable: MHeaderAddress
     def encode(buffSize: Z, context: Context): MOption[MSZ[B]]
     def wellFormed: Z
   }
 
   @record trait MHeaderAddress extends Runtime.MComposite {
-    @strictpure def toImmutable: HeaderAddress
+    def toImmutable: HeaderAddress
   }
 
   object HeaderAddress {
@@ -614,7 +624,9 @@ object BitCodec {
     var headerAddress: MHeaderAddress
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: MacHeader = MacHeader(frameControl.toImmutable, duration.toIS, headerAddress.toImmutable)
+    def toImmutable: MacHeader = {
+      return MacHeader(frameControl.toImmutable, duration.toIS, headerAddress.toImmutable)
+    }
 
     def wellFormed: Z = {
 
@@ -716,7 +728,9 @@ object BitCodec {
     var fcs: U32
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: MacFrame = MacFrame(macHeader.toImmutable, body.toIS, fcs)
+    def toImmutable: MacFrame = {
+      return MacFrame(macHeader.toImmutable, body.toIS, fcs)
+    }
 
     def wellFormed: Z = {
 

@@ -69,7 +69,9 @@ object BitCodec {
     var l: U64
   ) extends MBar {
 
-    @strictpure def toImmutable: Baz = Baz(flag, bs.toIS, l)
+    def toImmutable: Baz = {
+      return Baz(flag, bs.toIS, l)
+    }
 
     def wellFormed: Z = {
 
@@ -153,7 +155,9 @@ object BitCodec {
     var is: MSZ[U32]
   ) extends MBar {
 
-    @strictpure def toImmutable: Bazz = Bazz(flag, s, is.toIS)
+    def toImmutable: Bazz = {
+      return Bazz(flag, s, is.toIS)
+    }
 
     def wellFormed: Z = {
 
@@ -237,7 +241,9 @@ object BitCodec {
     var b2: U8
   ) extends MBar {
 
-    @strictpure def toImmutable: Bazzz = Bazzz(flag, b1, b2)
+    def toImmutable: Bazzz = {
+      return Bazzz(flag, b1, b2)
+    }
 
     def wellFormed: Z = {
 
@@ -281,13 +287,13 @@ object BitCodec {
   }
 
   @datatype trait Bar {
-    @strictpure def toMutable: MBar
+    @pure def toMutable: MBar
     def encode(context: Context): MOption[MSZ[B]]
     def wellFormed: Z
   }
 
   @record trait MBar extends Runtime.MComposite {
-    @strictpure def toImmutable: Bar
+    def toImmutable: Bar
   }
 
   object Bar {
@@ -440,7 +446,9 @@ object BitCodec {
     var bar: MBar
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: Foo = Foo(bar.toImmutable)
+    def toImmutable: Foo = {
+      return Foo(bar.toImmutable)
+    }
 
     def wellFormed: Z = {
 

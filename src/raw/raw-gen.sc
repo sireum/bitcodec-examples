@@ -58,7 +58,9 @@ object BitCodec {
     var elements: MSZ[B]
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: Foo = Foo(size, elements.toIS)
+    def toImmutable: Foo = {
+      return Foo(size, elements.toIS)
+    }
 
     def wellFormed: Z = {
 

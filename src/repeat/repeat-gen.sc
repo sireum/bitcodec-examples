@@ -58,7 +58,9 @@ object BitCodec {
     var sixBytes: MSZ[U8]
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: SixBytes = SixBytes(sixBytes.toIS)
+    def toImmutable: SixBytes = {
+      return SixBytes(sixBytes.toIS)
+    }
 
     def wellFormed: Z = {
 
@@ -106,7 +108,7 @@ object BitCodec {
       return if (context.hasError) None[Foo]() else Some(r.toImmutable)
     }
 
-    def toMutableElements(s: ISZ[SixBytes]): MSZ[MSixBytes] = {
+    @pure def toMutableElements(s: ISZ[SixBytes]): MSZ[MSixBytes] = {
       var r = MSZ[MSixBytes]()
       for (e <- s) {
         r = r :+ e.toMutable
@@ -146,7 +148,9 @@ object BitCodec {
     var elements: MSZ[MSixBytes]
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: Foo = Foo(size, Foo.toImmutableElements(elements))
+    def toImmutable: Foo = {
+      return Foo(size, Foo.toImmutableElements(elements))
+    }
 
     def wellFormed: Z = {
 

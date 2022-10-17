@@ -134,7 +134,9 @@ object BitCodec {
     var order: U1
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: FrameControl = FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    def toImmutable: FrameControl = {
+      return FrameControl(protocol, tpe, subType, toDS, fromDS, moreFrag, retry, powerMgmt, moreData, wep, order)
+    }
 
     def wellFormed: Z = {
 
@@ -228,7 +230,9 @@ object BitCodec {
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Cts = Cts(frameControl.toImmutable, duration.toIS, receiver.toIS, fcs)
+    def toImmutable: Cts = {
+      return Cts(frameControl.toImmutable, duration.toIS, receiver.toIS, fcs)
+    }
 
     def wellFormed: Z = {
 
@@ -322,7 +326,9 @@ object BitCodec {
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Rts = Rts(frameControl.toImmutable, duration.toIS, receiver.toIS, transmitter.toIS, fcs)
+    def toImmutable: Rts = {
+      return Rts(frameControl.toImmutable, duration.toIS, receiver.toIS, transmitter.toIS, fcs)
+    }
 
     def wellFormed: Z = {
 
@@ -416,7 +422,9 @@ object BitCodec {
     var seqNumber: U12
   ) extends Runtime.MComposite {
 
-    @strictpure def toImmutable: SeqControl = SeqControl(fragNumber, seqNumber)
+    def toImmutable: SeqControl = {
+      return SeqControl(fragNumber, seqNumber)
+    }
 
     def wellFormed: Z = {
 
@@ -502,7 +510,9 @@ object BitCodec {
     var fcs: U32
   ) extends MMacFrame {
 
-    @strictpure def toImmutable: Data = Data(frameControl.toImmutable, duration.toIS, address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS, body.toIS, fcs)
+    def toImmutable: Data = {
+      return Data(frameControl.toImmutable, duration.toIS, address1.toIS, address2.toIS, address3.toIS, seqControl.toImmutable, address4.toIS, body.toIS, fcs)
+    }
 
     def wellFormed: Z = {
 
@@ -605,13 +615,13 @@ object BitCodec {
   }
 
   @datatype trait MacFrame {
-    @strictpure def toMutable: MMacFrame
+    @pure def toMutable: MMacFrame
     def encode(buffSize: Z, context: Context): MOption[MSZ[B]]
     def wellFormed: Z
   }
 
   @record trait MMacFrame extends Runtime.MComposite {
-    @strictpure def toImmutable: MacFrame
+    def toImmutable: MacFrame
   }
 
   object MacFrame {
