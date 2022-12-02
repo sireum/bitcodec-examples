@@ -1,4 +1,4 @@
-::#! 2> /dev/null                                             #
+::/*#! 2> /dev/null                                           #
 @ 2>/dev/null # 2>nul & echo off & goto BOF                   #
 if [ -z ${SIREUM_HOME} ]; then                                #
   echo "Please set SIREUM_HOME env var"                       #
@@ -25,7 +25,7 @@ exit /B %errorlevel%
 :native
 %~dpnx0.com %*
 exit /B %errorlevel%
-::!#
+::!#*/
 // #Sireum
 import org.sireum._
 
